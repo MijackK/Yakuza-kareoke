@@ -1,1 +1,1 @@
-<h2> Yakuza Kareoke Web </h2>
+<h2> Kareoke Web </h2>
