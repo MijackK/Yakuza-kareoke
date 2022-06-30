@@ -1,0 +1,9 @@
+
+# Dependency directories
+node_modules/
+.eslintignore
+.eslintrc.json
+webpack.config.js 
+dist/
+src/video/
+src/audio/
