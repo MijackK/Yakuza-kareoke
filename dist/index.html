@@ -1,11 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <script src="bundle.js" defer></script>
-  </head>
-  <body></body>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="script.bundle.js" defer></script>
+  <title>Document</title>
+</head>
+<body class="light_mode">
+  <div class="song_wrapper">
+    <div class="disk disk_slide">
+      <div id="tag"><span>Pride from Despair</span></div>
+    </div>
+    <div class="song_select">
+      <div class="double-div list_type"> 
+        <div>Kareoke</div>
+        <div>Web</div>
+      </div>
+      <form class="add-form">
+        <div class="list-title">Add Form</div>
+        <label for="song-text">Name</label>
+        <input id="song-text"type="text">
+        <label for="mp3">Music URL</label>
+        <input id="mp3"type="text">
+        <label for="mp4">Video URL</label>
+        <input id="mp4"type="text">
+        <label for="backdrop_img">Image URL</label>
+        <input id="backdrop_img"type="text">
+        <label for="beat_map">Beat Map</label>
+        <input id="beat_map"type="file">
+        <button>Submit</button>
+      </form>
+      <div class="menu_container">
+      <div class="list-title">Song Selection</div>  
+        <ol class="song_list">
+          <li data-song="judgment">
+            <span class="list_number">1</span>
+            <span class="song-name">Judment-Shinpan</span>
+          </li>
+          <li  data-song="judgment2">
+            <span class="list_number">1</span>
+            <span class="song-name">Judment-Shinpan</span>
+          </li>
+        </ol>
+       </div>
+       <div class="double-div add_play">
+         <div id="execute"><a>Play</a></div>
+         <div id="new_song">Add</div>
+       </div>
+      </div>
+    </div>
+  </div>
+  <div class="background_image"></div>
+  <div class="display_tablet">
+    <div class="header"></div>
+    <div class="option_select">
+      <div class="col-one">
+        <div class="play"><a>Play</a></div>
+        <div class="editor">Editor</div>
+      </div>
+      <div class="col-two">
+        <div class="settings">Settings</div>
+        <div class="rules">Rules</div>
+        <div class="about"><a href="https://github.com/MijackK/Yakuza-kareoke">About</a></div>
+      </div>
+    </div>
+    <div class="logo"></div>
+    <div class="last_section"></div>
+  </div>
+
+</body>
 </html>
