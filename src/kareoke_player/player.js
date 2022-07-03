@@ -48,6 +48,7 @@ const rapidBtns = buttons.filter((element) => element.type === "rapid");
 
 const heatMode = (info) => {
   if (info.Success === true && info.incrementScore === 0 && heat === true) {
+    heat = false;
     document.body.className = "cold-mode";
   }
   if (heat === false && combo >= 20) {
@@ -76,7 +77,6 @@ const incrementScore = (info) => {
     });
   }
   if (info.incrementScore === 0 && info.Success === true) {
-    heat = false;
     combo = 0;
     container.style.opacity = 0;
   }

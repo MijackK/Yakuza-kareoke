@@ -247,9 +247,13 @@ const editor = (() => {
     }s linear`;
 
     // eslint-disable-next-line no-unused-expressions
-    Map.offSet;
+    // Map.offSet;
     const position = (songTime - offSet) * 10 * 29;
-    Map.style.left = `${startPosition - position}px`;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        Map.style.left = `${startPosition - position}px`;
+      });
+    });
     // Map.style.left = `-${(songTime - offSet) * 10 * 29}px`;
   };
 
@@ -308,8 +312,12 @@ const editor = (() => {
       Map.style.transition = `left ${
         (songTime - timePassed) / playbackRate
       }s linear`;
-      Map.offSet;
-      Map.style.left = `${startPosition - (songTime - offSet) * 10 * 29}px`;
+      // Map.offSet;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          Map.style.left = `${startPosition - (songTime - offSet) * 10 * 29}px`;
+        });
+      });
     }, 10);
   };
   const updateSpeed = (speed) => {
