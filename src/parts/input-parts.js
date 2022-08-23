@@ -113,7 +113,7 @@ const rapid = (inputList, kareokeFactory, images) => {
     let Performance = images.bad;
     const Key = inputs[0].key;
     let incrementScore = 0;
-    if (currentTime >= totalDuration) {
+    if (currentTime >= totalDuration || clicks >= neededClicks) {
       if (clicks >= neededClicks) {
         incrementScore = 100;
         inputs.shift();
@@ -128,7 +128,6 @@ const rapid = (inputList, kareokeFactory, images) => {
         inputs.shift();
         Success = true;
       }
-      console.log(clicks);
 
       clicks = 0;
     }

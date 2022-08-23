@@ -4,7 +4,6 @@ import greatImg from "../images/great.png";
 import missImg from "../images/miss.png";
 import badImg from "../images/bad.png";
 import goodImg from "../images/good.png";
-import judgment from "../audio/judgment.mp3";
 import kareokeFactory from "../parts/general-parts";
 import inputHandler from "../parts/input-parts";
 import Visualiser from "../parts/display-parts";
@@ -208,7 +207,8 @@ backgroundVideo.onloadedmetadata = () => {
 document.querySelector("body").addEventListener("keydown", (e) => {
   if (!keydown) {
     if (eventHandler(e.key, clickInput, "checkInput") !== true) {
-      // sometimes hold and click inputs can be valid in the same time frame, this will make sure that they dont trigger at the same time.
+      // sometimes hold and click inputs can be valid in the same time frame,
+      // this will make sure that they dont trigger at the same time.
       eventHandler(e.key, holdInput, "checkDown");
     }
 

@@ -17,6 +17,7 @@ let startTime;
 let Play = false;
 let moveThumb = false;
 let editorLoop;
+
 canvasP.init();
 
 const editor = (() => {
@@ -33,7 +34,10 @@ const editor = (() => {
   const setBtn = document.querySelector("#set");
   const Score = document.querySelector("#score");
   const Map = document.querySelector(".map");
-  const startPosition = (3.3 - timeOffset) * 10 * 29;
+  const timePointsPerSecond = 10;
+  const distanceBetweenTimePoints = 29;
+  const startPosition =
+    (3.3 - timeOffset) * timePointsPerSecond * distanceBetweenTimePoints;
   Map.style.left = `${startPosition}px`;
   const clickMarker = document.createElement("div");
   clickMarker.classList.toggle("click-placement");
@@ -207,7 +211,7 @@ const editor = (() => {
     ).textContent = ` ${editor.Audio.currentTime.toFixed(3)} / ${
       Audio.duration
     }`;
-    editor.Score.textContent = elapsedTime.toFixed(3);
+    editor.Score.textContent = elapsedTime.toFixed(1);
   };
 
   const timeStep = (direction, timePassed) => {
@@ -221,7 +225,10 @@ const editor = (() => {
     previousTime = (timePassed + move - offSet) / playbackRate;
     elapsedTime = previousTime * playbackRate + timeOffset;
     Map.style.transition = "";
-    const position = (timePassed - offSet + move) * 10 * 29;
+    const position =
+      (timePassed - offSet + move) *
+      timePointsPerSecond *
+      distanceBetweenTimePoints;
     // Map.style.left = `-${(timePassed - offSet + move) * 10 * 29}px`;
     Map.style.left = `${startPosition - position}px`;
     canvasP.validPrompts(elapsedTime, beatMap);
@@ -246,14 +253,11 @@ const editor = (() => {
       (songTime - timePassed) / playbackRate
     }s linear`;
 
-    // eslint-disable-next-line no-unused-expressions
-    // Map.offSet;
-    const position = (songTime - offSet) * 10 * 29;
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        Map.style.left = `${startPosition - position}px`;
-      });
-    });
+    Map.offSet;
+    const position =
+      (songTime - offSet) * timePointsPerSecond * distanceBetweenTimePoints;
+    Map.style.left = `${startPosition - position}px`;
+
     // Map.style.left = `-${(songTime - offSet) * 10 * 29}px`;
   };
 
@@ -304,20 +308,19 @@ const editor = (() => {
   const moveTimelineProgress = (songTime, timePassed) => {
     if (Play === false) return;
     Map.style.transition = "";
-    const position = (timePassed - offSet) * 10 * 29;
-    Map.style.transition = "";
+    const position =
+      (timePassed - offSet) * timePointsPerSecond * distanceBetweenTimePoints;
     Map.style.left = `${startPosition - position}px`;
-
+    // review this
     setTimeout(() => {
       Map.style.transition = `left ${
         (songTime - timePassed) / playbackRate
       }s linear`;
-      // Map.offSet;
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          Map.style.left = `${startPosition - (songTime - offSet) * 10 * 29}px`;
-        });
-      });
+      Map.offSet;
+      Map.style.left = `${
+        startPosition -
+        (songTime - offSet) * timePointsPerSecond * distanceBetweenTimePoints
+      }px`;
     }, 10);
   };
   const updateSpeed = (speed) => {
