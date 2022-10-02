@@ -1,3 +1,6 @@
+const greatScore = 100;
+const goodScore = 60;
+
 const click = (inputList, kareokeFactory, images) => {
   const prototype = kareokeFactory(images);
   const greatTimeWindow = 0.075;
@@ -15,8 +18,8 @@ const click = (inputList, kareokeFactory, images) => {
         [Performance, incrementScore] =
           inputTime >= inputs[0].time - greatTimeWindow &&
           inputTime <= inputs[0].time + greatTimeWindow
-            ? [images.great, 100]
-            : [images.good, 60];
+            ? [images.great, greatScore]
+            : [images.good, goodScore];
       }
 
       inputs.shift();
@@ -60,7 +63,7 @@ const hold = (inputList, kareokeFactory, images) => {
 
     // condition for great release
     if (endRange.includes(difference) && key === inputs[0].key) {
-      incrementScore = 100;
+      incrementScore = greatScore;
       inputs.shift();
       Success = true;
       Performance = images.great;
@@ -69,7 +72,7 @@ const hold = (inputList, kareokeFactory, images) => {
       clickTime < releaseTime &&
       releaseTime >= inputs[0].time + inputs[0].duration / 2
     ) {
-      incrementScore = 60;
+      incrementScore = goodScore;
       inputs.shift();
       Success = true;
       Performance = images.good;
@@ -107,15 +110,15 @@ const rapid = (inputList, kareokeFactory, images) => {
     }
   };
   const countInputs = (inputs, currentTime) => {
-    const totalDuration = inputs[0].time + inputs[0].duration + 0.2;
+    const totalDuration = inputs[0].time + inputs[0].duration;
     const neededClicks = inputs[0].duration * clickPerSecond;
     let Success = false;
     let Performance = images.bad;
     const Key = inputs[0].key;
     let incrementScore = 0;
-    if (currentTime >= totalDuration || clicks >= neededClicks) {
+    if (currentTime >= totalDuration) {
       if (clicks >= neededClicks) {
-        incrementScore = 100;
+        incrementScore = greatScore;
         inputs.shift();
         Success = true;
         Performance = images.great;
@@ -123,7 +126,7 @@ const rapid = (inputList, kareokeFactory, images) => {
       if (clicks > 0 && clicks < neededClicks) {
         if (clicks >= neededClicks / 2) {
           Performance = images.good;
-          incrementScore = 60;
+          incrementScore = goodScore;
         }
         inputs.shift();
         Success = true;

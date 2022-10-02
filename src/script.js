@@ -26,15 +26,6 @@ const createBtn = document.querySelector("#new_song");
 const menuContianer = document.querySelector(".menu_container");
 const addForm = document.querySelector(".add-form");
 
-let selectedSong;
-let direction;
-const initializeStorage = () => {
-  const songs = "songs";
-  const songArr = localStorage.getItem(songs);
-  if (songArr === null) {
-    console.log("no songs");
-  }
-};
 const removeSongFocus = () => {
   const items = songList.children;
   Array.from(items).forEach((song) => {
@@ -46,8 +37,11 @@ const removeSongFocus = () => {
 const newSong = () => {};
 const animateDisk = () => {
   Disk.classList.toggle("disk_slide");
-  Disk.offsetTop;
-  Disk.classList.toggle("disk_slide");
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      Disk.classList.toggle("disk_slide");
+    });
+  });
 };
 const generateList = (songs) => {
   const songItem = document.createElement("li");
@@ -60,7 +54,7 @@ const generateList = (songs) => {
 const selectSong = (song) => {
   removeSongFocus();
   diskTag.textContent = song.dataset.song;
-  selectedSong = song.dataset.song;
+  // selectedSong = song.dataset.song;
   song.classList.toggle("selected");
   animateDisk();
 };
@@ -82,12 +76,16 @@ selectModal.addEventListener("click", (e) => {
 playBtn.addEventListener("click", () => {
   selectModal.style.display = "flex";
   executeBtn.children[0].textContent = "Play";
+  executeBtn.style.width = "100%";
   executeBtn.children[0].href = "/player.html";
+  createBtn.style.display = "none";
 });
 editBtn.addEventListener("click", () => {
   selectModal.style.display = "flex";
   executeBtn.children[0].textContent = "Edit";
+  executeBtn.style.width = "50%";
   executeBtn.children[0].href = "/editor.html";
+  createBtn.style.display = "block";
 });
 
 createBtn.addEventListener("click", () => {
@@ -103,4 +101,3 @@ createBtn.addEventListener("click", () => {
     menuContianer.style.display = "block";
   }
 });
-initializeStorage();
