@@ -35,7 +35,7 @@ const longPromptText = {
   hold: holdText,
 };
 
-const init = () => {
+export const init = () => {
   myCanvas = document.querySelector(".cplayer");
   myCanvas.width = window.innerWidth;
   myCanvas.height = 215;
@@ -112,7 +112,7 @@ const spanwLongPrompts = (time, duration, type, symbol, held, clicks) => {
   );
   ctx.stroke();
 };
-const validPrompts = (time, buttons, play) => {
+export const validPrompts = (time, buttons, play) => {
   ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
   verticleLines(lineArr.length, play);
   for (let i = 0; i < buttons.length; i += 1) {
@@ -142,5 +142,3 @@ const validPrompts = (time, buttons, play) => {
 window.addEventListener("resize", () => {
   myCanvas.width = window.innerWidth;
 });
-
-export default { init, validPrompts };

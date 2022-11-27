@@ -7,10 +7,10 @@ import goodImg from "../images/good.png";
 import kareokeFactory from "../parts/general-parts";
 import inputHandler from "../parts/input-parts";
 import Visualiser from "../parts/display-parts";
-import canvasP from "../canvas/canvas";
+import { validPrompts, init } from "../canvas/canvas";
 import video from "../video/judgment.mp4";
 
-canvasP.init();
+init();
 const audio = document.createElement("audio");
 
 // const song = document.createElement("audio");
@@ -195,7 +195,7 @@ const AnimatePrompts = () => {
     .concat(holdInput.inputList);
 
   // adding prompts to the Canvas
-  canvasP.validPrompts(timeElapsed, promptArrays, play);
+  validPrompts(timeElapsed, promptArrays, play);
   animationID = requestAnimationFrame(AnimatePrompts);
 };
 backgroundVideo.onloadedmetadata = () => {
