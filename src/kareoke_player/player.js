@@ -1,12 +1,12 @@
 import "./player.css";
-import click from "../audio/hitsound02.mp3";
+import clickSound from "../audio/hitsound02.mp3";
 import greatImg from "../images/great.png";
 import missImg from "../images/miss.png";
 import badImg from "../images/bad.png";
 import goodImg from "../images/good.png";
 import kareokeFactory from "../parts/general-parts";
-import inputHandler from "../parts/input-parts";
-import Visualiser from "../parts/display-parts";
+import { click, hold, rapid } from "../parts/input-parts";
+import { feedBackVisualiserFactory } from "../parts/display-parts";
 import { validPrompts, init } from "../canvas/canvas";
 import video from "../video/judgment.mp4";
 
@@ -14,7 +14,7 @@ init();
 const audio = document.createElement("audio");
 
 // const song = document.createElement("audio");
-audio.src = click;
+audio.src = clickSound;
 // song.src = judgment;
 audio.playbackRate = 1;
 let play = true;
@@ -82,25 +82,13 @@ const incrementScore = (info) => {
   heatMode(info);
 };
 
-const clickInput = inputHandler.click(
-  clickBtns.slice(),
-  kareokeFactory,
-  imageIndicator
-);
+const clickInput = click(clickBtns.slice(), kareokeFactory, imageIndicator);
 
-const holdInput = inputHandler.hold(
-  holdBtns.slice(),
-  kareokeFactory,
-  imageIndicator
-);
+const holdInput = hold(holdBtns.slice(), kareokeFactory, imageIndicator);
 
-const rapidInput = inputHandler.rapid(
-  rapidBtns.slice(),
-  kareokeFactory,
-  imageIndicator
-);
+const rapidInput = rapid(rapidBtns.slice(), kareokeFactory, imageIndicator);
 
-const feedBackVisualiser = Visualiser.feedBackVisualiser();
+const feedBackVisualiser = feedBackVisualiserFactory();
 
 const eventHandler = (key, inputObject, methodName) => {
   let Success = false;

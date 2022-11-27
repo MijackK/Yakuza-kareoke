@@ -1,6 +1,4 @@
-let stoppedPrompts = [];
-
-const feedBackVisualiser = () => {
+export const feedBackVisualiserFactory = () => {
   const performanceIndicator = document.querySelector(
     ".performance-visualiser"
   );
@@ -56,13 +54,13 @@ const feedBackVisualiser = () => {
 
   return { inputFeedback, showIndicator, clearAnimation };
 };
-const autoThumbMovement = (position) => {
+export const autoThumbMovement = (position) => {
   if (position > 1) return;
   const thumb = document.querySelector(".progress_thumb");
   const leftValue = position * 100;
   thumb.style.left = `${leftValue}%`;
 };
-const moveProgressThumb = (event) => {
+export const moveProgressThumb = (event) => {
   const progressBar = document.querySelector(".p_container");
   const thumb = document.querySelector(".progress_thumb");
   const coords = progressBar.getBoundingClientRect();
@@ -74,7 +72,7 @@ const moveProgressThumb = (event) => {
   // eslint-disable-next-line consistent-return
   return (event.pageX - coords.left) / coords.width;
 };
-const mapProgressPrompts = (beatMap, time, offSet) => {
+export const mapProgressPrompts = (beatMap, time, offSet) => {
   const prompMap = document.querySelector("#prompt_location");
   const ctx = prompMap.getContext("2d");
   ctx.clearRect(0, 0, prompMap.width, prompMap.height);
@@ -94,46 +92,4 @@ const mapProgressPrompts = (beatMap, time, offSet) => {
     ctx.lineTo(xPosition, 80);
     ctx.stroke();
   }
-};
-
-const stopAnimation = (container, classArr) => {
-  // Not in use after canvas took over animating prompts
-  for (let i = 0; i < container.childElementCount; i += 1) {
-    // we do childcontainer minus two to excluded the inputline and the feedback visualizer
-    const { className } = container.children[i];
-    if (classArr.includes(className)) {
-      const prompt = container.children[i];
-      stoppedPrompts.push(prompt.style.left);
-      const leftValue = window.getComputedStyle(prompt).left;
-      prompt.style.transition = "";
-      prompt.style.left = leftValue;
-    }
-  }
-};
-
-const restartAnimation = (container, elapsedTime, classArr) => {
-  // Not in use after canvas took over animating prompts
-  if (stoppedPrompts.length === 0) return;
-
-  for (let i = container.childElementCount; i > 0; i -= 1) {
-    const { className } = container.children[i - 1];
-    if (classArr.includes(className)) {
-      const prompt = container.children[i - 1];
-      prompt.style.transition = `left ${
-        Number(prompt.id) - elapsedTime
-      }s linear`;
-      // eslint-disable-next-line no-unused-expressions
-      container.offsetTop;
-      [prompt.style.left] = stoppedPrompts;
-      stoppedPrompts.shift();
-    }
-  }
-  stoppedPrompts = [];
-};
-
-export default {
-  feedBackVisualiser,
-  moveProgressThumb,
-  mapProgressPrompts,
-  autoThumbMovement,
 };

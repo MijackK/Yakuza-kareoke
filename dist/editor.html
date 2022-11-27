@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="editor.bundle.js" defer></script>
+    <title>Document</title>
+  </head>
+  <body>
+   
+  
+      <form id="time-picker">
+      <h1>Pick where you'd like to Jump</h1>
+      <input type="number" name="" id="jump-to" step="0.1" min="3.0" placeholder="Enter Seconds">
+      <button>Jump</button>
+    </form>
+  
+ 
+
+    <audio id="editor-audio"> </audio>
+ 
+      <div class="map-container">
+        <div class="current-time"></div>
+        <div class="map"> </div>
+        <div class="progress_section">
+        
+          <canvas id="prompt_location" width="1728" height="80"></canvas>
+          <div class="p_container">
+            <div class="progression-bar">
+              <div class="progress_thumb"></div>
+            </div>
+          </div>
+        </div>
+        <select id="time_guage">
+          <option value="1" >Normal (x1)</option>
+          <option value="0.75" >x0.75</option>
+          <option value="0.5" >x0.5</option>
+          <option value="0.25" >x0.25</option>
+        </select>
+        <span> songTime:<span id="ptime"></span></span>
+      </div>
+
+      <div class="player">
+
+       <span>Time: <span id="score"></span>  </span>
+       <canvas class="cplayer">
+        Visualization of prompt inputs
+      </canvas>
+        <div class="performance-visualiser"></div>
+        <div class="finger_board">
+          <div class="horizontal-lines">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          <div class="input_line"> </div>
+          <div class="get-prompt">
+            <div id="one">Top</div>
+             <div id="two">Right</div>
+             <div id="three">Left</div>
+             <div id="four">Down</div>
+          </div>
+          <div class="visualiser-container">
+            <div class="button input-visualiser" id="first"  > </div>
+            <div class="button input-visualiser" id="second"></div>
+            <div class="button input-visualiser" id="third" ></div>
+            <div class="button input-visualiser" id="fourth" ></div>
+          </div>
+        </div>
+      </div>
+  
+  
+      <div class="tool-bar">
+        <div id="play">Play</div>
+        <div id="set">Jump</div>
+        <div  id ="click" class="active-prompt">Click</div>
+        <div id="rapid">Rapid 
+          <form id ="r-form" class="duration-form">
+          <label >Duration</label>
+          <input type="number"  step="0.1" value="1" min="0.1" >
+          <button>set</button>
+          </form> 
+        </div>
+        <div id="hold">Hold 
+          <form  id ="h-form" class="duration-form">
+            <label >Duration</label>
+          <input type="number"  step="0.1" value="1" min="0.1" >
+          <button>set</button>
+          </form> 
+        </div>
+        <div id="menu"> Menu</div>
+    </div>
+ <div class="background"></div>
+ 
+<div id="modal">
+ <button><a  id="download-map" download>Download Map</a></button>
+ <button><a href="index.html">Home</a></button>
+ <button id="exit">Exit</button>
+</div>
+
+  </body>
+</html>

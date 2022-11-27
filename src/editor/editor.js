@@ -5,9 +5,13 @@ import up from "../images/up1.png";
 import down from "../images/down1.png";
 import left from "../images/left1.png";
 import right from "../images/right1.png";
-import player from "../parts/map-visualizer";
-import canvasP from "../canvas/canvas";
-import displayParts from "../parts/display-parts";
+import gamePlayerLogic from "../parts/map-visualizer";
+import { validPrompts, init } from "../canvas/canvas";
+import {
+  mapProgressPrompts,
+  moveProgressThumb,
+  autoThumbMovement,
+} from "../parts/display-parts";
 import surviveBar from "../images/survive_bar.png";
 
 const timeOffset = 3.0;
@@ -18,7 +22,7 @@ let Play = false;
 let moveThumb = false;
 let editorLoop;
 
-canvasP.init();
+init();
 
 const editor = (() => {
   const background = document.querySelector(".background");
@@ -231,7 +235,7 @@ const editor = (() => {
       distanceBetweenTimePoints;
     // Map.style.left = `-${(timePassed - offSet + move) * 10 * 29}px`;
     Map.style.left = `${startPosition - position}px`;
-    canvasP.validPrompts(elapsedTime, beatMap);
+    validPrompts(elapsedTime, beatMap);
   };
 
   const pickTime = (time) => {
@@ -240,7 +244,7 @@ const editor = (() => {
     }
     previousTime = (time - timeOffset) / playbackRate;
     elapsedTime = previousTime * playbackRate + timeOffset;
-    canvasP.validPrompts(elapsedTime, beatMap);
+    validPrompts(elapsedTime, beatMap);
   };
   const moveTimeLine = (songTime, timePassed) => {
     if (timePassed >= songTime) {
@@ -288,22 +292,14 @@ const editor = (() => {
     // eslint-disable-next-line no-param-reassign
     timePoint.textContent = "";
     saveChanges();
-    displayParts.mapProgressPrompts(
-      beatMap,
-      Audio.duration - timeOffset,
-      timeOffset
-    );
+    mapProgressPrompts(beatMap, Audio.duration - timeOffset, timeOffset);
   };
   const addPrompt = (type, time, place) => {
     const promptObject = contructPrompt(time, type, promptDuration, place);
     beatMap.push(promptObject);
     beatMap.sort((a, b) => a.time - b.time);
     saveChanges();
-    displayParts.mapProgressPrompts(
-      beatMap,
-      Audio.duration - timeOffset,
-      timeOffset
-    );
+    mapProgressPrompts(beatMap, Audio.duration - timeOffset, timeOffset);
   };
   const moveTimelineProgress = (songTime, timePassed) => {
     if (Play === false) return;
@@ -397,9 +393,11 @@ const editor = (() => {
     );
     const promptKey = translateToKey(e.target.id);
     if (checkOccupation(Number(timePoint.id))) {
+      console.log("space is occupied by a long prompt");
       return;
     }
     if (canPlace(Number(timePoint.id), promptDuration)) {
+      console.log("cant place that prompt here");
       return;
     }
     console.log(`${e.target.id}  time: ${elapsedTime.toFixed(1)}`);
@@ -450,7 +448,7 @@ const editor = (() => {
   });
   progressBar.addEventListener("mousedown", (e) => {
     moveThumb = true;
-    const timePosition = displayParts.moveProgressThumb(e);
+    const timePosition = moveProgressThumb(e);
     progressBarTimeUpdate(timePosition);
   });
   progressBar.addEventListener("mouseup", () => {
@@ -459,7 +457,7 @@ const editor = (() => {
 
   progressBar.addEventListener("mousemove", (e) => {
     if (moveThumb) {
-      const timePosition = displayParts.moveProgressThumb(e);
+      const timePosition = moveProgressThumb(e);
       progressBarTimeUpdate(timePosition);
     }
   });
@@ -524,7 +522,7 @@ const timeController = () => {
   // elapsedTime += currentTime - previousTime;
   elapsedTime = previousTime * playRate + timeOffset;
   previousTime = currentTime;
-  displayParts.autoThumbMovement(
+  autoThumbMovement(
     (editor.Audio.currentTime - timeOffset) /
       (editor.Audio.duration - timeOffset)
   );
@@ -532,18 +530,19 @@ const timeController = () => {
 };
 const AnimatePrompts = () => {
   timeController();
-  canvasP.validPrompts(
+  validPrompts(
     previousTime * editor.getPlayRate() + timeOffset,
     editor.getBeatMap(),
     Play
   );
-  player.gamePlayerLogic(elapsedTime);
+  // enable this when computer player is working is working
+  // gamePlayerLogic(elapsedTime);
 
   requestAnimationFrame(AnimatePrompts);
 };
 editor.Audio.onloadedmetadata = () => {
   editor.Audio.playbackRate = editor.getPlayRate();
-  displayParts.mapProgressPrompts(
+  mapProgressPrompts(
     editor.getBeatMap(),
     editor.Audio.duration - timeOffset,
     timeOffset

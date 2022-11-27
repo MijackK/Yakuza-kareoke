@@ -1,6 +1,6 @@
 import kareokeFactory from "./general-parts";
-import inputHandler from "./input-parts";
-import Visualiser from "./display-parts";
+import { click, hold, rapid } from "./input-parts";
+import { feedBackVisualiserFactory } from "./display-parts";
 import greatImg from "../images/great.png";
 import missImg from "../images/miss.png";
 import badImg from "../images/bad.png";
@@ -18,25 +18,13 @@ const clickBtns = buttons.filter((element) => element.type === "click");
 const holdBtns = buttons.filter((element) => element.type === "hold");
 const rapidBtns = buttons.filter((element) => element.type === "rapid");
 
-const clickInput = inputHandler.click(
-  clickBtns.slice(),
-  kareokeFactory,
-  imageIndicator
-);
+const clickInput = click(clickBtns.slice(), kareokeFactory, imageIndicator);
 
-const holdInput = inputHandler.hold(
-  holdBtns.slice(),
-  kareokeFactory,
-  imageIndicator
-);
+const holdInput = hold(holdBtns.slice(), kareokeFactory, imageIndicator);
 
-const rapidInput = inputHandler.rapid(
-  rapidBtns.slice(),
-  kareokeFactory,
-  imageIndicator
-);
+const rapidInput = rapid(rapidBtns.slice(), kareokeFactory, imageIndicator);
 
-const feedBackVisualiser = Visualiser.feedBackVisualiser();
+const feedBackVisualiser = feedBackVisualiserFactory();
 
 const removeGameInputs = (duration, inputObject, elapsedTime) => {
   feedBackVisualiser.showIndicator(
@@ -78,4 +66,4 @@ const gamePlayerLogic = (timeElapsed) => {
   return false;
 };
 
-export default { gamePlayerLogic };
+export default gamePlayerLogic;

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="player.bundle.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@900&display=swap" rel="stylesheet">
+  </head>
+  <body class="cold-mode">
+    <video class="background"></video>
+   <div class="info-container">
+     <span id="time"></span>
+     <div class="combo-container jump-animation">
+      <div class="combo-score">10</div>
+      <div class="combo-text">COMBO</div>
+    </div> 
+    </div>
+   
+ 
+   <!-- <span class="performance-visualiser">GREAT</span> -->
+   
+    <div class="player ">
+     
+      <canvas class="cplayer">
+        Visualization of prompt inputs
+      </canvas>
+   
+      <div class="performance-visualiser">
+        
+      </div>
+      <div class="finger_board">
+        <div class="horizontal-lines">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="input_line"> </div>
+        <div class="visualiser-container">
+          <div class="button input-visualiser" id="first"  ></div>
+          <div class="button input-visualiser" id="second"></div>
+          <div class="button input-visualiser" id="third" ></div>
+          <div class="button input-visualiser" id="fourth" ></div>
+        </div>
+      </div>
+    </div>
+   <span id="score"></span>
+    <!--<div class="test" style="width:20px; height:20px; background-color: yellow;"></div> -->
+  </body>
+</html>

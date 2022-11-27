@@ -1,7 +1,7 @@
 const greatScore = 100;
 const goodScore = 60;
 
-const click = (inputList, kareokeFactory, images) => {
+export const click = (inputList, kareokeFactory, images) => {
   const prototype = kareokeFactory(images);
   const greatTimeWindow = 0.075;
 
@@ -29,7 +29,7 @@ const click = (inputList, kareokeFactory, images) => {
   return { checkInput, inputList, prototype };
 };
 
-const hold = (inputList, kareokeFactory, images) => {
+export const hold = (inputList, kareokeFactory, images) => {
   const prototype = kareokeFactory(images);
   let clickTime;
   const checkDown = (key, time, inputs) => {
@@ -92,7 +92,7 @@ const hold = (inputList, kareokeFactory, images) => {
   return { checkDown, checkUp, inputList, prototype };
 };
 
-const rapid = (inputList, kareokeFactory, images) => {
+export const rapid = (inputList, kareokeFactory, images) => {
   let clicks = 0;
   const clickPerSecond = 6;
   const prototype = kareokeFactory(images);
@@ -139,5 +139,3 @@ const rapid = (inputList, kareokeFactory, images) => {
   };
   return { checkInput, countInputs, inputList, prototype };
 };
-
-export default { click, hold, rapid };
