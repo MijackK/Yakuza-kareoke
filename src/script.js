@@ -1,13 +1,11 @@
 import "./style.css";
 import surviveBar from "./images/survive_bar.png";
 import diskImage from "./images/disk.png";
-import header from "./images/header.png";
-import leftOne from "./images/left_one.png";
-import footer from "./images/footer.png";
 import hoverSound from "./audio/hover-sound.mp3";
 import selectSound from "./audio/select-sound.mp3";
 
 const backgroundImage = document.querySelector(".background_image");
+let hoverDebounce = null;
 
 const Disk = document.querySelector(".disk");
 const menuOptions = document.querySelector(".menu-options");
@@ -113,15 +111,22 @@ createBtn.addEventListener("click", () => {
     menuContianer.style.display = "block";
   }
 });
+const optionElements = menuOptions.children;
 
-// eslint-disable-next-line no-restricted-syntax
-for (const option of menuOptions.children) {
-  option.addEventListener("mouseover", () => {
-    audioHover.currentTime = 0;
-    audioHover.play();
+Object.keys(optionElements).forEach((option) => {
+  optionElements[option].addEventListener("mouseover", () => {
+    hoverDebounce = setTimeout(() => {
+      audioHover.currentTime = 0;
+      audioHover.play();
+    }, 50);
   });
-  option.addEventListener("click", () => {
+  optionElements[option].addEventListener("mouseout", () => {
+    audioHover.pause();
+    clearTimeout(hoverDebounce);
+  });
+
+  optionElements[option].addEventListener("click", () => {
     audioSelect.currentTime = 0;
     audioSelect.play();
   });
-}
+});
