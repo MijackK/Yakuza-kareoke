@@ -4,17 +4,16 @@ import diskImage from "./images/disk.png";
 import header from "./images/header.png";
 import leftOne from "./images/left_one.png";
 import footer from "./images/footer.png";
+import hoverSound from "./audio/hover-sound.mp3";
+import selectSound from "./audio/select-sound.mp3";
 
 const backgroundImage = document.querySelector(".background_image");
-const headerImage = document.querySelector(".header");
-const leftImage = document.querySelector(".logo");
-const lastSection = document.querySelector(".last_section");
+
 const Disk = document.querySelector(".disk");
+const menuOptions = document.querySelector(".menu-options");
 Disk.style.backgroundImage = `url(${diskImage})`;
 backgroundImage.style.backgroundImage = `url(${surviveBar})`;
-headerImage.style.backgroundImage = `url(${header})`;
-leftImage.style.backgroundImage = `url(${leftOne})`;
-lastSection.style.backgroundImage = `url(${footer})`;
+
 const diskTag = document.querySelector("#tag").children[0];
 diskTag.textContent = "Empty disk";
 const songList = document.querySelector(".song_list");
@@ -25,6 +24,19 @@ const executeBtn = document.querySelector("#execute");
 const createBtn = document.querySelector("#new_song");
 const menuContianer = document.querySelector(".menu_container");
 const addForm = document.querySelector(".add-form");
+
+// add audio
+const audioHover = document.createElement("audio");
+const audioSelect = document.createElement("audio");
+
+audioSelect.setAttribute(
+  "data-artist",
+  "Sound Effect by Universfield from Pixabay"
+);
+audioHover.src = hoverSound;
+audioSelect.src = selectSound;
+audioSelect.playbackRate = 1;
+document.querySelector("body").prepend(audioHover, audioSelect);
 
 const removeSongFocus = () => {
   const items = songList.children;
@@ -101,3 +113,15 @@ createBtn.addEventListener("click", () => {
     menuContianer.style.display = "block";
   }
 });
+
+// eslint-disable-next-line no-restricted-syntax
+for (const option of menuOptions.children) {
+  option.addEventListener("mouseover", () => {
+    audioHover.currentTime = 0;
+    audioHover.play();
+  });
+  option.addEventListener("click", () => {
+    audioSelect.currentTime = 0;
+    audioSelect.play();
+  });
+}

@@ -201,17 +201,7 @@ document.querySelector("body").addEventListener("keydown", (e) => {
     }
 
     rapidInputHandler(e.key);
-    // eventHandler(e.key, clickInput, "checkInput");
-    // eventHandler(e.key, holdInput, "checkDown");
-    /** 
-    if (rapidInput.inputList.length !== 0) {
-      rapidInput.checkInput(
-        e.key,
-        rapidInput.inputList,
-        Number(((Date.now() - startTime) / 1000).toFixed(1))
-      );
-    }
-*/
+
     audio.currentTime = 0;
     audio.play();
 
