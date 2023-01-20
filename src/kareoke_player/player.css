@@ -64,6 +64,12 @@ body {
   left: 400px;
   box-shadow: 1px 1px 15px var(--input-line);
 }
+.line-shadow {
+  width: 280px;
+  height: 180px;
+  background-image: var(--fade-color);
+  transform: translateX(-280px);
+}
 .button {
   width: 45px;
   height: 45px;
@@ -189,14 +195,24 @@ img {
 .heat-mode {
   --combo-color: linear-gradient(yellow, red);
   --input-line: #f7e378;
-  --horizontal-line: #7f3f10;
+  --horizontal-line: #7f3e10;
   --score-color: wheat;
+  --fade-color: linear-gradient(
+    to right,
+    rgba(247, 227, 120, 0),
+    rgba(247, 227, 120, 0.7)
+  );
 }
 .cold-mode {
   --combo-color: linear-gradient(rgb(255, 255, 255), blue);
   --input-line: rgb(60, 239, 230);
   --horizontal-line: #6579a8a7;
   --score-color: rgb(172, 172, 228);
+  --fade-color: linear-gradient(
+    to right,
+    rgba(60, 239, 230, 0),
+    rgba(60, 239, 230, 0.7)
+  );
 }
 @keyframes explode {
   0% {
