@@ -3,6 +3,7 @@ import surviveBar from "./images/survive_bar.png";
 import diskImage from "./images/disk.png";
 import hoverSound from "./audio/hover-sound.mp3";
 import selectSound from "./audio/select-sound.mp3";
+import stray from "./video/stray.mp4";
 
 const backgroundImage = document.querySelector(".background_image");
 let hoverDebounce = null;
@@ -10,7 +11,9 @@ let hoverDebounce = null;
 const Disk = document.querySelector(".disk");
 const menuOptions = document.querySelector(".menu-options");
 Disk.style.backgroundImage = `url(${diskImage})`;
-backgroundImage.style.backgroundImage = `url(${surviveBar})`;
+// backgroundImage.style.backgroundImage = `url(${surviveBar})`;
+backgroundImage.src = stray;
+backgroundImage.play();
 
 const diskTag = document.querySelector("#tag").children[0];
 diskTag.textContent = "Empty disk";
