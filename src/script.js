@@ -4,6 +4,7 @@ import diskImage from "./images/disk.png";
 import hoverSound from "./audio/hover-sound.mp3";
 import selectSound from "./audio/select-sound.mp3";
 import stray from "./video/stray.mp4";
+import { login } from "./api/authentication";
 
 const backgroundImage = document.querySelector(".background_image");
 let hoverDebounce = null;
@@ -25,6 +26,9 @@ const executeBtn = document.querySelector("#execute");
 const createBtn = document.querySelector("#new_song");
 const menuContianer = document.querySelector(".menu_container");
 const addForm = document.querySelector(".add-form");
+const authBtn = document.querySelector(".auth");
+const loginDialog = document.querySelector("#auth-dialog");
+const loginForm = document.querySelector("#login");
 
 // add audio
 const audioHover = document.createElement("audio");
@@ -100,6 +104,9 @@ editBtn.addEventListener("click", () => {
   executeBtn.children[0].href = "/editor.html";
   createBtn.style.display = "block";
 });
+authBtn.addEventListener("click", () => {
+  loginDialog.style.display = "flex";
+});
 
 createBtn.addEventListener("click", () => {
   if (createBtn.textContent === "Add") {
@@ -112,6 +119,12 @@ createBtn.addEventListener("click", () => {
     createBtn.textContent = "Add";
     addForm.style.display = "none";
     menuContianer.style.display = "block";
+  }
+});
+
+loginDialog.addEventListener("click", (e) => {
+  if (e.target === loginDialog) {
+    loginDialog.style.display = "none";
   }
 });
 const optionElements = menuOptions.children;
@@ -132,4 +145,11 @@ Object.keys(optionElements).forEach((option) => {
     audioSelect.currentTime = 0;
     audioSelect.play();
   });
+});
+
+loginForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const loginData = new FormData(loginForm);
+
+  login({ email: loginData.get("email"), password: loginData.get("password") });
 });

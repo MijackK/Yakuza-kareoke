@@ -3,6 +3,26 @@ body {
   overflow: hidden;
   padding: 0.1px;
 }
+#auth-dialog {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.452);
+}
+#login {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: #39a6f6;
+
+  font-size: 1.4rem;
+  gap: 5px;
+}
+
 .add-form {
   display: none;
   flex-direction: column;

@@ -5,6 +5,9 @@ const config = {
   pointWidth: 10,
   pointSpacing: 10,
   startTime: 3,
+  domain: "localhost:5000",
+  // for fetch requests
+  options: { mode: "cors", credentials: "include" },
 };
 
 export default config;
