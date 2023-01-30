@@ -151,5 +151,15 @@ loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const loginData = new FormData(loginForm);
 
-  login({ email: loginData.get("email"), password: loginData.get("password") });
+  login({
+    email: loginData.get("email"),
+    password: loginData.get("password"),
+  })
+    .then(() => {
+      authBtn.textContent = "LOGOUT";
+      loginDialog.style.display = "none";
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });

@@ -38,6 +38,11 @@ body {
 #beat_map {
   text-align: center;
 }
+.auth-wrapper {
+  background-color: white;
+  width: 30vw;
+  height: 30vh;
+}
 label {
   text-align: center;
 }

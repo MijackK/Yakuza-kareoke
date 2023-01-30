@@ -1,5 +1,5 @@
 import "./player.css";
-import clickSound from "../audio/hitsound02.mp3";
+import clickSound from "../audio/hit6.mp3";
 import greatImg from "../images/great.png";
 import missImg from "../images/miss.png";
 import badImg from "../images/bad.png";
