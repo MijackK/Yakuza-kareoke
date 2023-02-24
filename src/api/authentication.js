@@ -11,15 +11,24 @@ export async function login({ email, password }) {
   };
 
   const response = await apiRequest({ url: "auth/login", options, headers });
+
   if (response.ok === false) {
     throw new Error("Problem Authentication, please try again");
   }
 
-  const userInfo = await response.json();
+  const data = await response.json();
 
-  saveUserInfo(userInfo);
+  return data;
 }
-
+export async function check({ csrfToken }) {
+  const options = { method: "get" };
+  const headers = {
+    "Content-Type": "application/json",
+    CSRF_TOKEN: csrfToken,
+  };
+  const response = await apiRequest({ url: "auth/check", options, headers });
+  return response;
+}
 export async function logout() {}
 
 export async function register() {}

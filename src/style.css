@@ -199,7 +199,9 @@ label {
 .selected {
   background-color: #e9bae5;
 }
-
+.account {
+  display: none;
+}
 .list_number {
   background: black;
   width: 30px;
