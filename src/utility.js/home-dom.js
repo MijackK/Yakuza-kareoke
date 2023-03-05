@@ -28,6 +28,8 @@ const authBtn = document.querySelector(".auth");
 const accountBtn = document.querySelector(".account");
 const loginDialog = document.querySelector("#auth-dialog");
 const loginForm = document.querySelector("#login");
+const registerForm = document.querySelector("#register");
+const authButtonGroup = document.querySelector(".button-group");
 
 // add audio
 const audioHover = document.createElement("audio");
@@ -80,7 +82,25 @@ const authenticatedView = () => {
   accountBtn.style.display = "block";
   loginDialog.style.display = "none";
 };
+// switches between login and signup form
+const authSwitch = (button) => {
+  const buttonGroupMember = authButtonGroup.children;
 
+  Object.keys(buttonGroupMember).forEach((child) => {
+    const element = buttonGroupMember[child];
+
+    if (element === button) {
+      button.classList.add("active");
+      const selectedForm = element.getAttribute("data-form");
+      console.log(selectedForm);
+      registerForm.style.display =
+        selectedForm === "register" ? "flex" : "none";
+      loginForm.style.display = selectedForm === "login" ? "flex" : "none";
+      return;
+    }
+    element.classList.remove("active");
+  });
+};
 export default function initialize(user) {
   currentUser = user;
   if (user.getUserData()?.isLogin) {
@@ -158,6 +178,18 @@ export default function initialize(user) {
       .catch((err) => {
         console.log(err);
       });
+  });
+  registerForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    console.log("register");
+  });
+
+  // authentication button group
+  const buttonGroupMember = authButtonGroup.children;
+  Object.keys(buttonGroupMember).forEach((button) => {
+    buttonGroupMember[button].addEventListener("click", (e) => {
+      authSwitch(e.target);
+    });
   });
 
   // add audio to menu options

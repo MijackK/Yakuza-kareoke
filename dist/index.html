@@ -12,7 +12,7 @@
   
   
 </head>
-<body class="light_mode">
+<body class="dark_mode">
   <div class="song_wrapper">
     <div class="disk disk_slide">
       <div id="tag"><span>Pride from Despair</span></div>
@@ -54,14 +54,28 @@
   </div>
   <div id="auth-dialog">
     <div class="auth-wrapper">
-      <button>Log in</button>
-      <button>Register</button>
-      <form action="" id="login">
-        <label for="email">Email</label>
+      <div class="button-group">
+        <div class="active" data-form="login">LOGIN</div>
+        <div data-form="register">SIGN UP</div>
+      </div>
+  
+      <form action="" id="login" class="auth-form">
+        <label for="email">EMAIL</label>
         <input type="email" id="email" name="email">
-        <label for="password">Password</label>
+        <label for="password">PASSWORD</label>
         <input type="password" id="password" name="password">
-        <button type="submit">Login</button>
+        <button type="submit">SUBMIT</button>
+      </form>
+      <form action="" class="auth-form" id="register">
+        <label for="username">USERNAME</label>
+        <input type="text" id="username" name="username">
+        <label for="email">EMAIL</label>
+        <input type="email" id="email" name="email">
+        <label for="password">PASSWORD</label>
+        <input type="password" id="password" name="password">
+        <label for="password">CONFIRM PASSWORD</label>
+        <input type="text" id="c-password" name="c-password">
+        <button type="submit">SUBMIT</button>
       </form>
     </div>
   </div>

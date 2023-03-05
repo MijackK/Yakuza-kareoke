@@ -1,28 +1,87 @@
+:root {
+  --primary-font: "Finger Paint", cursive;
+  --secondary-font: "Courier New", Courier, monospace;
+}
 body {
   margin: 0px;
   overflow: hidden;
   padding: 0.1px;
+  font-family: var(--secondary-font);
+  font-family: var(--primary-font);
 }
+
+#register {
+  display: none;
+}
+
 #auth-dialog {
   position: absolute;
   width: 100vw;
   height: 100vh;
-  display: none;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.452);
 }
-#login {
+
+.auth-form {
   display: flex;
   flex-direction: column;
   padding: 10px;
-  background-color: #39a6f6;
-
+  background-color: var(--primary-bg-color);
+  color: var(--primary-color);
   font-size: 1.4rem;
   gap: 5px;
+  justify-content: center;
+  align-items: center;
 }
+.auth-form > label {
+  margin-bottom: 10px;
+}
+.auth-form > input {
+  margin-bottom: 10px;
+  width: 50%;
+}
+.auth-form > button {
+  width: 50%;
+  border: none;
+  color: var(--primary-color);
+  background-color: transparent;
+  font-size: 1.4rem;
+  border: solid grey thin;
+  padding: 4px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+.auth-form > button:hover {
+  filter: brightness(1.2);
+}
+.button-group {
+  display: flex;
+  color: var(--primary-color);
+  cursor: pointer;
+}
+.button-group > div {
+  width: 50%;
+  text-align: center;
+  padding-top: 5px;
+  font-size: 1.5rem;
+}
+.button-group > .active {
+  background-image: linear-gradient(
+    to left,
+    rgba(57, 166, 246, 0.1),
+    rgb(57, 166, 246)
+  );
+}
+.auth-wrapper {
+  width: 30vw;
+  min-width: 300px;
 
+  background-color: var(--primary-bg-color);
+  border: solid grey thin;
+}
 .add-form {
   display: none;
   flex-direction: column;
@@ -38,11 +97,7 @@ body {
 #beat_map {
   text-align: center;
 }
-.auth-wrapper {
-  background-color: white;
-  width: 30vw;
-  height: 30vh;
-}
+
 label {
   text-align: center;
 }
@@ -65,14 +120,6 @@ label {
   background-size: 100% 100%;
   filter: brightness(0.6);
   background-color: black;
-}
-
-.dark_mode {
-  --primary-bg-color: #00000c;
-}
-
-.light_mode {
-  --primary-bg-color: #eeeeee;
 }
 
 .logo {
@@ -99,9 +146,6 @@ label {
   font-size: 2rem;
   cursor: pointer;
   width: 35vw;
-  font-style: italic;
-  font-family: "Courier New", Courier, monospace;
-  font-family: "Finger Paint", cursive;
 }
 .menu-options > div:hover {
   background: rgb(246, 0, 0);
@@ -262,6 +306,15 @@ label {
 }
 .add_play > div:hover {
   filter: brightness(1.1);
+}
+.dark_mode {
+  --primary-color: #eeeeee;
+  --primary-bg-color: #091126;
+}
+
+.light_mode {
+  --primary-color: #000000;
+  --primary-bg-color: #eeeeee;
 }
 
 @keyframes slide {
