@@ -13,20 +13,13 @@ body {
 #register {
   display: none;
 }
-#login {
-  margin-top: 60px;
-}
-#login > button {
-  margin-top: 115px;
-}
 
 #auth-dialog {
   position: absolute;
   width: 100vw;
   height: 100vh;
-  display: flex;
+  display: none;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.452);
 }
@@ -34,7 +27,7 @@ body {
 .auth-form {
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 20px;
   background-color: var(--primary-bg-color);
   color: var(--primary-color);
   font-size: 1.4rem;
@@ -92,9 +85,9 @@ body {
 .auth-wrapper {
   width: 30vw;
   min-width: 300px;
-  min-height: 470px;
   background-color: var(--primary-bg-color);
   border: solid grey thin;
+  margin-top: 170px;
 }
 .add-form {
   display: none;
@@ -273,7 +266,7 @@ label {
   margin-right: 20px;
 }
 #tag {
-  font-size: 1.4rem;
+  font-size: 1rem;
   background-color: white;
   width: fit-content;
   padding: 5px;
