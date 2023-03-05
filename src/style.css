@@ -11,9 +11,10 @@ body {
 }
 
 #register {
-  max-height: 0px;
-
-  opacity: 0;
+  display: none;
+}
+#login {
+  margin-top: 60px;
 }
 
 #auth-dialog {
@@ -37,7 +38,6 @@ body {
   gap: 5px;
   justify-content: center;
   align-items: center;
-  transition: max-height 1s;
   overflow: hidden;
 }
 .auth-form > label {

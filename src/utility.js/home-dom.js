@@ -96,16 +96,10 @@ const authSwitch = (button) => {
       const checkRegsiter = selectedForm === "register";
       const checkLogin = selectedForm === "login";
       // register form style change
-
-      registerForm.style.opacity = checkRegsiter ? 1 : 0;
-      registerForm.style.maxHeight = checkRegsiter ? "100vh" : "0px";
-      registerForm.style.height = checkRegsiter ? "auto" : "0px";
+      registerForm.style.display = checkRegsiter ? "flex" : "none";
 
       // login form style change
-
-      loginForm.style.opacity = checkLogin ? 1 : 0;
-      loginForm.style.maxHeight = checkLogin ? "100vh" : "0px";
-      loginForm.style.height = checkLogin ? "auto" : "0px";
+      loginForm.style.display = checkLogin ? "flex" : "none";
 
       return;
     }
