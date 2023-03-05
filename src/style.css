@@ -11,7 +11,9 @@ body {
 }
 
 #register {
-  display: none;
+  max-height: 0px;
+
+  opacity: 0;
 }
 
 #auth-dialog {
@@ -35,6 +37,8 @@ body {
   gap: 5px;
   justify-content: center;
   align-items: center;
+  transition: max-height 1s;
+  overflow: hidden;
 }
 .auth-form > label {
   margin-bottom: 10px;
@@ -78,7 +82,7 @@ body {
 .auth-wrapper {
   width: 30vw;
   min-width: 300px;
-
+  min-height: 470px;
   background-color: var(--primary-bg-color);
   border: solid grey thin;
 }

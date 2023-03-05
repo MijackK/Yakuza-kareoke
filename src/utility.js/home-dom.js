@@ -92,10 +92,21 @@ const authSwitch = (button) => {
     if (element === button) {
       button.classList.add("active");
       const selectedForm = element.getAttribute("data-form");
-      console.log(selectedForm);
-      registerForm.style.display =
-        selectedForm === "register" ? "flex" : "none";
-      loginForm.style.display = selectedForm === "login" ? "flex" : "none";
+
+      const checkRegsiter = selectedForm === "register";
+      const checkLogin = selectedForm === "login";
+      // register form style change
+
+      registerForm.style.opacity = checkRegsiter ? 1 : 0;
+      registerForm.style.maxHeight = checkRegsiter ? "100vh" : "0px";
+      registerForm.style.height = checkRegsiter ? "auto" : "0px";
+
+      // login form style change
+
+      loginForm.style.opacity = checkLogin ? 1 : 0;
+      loginForm.style.maxHeight = checkLogin ? "100vh" : "0px";
+      loginForm.style.height = checkLogin ? "auto" : "0px";
+
       return;
     }
     element.classList.remove("active");
