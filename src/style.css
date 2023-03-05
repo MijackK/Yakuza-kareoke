@@ -16,6 +16,9 @@ body {
 #login {
   margin-top: 60px;
 }
+#login > button {
+  margin-top: 115px;
+}
 
 #auth-dialog {
   position: absolute;
@@ -36,25 +39,23 @@ body {
   color: var(--primary-color);
   font-size: 1.4rem;
   gap: 5px;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
 }
 .auth-form > label {
   margin-bottom: 10px;
+  align-self: flex-start;
 }
 .auth-form > input {
   margin-bottom: 10px;
-  width: 50%;
 }
 .auth-form > button {
   width: 50%;
   border: none;
   color: var(--primary-color);
-  background-color: transparent;
+  background-color: rgb(220, 88, 88);
+
   font-size: 1.4rem;
-  border: solid grey thin;
-  padding: 4px;
+
+  padding: 10px;
   cursor: pointer;
   margin-top: 5px;
 }
@@ -72,13 +73,22 @@ body {
   padding-top: 5px;
   font-size: 1.5rem;
 }
-.button-group > .active {
+
+[data-form="login"].active {
   background-image: linear-gradient(
     to left,
     rgba(57, 166, 246, 0.1),
     rgb(57, 166, 246)
   );
 }
+[data-form="register"].active {
+  background-image: linear-gradient(
+    to right,
+    rgba(57, 166, 246, 0.1),
+    rgb(57, 166, 246)
+  );
+}
+
 .auth-wrapper {
   width: 30vw;
   min-width: 300px;
