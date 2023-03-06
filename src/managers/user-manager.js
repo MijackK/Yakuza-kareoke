@@ -1,4 +1,4 @@
-import { login, logout, check } from "../api/authentication";
+import { login, logout, check, register } from "../api/authentication";
 import { getUserInfo, saveUserInfo } from "../utility.js/storage";
 
 function userManager() {
@@ -12,6 +12,11 @@ function userManager() {
       saveUserInfo(userData);
     }
     return loginResponse;
+  };
+  const handleRegister = async (data) => {
+    const registerResponse = await register(data);
+
+    return registerResponse;
   };
   const isLogin = async () => {
     const userInfo = getUserInfo();
@@ -27,6 +32,7 @@ function userManager() {
     getUserData,
     setUserData,
     handleLogin,
+    handleRegister,
     isLogin,
     logout,
   };

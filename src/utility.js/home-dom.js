@@ -186,7 +186,24 @@ export default function initialize(user) {
   });
   registerForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    console.log("register");
+    const registerData = new FormData(registerForm);
+    currentUser
+      .handleRegister({
+        email: registerData.get("email"),
+        password: registerData.get("password"),
+        userName: registerData.get("username"),
+      })
+      .then((res) => {
+        if (res.success) {
+          alert("registration sucessfull");
+          loginDialog.style.display = "none";
+          return;
+        }
+        console.log(res.message);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 
   // authentication button group
