@@ -1,5 +1,5 @@
 import "./player.css";
-import clickSound from "../audio/hit6.mp3";
+import clickSound from "../audio/hitsound02.mp3";
 import greatImg from "../images/great.png";
 import missImg from "../images/miss.png";
 import badImg from "../images/bad.png";
@@ -8,22 +8,24 @@ import kareokeFactory from "../parts/general-parts";
 import { click, hold, rapid } from "../parts/input-parts";
 import { feedBackVisualiserFactory } from "../parts/display-parts";
 import { validPrompts, init } from "../canvas/canvas";
-import video from "../video/judgment.mp4";
+import background from "../video/judgment.mp4";
+import audiomp3 from "../audio/judgment.mp3";
 
 init();
+
 const audio = document.createElement("audio");
 
-// const song = document.createElement("audio");
+const song = document.createElement("audio");
 audio.src = clickSound;
-// song.src = judgment;
+song.src = audiomp3;
 audio.playbackRate = 1;
 let play = true;
 
 document.querySelector("body").prepend(audio);
-// document.querySelector("body").prepend(song);
+document.querySelector("body").prepend(song);
 const backgroundVideo = document.querySelector(".background");
-backgroundVideo.src = video;
-// song.play();
+backgroundVideo.src = background;
+
 let timeElapsed = 0;
 let previousTime = 0;
 let startTime = Date.now();
@@ -186,8 +188,10 @@ const AnimatePrompts = () => {
   validPrompts(timeElapsed, promptArrays, play);
   animationID = requestAnimationFrame(AnimatePrompts);
 };
+
 backgroundVideo.onloadedmetadata = () => {
   backgroundVideo.play();
+  song.play();
   animationID = requestAnimationFrame(AnimatePrompts);
   gameLoop = setInterval(timeController, 0);
 };

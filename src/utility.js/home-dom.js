@@ -5,7 +5,8 @@ import stray from "../video/stray.mp4";
 
 const backgroundImage = document.querySelector(".background_image");
 let hoverDebounce = null;
-let currentUser = null;
+let userManager;
+let mapManager;
 
 const Disk = document.querySelector(".disk");
 const menuOptions = document.querySelector(".menu-options");
@@ -15,21 +16,19 @@ backgroundImage.src = stray;
 backgroundImage.play();
 
 const diskTag = document.querySelector("#tag").children[0];
-diskTag.textContent = "Empty disk";
 const songList = document.querySelector(".song_list");
-const selectModal = document.querySelector(".song_wrapper");
+const songModal = document.querySelector(".song_wrapper");
 const playBtn = document.querySelector(".play");
-const editBtn = document.querySelector(".editor");
-const executeBtn = document.querySelector("#execute");
-const createBtn = document.querySelector("#new_song");
-const menuContianer = document.querySelector(".menu_container");
-const addForm = document.querySelector(".add-form");
+const startSongBtn = document.querySelector("#start-song");
 const authBtn = document.querySelector(".auth");
 const accountBtn = document.querySelector(".account");
 const loginDialog = document.querySelector("#auth-dialog");
 const loginForm = document.querySelector("#login");
 const registerForm = document.querySelector("#register");
+const accountForm = document.querySelector("#account");
 const authButtonGroup = document.querySelector(".button-group");
+const accountPage = document.querySelector("#account-dialog");
+const accountPageClose = document.querySelector("#close-account");
 
 // add audio
 const audioHover = document.createElement("audio");
@@ -53,7 +52,6 @@ const removeSongFocus = () => {
   });
 };
 
-const newSong = () => {};
 const animateDisk = () => {
   Disk.classList.toggle("disk_slide");
   requestAnimationFrame(() => {
@@ -63,11 +61,24 @@ const animateDisk = () => {
   });
 };
 const generateList = (songs) => {
-  const songItem = document.createElement("li");
-  const numberPoint = document.createElement("span");
-  numberPoint.className = "list_number";
-  const songName = document.createElement("span");
-  songName.className = "song-name";
+  for (let i = 0; i < songs.length; i += 1) {
+    const songItem = document.createElement("li");
+    songItem.title = songs[i].name;
+    songItem.dataset.song = songs[i].name;
+    const numberPoint = document.createElement("span");
+    numberPoint.className = "list_number";
+    numberPoint.textContent = i;
+    songItem.append(numberPoint);
+    const songName = document.createElement("span");
+    songName.className = "song-name";
+    songName.textContent = songs[i].name;
+
+    songItem.append(songName);
+    songItem.addEventListener("click", () => {
+      startSongBtn.parentNode.href = `player.html?id=${songs[i].id}`;
+    });
+    songList.append(songItem);
+  }
 };
 
 const selectSong = (song) => {
@@ -106,8 +117,14 @@ const authSwitch = (button) => {
     element.classList.remove("active");
   });
 };
-export default function initialize(user) {
-  currentUser = user;
+export default function initialize(user, map) {
+  userManager = user;
+  mapManager = map;
+
+  mapManager.getSongs().then((songs) => {
+    generateList(songs);
+  });
+
   if (user.getUserData()?.isLogin) {
     authenticatedView();
   }
@@ -120,11 +137,15 @@ export default function initialize(user) {
 
     selectSong(e.target);
   });
+  // auto populate account
 
   // modals
-  selectModal.addEventListener("click", (e) => {
-    if (e.target === selectModal) {
-      selectModal.style.display = "none";
+  songModal.addEventListener("click", (e) => {
+    if (e.target === songModal) {
+      songModal.style.display = "none";
+      // eslint-disable-next-line no-script-url
+      startSongBtn.parentNode.href = "javascript:void(0)";
+      removeSongFocus();
     }
   });
   loginDialog.addEventListener("click", (e) => {
@@ -135,40 +156,22 @@ export default function initialize(user) {
   // add events to menu options
 
   playBtn.addEventListener("click", () => {
-    selectModal.style.display = "flex";
-    executeBtn.children[0].textContent = "Play";
-    executeBtn.style.width = "100%";
-    executeBtn.children[0].href = "/player.html";
-    createBtn.style.display = "none";
+    songModal.style.display = "flex";
   });
-  editBtn.addEventListener("click", () => {
-    selectModal.style.display = "flex";
-    executeBtn.children[0].textContent = "Edit";
-    executeBtn.style.width = "50%";
-    executeBtn.children[0].href = "/editor.html";
-    createBtn.style.display = "block";
-  });
-  createBtn.addEventListener("click", () => {
-    if (createBtn.textContent === "Add") {
-      createBtn.textContent = "Back";
-      addForm.style.display = "flex";
-      menuContianer.style.display = "none";
-      return;
-    }
-    if (createBtn.textContent === "Back") {
-      createBtn.textContent = "Add";
-      addForm.style.display = "none";
-      menuContianer.style.display = "block";
-    }
-  });
+
   authBtn.addEventListener("click", () => {
     loginDialog.style.display = "flex";
+  });
+  accountBtn.addEventListener("click", () => {
+    accountPage.style.display = "grid";
+    accountForm.elements.username.value = userManager.getUserData().userName;
+    accountForm.elements.email.value = userManager.getUserData().email;
   });
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const loginData = new FormData(loginForm);
 
-    currentUser
+    userManager
       .handleLogin({
         email: loginData.get("email"),
         password: loginData.get("password"),
@@ -187,7 +190,7 @@ export default function initialize(user) {
   registerForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const registerData = new FormData(registerForm);
-    currentUser
+    userManager
       .handleRegister({
         email: registerData.get("email"),
         password: registerData.get("password"),
@@ -204,6 +207,9 @@ export default function initialize(user) {
       .catch((err) => {
         console.log(err);
       });
+  });
+  accountPageClose.addEventListener("click", () => {
+    accountPage.style.display = "none";
   });
 
   // authentication button group

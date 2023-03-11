@@ -22,33 +22,23 @@
         <div>Kareoke</div>
         <div>Web</div>
       </div>
-      <form class="add-form">
-        <div class="list-title">Add A song</div>
-        <label for="song-text">Name</label>
-        <input id="song-text"type="text">
-        <label for="mp3">Music File</label>
-        <input id="mp3"type="text">
-        <label for="backdrop_img">Background image</label>
-        <input id="backdrop_img"type="file">
-        <button>Submit</button>
-      </form>
+ 
       <div class="menu_container">
       <div class="list-title">Song Selection</div>  
         <ol class="song_list">
-          <li data-song="judgment">
+           <!-- <li data-song="judgment"  >
             <span class="list_number">1</span>
             <span class="song-name">Judment-Shinpan</span>
           </li>
           <li  data-song="judgment2">
             <span class="list_number">1</span>
             <span class="song-name">Judment-Shinpan</span>
-          </li>
+          </li>-->
         </ol>
        </div>
-       <div class="double-div add_play">
-         <div id="execute"><a>Play</a></div>
-         <div id="new_song">Add</div>
-       </div>
+    
+       <a href="javascript:void(0)"><div id="start-song">Play</div></a>
+      
       </div>
     </div>
   </div>
@@ -79,12 +69,34 @@
       </form>
     </div>
   </div>
+  <div id="account-dialog" class="dialog">
+  
+    <div class="account-header">
+      <h1>Account</h1>
+      <button id="close-account">close</span>
+    </div>
+    <div>
+      <h2>Account Details</h2>
+    <form action="" class="general-form" id="account">
+      <label for="username">USERNAME</label>
+      <input type="text" id="username" name="username">
+      <label for="email">EMAIL</label>
+      <input type="email" id="email" name="email">
+
+    </form>
+    <a href="#">Verify account</a>
+  </div>
+  <div>
+    <h2>Highscores</h2>
+  </div>
+    
+  </div>
   <video class="background_image" loop></video>
   <div class="background-overlay"></div>
  
   <div class="menu-options">
     <div class="play option-active"><a>PLAY</a></div>
-    <div class="editor">EDITOR</div>
+    <a href="editor.html"></a><div class="editor ">EDITOR</div></a>
     <div class="settings">SETTINGS</div>
     <div class="about">ABOUT</div>
     <div class="auth">LOG IN</div>

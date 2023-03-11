@@ -1,7 +1,8 @@
 import { login, logout, check, register } from "../api/authentication";
+import { getUserMaps } from "../api/kareoke";
 import { getUserInfo, saveUserInfo } from "../utility.js/storage";
 
-function userManager() {
+export default function userManager() {
   let userData = { isLogin: false };
   const getUserData = () => userData;
   const setUserData = (data) => {};
@@ -37,7 +38,3 @@ function userManager() {
     logout,
   };
 }
-
-const user = userManager();
-
-export default user;
