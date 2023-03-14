@@ -187,14 +187,14 @@ label {
   justify-content: center;
   gap: 10px;
 }
-.menu-options > div {
+.menu-options div {
   color: rgba(255, 255, 255, 0.8);
   padding-left: 8vw;
   font-size: 2rem;
   cursor: pointer;
   width: 35vw;
 }
-.menu-options > div:hover {
+.menu-options div:hover {
   background: rgb(246, 0, 0);
   background: linear-gradient(
     90deg,

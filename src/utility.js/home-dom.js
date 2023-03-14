@@ -75,7 +75,7 @@ const generateList = (songs) => {
 
     songItem.append(songName);
     songItem.addEventListener("click", () => {
-      startSongBtn.parentNode.href = `player.html?id=${songs[i].id}`;
+      startSongBtn.parentNode.href = `player.html?song=${songs[i].id}`;
     });
     songList.append(songItem);
   }

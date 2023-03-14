@@ -5,13 +5,13 @@ import up from "../images/up1.png";
 import down from "../images/down1.png";
 import left from "../images/left1.png";
 import right from "../images/right1.png";
-import gamePlayerLogic from "../parts/map-visualizer";
+import gamePlayerLogic from "../player-parts/map-visualizer";
 import { validPrompts, init } from "../canvas/canvas";
 import {
   mapProgressPrompts,
   moveProgressThumb,
   autoThumbMovement,
-} from "../parts/display-parts";
+} from "../player-parts/display-parts";
 import surviveBar from "../images/survive_bar.png";
 
 const timeOffset = 3.0;
@@ -67,7 +67,7 @@ const editor = (() => {
   rapidForm.children[1].value = 1;
   const holdForm = document.querySelector("#h-form");
   holdForm.children[1].value = 1;
-  const Board = document.querySelector(".finger_board");
+
   let promptType = "click";
   let promptDuration = 0;
   let holdDuration = 1;
@@ -476,8 +476,8 @@ const editor = (() => {
     if (!["", "none"].includes(timePicker.style.display)) return;
 
     playPause(playBtn.id);
-    playBtn.textContent = playBtn.textContent === "Play" ? "Pause" : "Play";
-    playBtn.id = playBtn.id === "play" ? "pause" : "play";
+    playBtn.textContent = Play ? "Pause" : "Play";
+    playBtn.id = Play ? "pause" : "play";
   });
 
   return {
