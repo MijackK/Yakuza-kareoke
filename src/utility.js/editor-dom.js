@@ -88,7 +88,10 @@ const fillTimeline = (duration, beatMap, images) => {
     if (promptInfo) {
       switch (promptInfo.type) {
         case "click":
-          clickPrompt(Map.children[Map.childElementCount - 1], promptInfo.key);
+          clickPrompt(
+            Map.children[Map.childElementCount - 1],
+            images[promptInfo.key]
+          );
           break;
         default:
           longPrompt(
