@@ -45,7 +45,7 @@ export default function beatMapManager() {
   const generateBlobUrl = async ({ audio, background }) => {
     URL.revokeObjectURL(backgroundUrl);
     URL.revokeObjectURL(audioUrl);
-    console.log(audio);
+    console.log(background);
 
     const [audioBlob, backgroundBloB] = await Promise.all([
       getMedia(`http://${config.objectServer}/${audio}`),
@@ -54,7 +54,7 @@ export default function beatMapManager() {
 
     audioUrl = URL.createObjectURL(audioBlob);
     backgroundUrl = URL.createObjectURL(backgroundBloB);
-    console.log(audioUrl);
+    console.log(backgroundUrl);
   };
 
   return {

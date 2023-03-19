@@ -14,7 +14,11 @@ import {
 } from "../player-parts/display-parts";
 
 import editorFactory from "../managers/editor_manager";
-import { initialize, fillTimeline } from "../utility.js/editor-dom";
+import {
+  initialize,
+  fillTimeline,
+  updateDomTime,
+} from "../utility.js/editor-dom";
 import beatMapManager from "../managers/map_manager";
 import userFactory from "../managers/user-manager";
 
@@ -22,6 +26,7 @@ const editor = editorFactory();
 const mapManager = beatMapManager();
 const userManager = userFactory();
 init();
+let editorLoop;
 
 /** 
 const timeOffset = 3.0;
@@ -503,13 +508,14 @@ const editor = (() => {
 })();
 */
 const timeController = () => {
-  const elapsedTime = editor.getElapseTime();
+  const elapsedTime = editor.getElapsedTime();
   const Play = editor.getPlay();
   const audioDuration = editor.getAudioDuration();
-  let startTime = editor.getStartTime();
+
   const timeOffset = editor.getTimeOffset();
-  let previousTime = editor.getPreviousTime();
+  const previousTime = editor.getPreviousTime();
   const playRate = editor.getPlayRate();
+  const AudioCurrentTime = editor.getAudioCurrentTime();
 
   if (elapsedTime > audioDuration) {
     // clearInterval(editorLoop);
@@ -524,27 +530,26 @@ const timeController = () => {
   if (Play === false) {
     return;
   }
-  if (!startTime) {
-    startTime = Date.now();
+  if (!editor.getStartTime()) {
+    editor.setStartTime(Date.now());
   }
 
-  let currentTime = Number((Date.now() - startTime) / 1000);
+  let currentTime = Number((Date.now() - editor.getStartTime()) / 1000);
 
   if (Math.abs(elapsedTime - currentTime * playRate - timeOffset) > 0.1) {
     const startIncrease = currentTime - previousTime;
 
-    startTime += startIncrease * 1000;
-    currentTime = Number((Date.now() - startTime) / 1000);
+    editor.setStartTime(editor.getStartTime() + startIncrease * 1000);
+    currentTime = Number((Date.now() - editor.getStartTime()) / 1000);
   }
 
   // elapsedTime += currentTime - previousTime;
   editor.setElapsedTime(previousTime * playRate + timeOffset);
-  previousTime = currentTime;
+  editor.setPreviousTime(currentTime);
   autoThumbMovement(
-    (editor.Audio.currentTime - timeOffset) /
-      (editor.Audio.duration - timeOffset)
+    (AudioCurrentTime - timeOffset) / (audioDuration - timeOffset)
   );
-  editor.updateDomTime();
+  updateDomTime(elapsedTime);
 };
 const AnimatePrompts = () => {
   timeController();
@@ -561,11 +566,8 @@ const AnimatePrompts = () => {
 userManager.isLogin().then(() => {
   console.log(userManager.getUserData());
   initialize({ user: userManager, map: mapManager, editor });
-});
-
-mapManager.generateBlobUrl({
-  audio: "kareoke/judgmentv9dUo1zKgrqyqfaJxmCkq25gGy6eEcPBSvLdqYPwAkI.mp3",
-  background: "kareoke/judgmentv9dUo1zKgrqyqfaJxmCkq25gGy6eEcPBSvLdqYPwAkI.mp3",
+  requestAnimationFrame(AnimatePrompts);
+  editorLoop = setInterval(timeController, 0);
 });
 
 /** editor.Audio.onloadedmetadata = () => {

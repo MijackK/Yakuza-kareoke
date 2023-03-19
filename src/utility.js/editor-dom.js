@@ -1,4 +1,7 @@
-import { moveProgressThumb } from "../player-parts/display-parts";
+import {
+  moveProgressThumb,
+  mapProgressPrompts,
+} from "../player-parts/display-parts";
 import surviveBar from "../images/survive_bar.png";
 
 const background = document.querySelector(".background");
@@ -151,8 +154,9 @@ const moveTimelineProgress = ({ leftStart, leftEnd, transition }) => {
   }, 10);
 };
 
-const progressBarTimeUpdate = (newPosition) => {
+const progressBarTimeUpdate = (newPosition, elapsedTime) => {
   const positionValue = newPosition.value;
+  Audio.currentTime = elapsedTime;
   switch (newPosition.Play) {
     case false:
       stopTimeLine(positionValue);
@@ -160,11 +164,23 @@ const progressBarTimeUpdate = (newPosition) => {
     default:
       moveTimelineProgress(positionValue);
   }
-  updateDomTime();
+  updateDomTime(elapsedTime);
 };
 
 const clearSongList = () => {};
+
 const loadMedia = ({ mapBackground, mapAudio, map, editor }) => {
+  const getMetaData = () => {
+    editor.setAudioDuration(Audio.duration);
+    fillTimeline(Audio.duration * 10, editor.getBeatMap(), editor.getImages());
+    const timeOffset = editor.getTimeOffset();
+    mapProgressPrompts(
+      editor.getBeatMap(),
+      Audio.duration - timeOffset,
+      timeOffset
+    );
+    Audio.removeEventListener("loadedmetadata", getMetaData);
+  };
   map
     .generateBlobUrl({
       audio: mapAudio,
@@ -172,6 +188,7 @@ const loadMedia = ({ mapBackground, mapAudio, map, editor }) => {
     })
     .then(() => {
       Audio.src = map.getAudioUrl();
+      Audio.addEventListener("loadedmetadata", getMetaData);
     });
 };
 const listBeatMaps = (beatMaps, editor, map) => {
@@ -201,6 +218,8 @@ export function initialize({ editor, map, user }) {
   Map.style.left = `${editor.getStartPosition()}px`;
   Audio.src = map.getAudioUrl();
   selectPlaySpeed.value = editor.getPlayBackRate();
+  // alows editor to get the audio current time
+  editor.getAudioCurrentTime = () => Audio.currentTime;
 
   // fcheck if user isn't logged in, a
   if (user.getUserData().isLogin === false) {
@@ -272,7 +291,7 @@ export function initialize({ editor, map, user }) {
     e.preventDefault();
     editor.pickTime(Number(jumpInput.value));
     stopTimeLine(Number(editor.getElapsedTime().toFixed(1)));
-    updateDomTime();
+    updateDomTime(editor.getElapsedTime());
     timePicker.style.display = "none";
     jumpInput.value = "";
   });
@@ -370,7 +389,7 @@ export function initialize({ editor, map, user }) {
 
     const position = editor.progressBarTimeUpdate(timePosition);
     if (position) {
-      progressBarTimeUpdate(position);
+      progressBarTimeUpdate(position, editor.getElapsedTime());
     }
   });
   progressBar.addEventListener("mouseup", () => {
@@ -382,7 +401,7 @@ export function initialize({ editor, map, user }) {
       const timePosition = moveProgressThumb(e);
       const position = editor.progressBarTimeUpdate(timePosition);
       if (position) {
-        progressBarTimeUpdate(position);
+        progressBarTimeUpdate(position, editor.getElapsedTime());
       }
     }
   });
@@ -411,4 +430,4 @@ export function initialize({ editor, map, user }) {
   });
 }
 
-export { fillTimeline };
+export { fillTimeline, updateDomTime };

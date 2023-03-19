@@ -15,6 +15,7 @@ export default function editorFactory() {
   let moveThumb = false;
   let beatMap = JSON.parse(localStorage.getItem("judgment"));
   let audioDuration;
+  const getAudioCurrentTime = () => timeOffset;
   let playbackRate = 1;
 
   const timePointsPerSecond = 10;
@@ -82,6 +83,12 @@ export default function editorFactory() {
   };
   const setElapsedTime = (value) => {
     elapsedTime = value;
+  };
+  const setStartTime = (value) => {
+    startTime = value;
+  };
+  const setMoveThumb = (value) => {
+    moveThumb = value;
   };
 
   const translateToKey = (position) => {
@@ -171,7 +178,7 @@ export default function editorFactory() {
   };
   const moveTimeLine = (songTime) => {
     const timePassed = Number(elapsedTime).toFixed(1);
-    if (timePassed >= songTime) {
+    if (timePassed >= Number(songTime)) {
       Play = true;
       return false;
     }
@@ -291,5 +298,8 @@ export default function editorFactory() {
     setElapsedTime,
     getStartPosition,
     getPlayBackRate,
+    getAudioCurrentTime,
+    setStartTime,
+    setMoveThumb,
   };
 }
