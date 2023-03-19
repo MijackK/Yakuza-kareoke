@@ -278,6 +278,7 @@ export function initialize({ editor, map, user }) {
   selectPlaySpeed.addEventListener("change", (e) => {
     const position = editor.updateSpeed(Number(e.target.value));
     if (position) {
+      Audio.playbackRate = editor.getPlayBackRate();
       moveTimelineProgress(position);
     }
   });
