@@ -3,6 +3,7 @@ import {
   mapProgressPrompts,
 } from "../player-parts/display-parts";
 import surviveBar from "../images/survive_bar.png";
+import { validPrompts } from "../canvas/canvas";
 
 const background = document.querySelector(".background");
 
@@ -296,6 +297,7 @@ export function initialize({ editor, map, user }) {
 
     const validTime = editor.pickTime(Number(jumpInput.value));
     if (validTime) {
+      validPrompts(editor.getElapsedTime(), editor.getBeatMap());
       const postion = editor.stopTimeLine();
       stopTimeLine(postion);
       updateDomTime(editor.getElapsedTime());
@@ -338,11 +340,23 @@ export function initialize({ editor, map, user }) {
 
     if (timePoint.childElementCount !== 0) {
       editor.removePrompt(Number(timePoint.id));
+      const timeOffset = editor.getTimeOffset();
+      mapProgressPrompts(
+        editor.getBeatMap(),
+        Audio.duration - timeOffset,
+        timeOffset
+      );
       timePoint.textContent = "";
       return;
     }
 
     editor.addPrompt(Number(timePoint.id), e.target.id);
+    const timeOffset = editor.getTimeOffset();
+    mapProgressPrompts(
+      editor.getBeatMap(),
+      Audio.duration - timeOffset,
+      timeOffset
+    );
     const promptImages = editor.getImages();
     switch (editor.getPromptType) {
       case "click":
@@ -418,11 +432,11 @@ export function initialize({ editor, map, user }) {
     if (["ArrowRight", "ArrowLeft"].includes(e.key) === false) {
       return;
     }
-    console.log("hi");
 
     const direction = e.key === "ArrowRight" ? "foward" : "backward";
     const movePosition = editor.timeStep(direction);
     if (direction) {
+      validPrompts(editor.getElapsedTime(), editor.getBeatMap());
       timeStep(movePosition);
     }
 

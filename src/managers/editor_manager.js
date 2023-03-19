@@ -4,7 +4,6 @@ import left from "../images/left1.png";
 import right from "../images/right1.png";
 
 import { validPrompts } from "../canvas/canvas";
-import { mapProgressPrompts } from "../player-parts/display-parts";
 
 export default function editorFactory() {
   const timeOffset = 3.0;
@@ -164,7 +163,6 @@ export default function editorFactory() {
       timePointsPerSecond *
       distanceBetweenTimePoints;
 
-    validPrompts(elapsedTime, beatMap);
     return `${startPosition - position}px`;
   };
 
@@ -174,7 +172,7 @@ export default function editorFactory() {
     }
     previousTime = (time - timeOffset) / playbackRate;
     elapsedTime = previousTime * playbackRate + timeOffset;
-    validPrompts(elapsedTime, beatMap);
+
     return true;
   };
   const moveTimeLine = (songTime) => {
@@ -204,7 +202,6 @@ export default function editorFactory() {
     beatMap = beatMap.filter((prompt) => prompt.time !== identifier);
     // eslint-disable-next-line no-param-reassign
     saveChanges();
-    mapProgressPrompts(beatMap, audioDuration - timeOffset, timeOffset);
   };
   const addPrompt = (time, place) => {
     const promptObject = contructPrompt(
@@ -216,7 +213,6 @@ export default function editorFactory() {
     beatMap.push(promptObject);
     beatMap.sort((a, b) => a.time - b.time);
     saveChanges();
-    mapProgressPrompts(beatMap, audioDuration - timeOffset, timeOffset);
   };
   const moveTimelineProgress = (songTime) => {
     const timePassed = elapsedTime.toFixed(1);
