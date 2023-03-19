@@ -149,7 +149,7 @@ export default function editorFactory() {
   };
 
   const timeStep = (direction) => {
-    const timePassed = elapsedTime.toFixed(1);
+    const timePassed = Number(elapsedTime.toFixed(1));
     if (Play) {
       return false;
     }

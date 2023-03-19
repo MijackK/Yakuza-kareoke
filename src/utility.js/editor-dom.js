@@ -343,14 +343,15 @@ export function initialize({ editor, map, user }) {
     }
 
     editor.addPrompt(Number(timePoint.id), e.target.id);
+    const promptImages = editor.getImages();
     switch (editor.getPromptType) {
       case "click":
-        clickPrompt(timePoint, promptKey);
+        clickPrompt(timePoint, promptImages[promptKey]);
         break;
       default:
         longPrompt(
           timePoint,
-          promptKey,
+          promptImages[promptKey],
           editor.getPromptDuration,
           editor.getPromptType
         );
@@ -414,9 +415,10 @@ export function initialize({ editor, map, user }) {
     }
   });
   document.querySelector("body").addEventListener("keydown", (e) => {
-    if (e.key !== "ArrowRight" || e.key !== "ArrowLeft") {
+    if (["ArrowRight", "ArrowLeft"].includes(e.key) === false) {
       return;
     }
+    console.log("hi");
 
     const direction = e.key === "ArrowRight" ? "foward" : "backward";
     const movePosition = editor.timeStep(direction);
