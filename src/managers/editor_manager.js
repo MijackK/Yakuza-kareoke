@@ -6,7 +6,7 @@ import right from "../images/right1.png";
 import { validPrompts } from "../canvas/canvas";
 import { mapProgressPrompts } from "../player-parts/display-parts";
 
-export default function editor() {
+export default function editorFactory() {
   const timeOffset = 3.0;
   let elapsedTime = timeOffset;
   let previousTime = 0;
@@ -14,13 +14,13 @@ export default function editor() {
   let Play = false;
   let moveThumb = false;
   let beatMap = JSON.parse(localStorage.getItem("judgment"));
+  let audioDuration;
   let playbackRate = 1;
 
   const timePointsPerSecond = 10;
   const distanceBetweenTimePoints = 29;
   const startPosition =
     (3.3 - timeOffset) * timePointsPerSecond * distanceBetweenTimePoints;
-  Map.style.left = `${startPosition}px`;
 
   const offSet = timeOffset;
   let promptType = "click";
@@ -52,6 +52,12 @@ export default function editor() {
   const getPromptType = () => promptType;
   const getMoveThumb = () => moveThumb;
   const getImages = () => image;
+  const getPreviousTime = () => previousTime;
+  const getAudioDuration = () => audioDuration;
+  const getPlay = () => Play;
+  const getTimeOffset = () => timeOffset;
+  const getStartPosition = () => startPosition;
+  const getPlayBackRate = () => playbackRate;
   // setters
   const setRapidDuration = (value) => {
     rapidDuration = value;
@@ -64,6 +70,18 @@ export default function editor() {
   };
   const setMoveThump = (value) => {
     moveThumb = value;
+  };
+  const setPreviousTime = (value) => {
+    previousTime = value;
+  };
+  const setAudioDuration = (value) => {
+    audioDuration = value;
+  };
+  const setPlay = (value) => {
+    Play = value;
+  };
+  const setElapsedTime = (value) => {
+    elapsedTime = value;
   };
 
   const translateToKey = (position) => {
@@ -174,13 +192,13 @@ export default function editor() {
     return `${startPosition - position}px`;
   };
 
-  const removePrompt = (identifier, audioDuration) => {
+  const removePrompt = (identifier) => {
     beatMap = beatMap.filter((prompt) => prompt.time !== identifier);
     // eslint-disable-next-line no-param-reassign
     saveChanges();
     mapProgressPrompts(beatMap, audioDuration - timeOffset, timeOffset);
   };
-  const addPrompt = (time, place, audioDuration) => {
+  const addPrompt = (time, place) => {
     const promptObject = contructPrompt(
       time,
       promptType,
@@ -207,14 +225,14 @@ export default function editor() {
       transition: `left ${(songTime - timePassed) / playbackRate}s linear`,
     };
   };
-  const updateSpeed = (speed, audioDuration) => {
+  const updateSpeed = (speed) => {
     playbackRate = speed;
     previousTime = (elapsedTime - offSet) / playbackRate;
     elapsedTime = previousTime * playbackRate + timeOffset;
     const position = moveTimelineProgress(audioDuration.toFixed(1));
     return position;
   };
-  const progressBarTimeUpdate = (timePosition, audioDuration) => {
+  const progressBarTimeUpdate = (timePosition) => {
     if (timePosition === undefined) {
       console.log("undefined");
       return false;
@@ -263,5 +281,15 @@ export default function editor() {
     setMoveThump,
     getMoveThumb,
     getImages,
+    getPreviousTime,
+    setPreviousTime,
+    getAudioDuration,
+    setAudioDuration,
+    getPlay,
+    setPlay,
+    getTimeOffset,
+    setElapsedTime,
+    getStartPosition,
+    getPlayBackRate,
   };
 }

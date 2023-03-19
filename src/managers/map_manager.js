@@ -1,28 +1,74 @@
-import { getBeatMaps } from "../api/kareoke";
+import {
+  getBeatMaps,
+  getBeatMap,
+  getMedia,
+  getSongs,
+  uploadBeatmap,
+  getUserBeatMaps,
+} from "../api/kareoke";
+import config from "../config";
 
 export default function beatMapManager() {
-  let selectedMap;
-  const setSelectedMap = (id) => {
-    selectedMap = id;
+  let audioUrl;
+  let backgroundUrl;
+  let selectedSong;
+
+  const getBackgroundUrl = () => backgroundUrl;
+  const getAudioUrl = () => audioUrl;
+  const getSelectedSong = () => selectedSong;
+  const setSelectedSong = (id) => {
+    selectedSong = id;
+    localStorage.setItem("selectedSong", id);
   };
-  const getSelectedMap = () => selectedMap;
+  const addBeatMap = (formData) => {
+    const response = uploadBeatmap(formData);
+    return response;
+  };
 
   const saveMapLocal = () => {};
-  const saveMapRemote = async () => {};
+  const saveMapRemote = async (id) => {};
   const getMap = async () => {};
-  const getSongs = async () => {
+  const handleGetUserBeatMaps = async () => {
+    const beatMaps = await getUserBeatMaps();
+    return beatMaps;
+  };
+  const handleGetBeatMaps = async () => {
     const response = await getBeatMaps();
     return response;
   };
-  const getUserSongs = async () => {};
+  const getSongsList = async () => {
+    const songs = await getSongs();
+
+    return songs;
+  };
+
+  const generateBlobUrl = async ({ audio, background }) => {
+    URL.revokeObjectURL(backgroundUrl);
+    URL.revokeObjectURL(audioUrl);
+    console.log(audio);
+
+    const [audioBlob, backgroundBloB] = await Promise.all([
+      getMedia(`http://${config.objectServer}/${audio}`),
+      getMedia(`http://${config.objectServer}/${background}`),
+    ]);
+
+    audioUrl = URL.createObjectURL(audioBlob);
+    backgroundUrl = URL.createObjectURL(backgroundBloB);
+    console.log(audioUrl);
+  };
 
   return {
     saveMapLocal,
     saveMapRemote,
-    getSongs,
-    getUserSongs,
+    handleGetUserBeatMaps,
+    handleGetBeatMaps,
+    getSongsList,
     getMap,
-    setSelectedMap,
-    getSelectedMap,
+    getBackgroundUrl,
+    getAudioUrl,
+    generateBlobUrl,
+    getSelectedSong,
+    setSelectedSong,
+    addBeatMap,
   };
 }

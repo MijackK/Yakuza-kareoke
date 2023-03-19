@@ -1,4 +1,5 @@
 import { moveProgressThumb } from "../player-parts/display-parts";
+import surviveBar from "../images/survive_bar.png";
 
 const background = document.querySelector(".background");
 
@@ -10,7 +11,8 @@ const jumpInput = document.querySelector("#jump-to");
 const setBtn = document.querySelector("#set");
 const Score = document.querySelector("#score");
 const Map = document.querySelector(".map");
-
+const addMapForm = document.querySelector("#add-map-form");
+const loginForm = document.querySelector("#login");
 const clickMarker = document.createElement("div");
 clickMarker.classList.toggle("click-placement");
 const durationLine = document.createElement("div");
@@ -24,6 +26,8 @@ const fullLine = document.createElement("div");
 const halfLine = document.createElement("div");
 fullLine.className = "timemarker second";
 halfLine.className = "timemarker mili-second";
+const songSelect = document.querySelector("#song-select");
+const userMaps = document.querySelector("#map-list");
 
 const promptPosition = document.querySelector(".get-prompt");
 const toolBar = document.querySelector(".tool-bar");
@@ -124,6 +128,7 @@ const playPause = (action, editor) => {
     if (position) {
       moveTimeLine(position);
       Audio.currentTime = editor.getElapsedTime();
+      console.log("hi");
       Audio.play();
     }
   }
@@ -158,27 +163,109 @@ const progressBarTimeUpdate = (newPosition) => {
   updateDomTime();
 };
 
-export default function initialize(editor) {
+const clearSongList = () => {};
+const loadMedia = ({ mapBackground, mapAudio, map, editor }) => {
+  map
+    .generateBlobUrl({
+      audio: mapAudio,
+      background: mapBackground,
+    })
+    .then(() => {
+      Audio.src = map.getAudioUrl();
+    });
+};
+const listBeatMaps = (beatMaps, editor, map) => {
+  beatMaps.forEach((beatMap) => {
+    const listItem = document.createElement("li");
+    listItem.textContent = `id:${beatMap.id} name: ${beatMap.name}`;
+    // add event listner
+    listItem.addEventListener("click", () => {
+      loadMedia({
+        mapBackground: beatMap.background,
+        mapAudio: beatMap.audio,
+        map,
+        editor,
+      });
+    });
+
+    userMaps.append(listItem);
+  });
+};
+export function initialize({ editor, map, user }) {
   // set attributes and stuff
-  background.style.backgroundImage = `url(${editor.getBackGround})`;
+  background.style.backgroundImage = `url(${
+    map.getBackgroundUrl() || surviveBar
+  })`;
+
   Audio.currentTime = editor.getTimeOffset();
   Map.style.left = `${editor.getStartPosition()}px`;
-  Audio.src = editor.getAudio();
+  Audio.src = map.getAudioUrl();
   selectPlaySpeed.value = editor.getPlayBackRate();
 
-  // fill timeline
-  fillTimeline(editor.getDuration(), editor.getMap(), editor.getImages());
+  // fcheck if user isn't logged in, a
+  if (user.getUserData().isLogin === false) {
+    loginForm.style.display = "block";
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const loginData = new FormData(loginForm);
+
+      user
+        .handleLogin({
+          email: loginData.get("email"),
+          password: loginData.get("password"),
+        })
+        .then(async (res) => {
+          if (res.success) {
+            loginForm.style.display = "none";
+            // get user songs and display them on my map.
+            const beatMaps = await map.handleGetUserBeatMaps();
+            listBeatMaps(beatMaps, editor, map);
+            alert("succesfully logged in");
+          } else {
+            console.log(res.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  }
+
+  // start loadings for song list
+  map.getSongsList().then((songList) => {
+    console.log(songList);
+    // stop song list loading ui
+    songList.forEach((song) => {
+      const option = document.createElement("option");
+      option.value = song.id;
+      option.textContent = song.name;
+      songSelect.append(option);
+    });
+  });
+  // get user beat maps
+  map.handleGetUserBeatMaps().then((beatMaps) => {
+    listBeatMaps(beatMaps, editor, map);
+  });
+
   // add event listners
+  addMapForm.addEventListener("submit", (e) => {
+    console.log(map);
+    e.preventDefault();
+    const mapData = new FormData(addMapForm);
+    map.addBeatMap(mapData).then((res) => {
+      console.log(res);
+    });
+  });
   selectPlaySpeed.addEventListener("change", (e) => {
-    const position = editor.updateSpeed(Number(e.target.value), Audio.duration);
+    const position = editor.updateSpeed(Number(e.target.value));
     if (position) {
       moveTimelineProgress(position);
     }
   });
   playBtn.addEventListener("click", () => {
     playPause(playBtn.id, editor);
-    playBtn.textContent = playBtn.textContent === "Play" ? "Pause" : "Play";
-    playBtn.id = playBtn.id === "play" ? "pause" : "play";
+    playBtn.textContent = editor.getPlay() ? "Pause" : "Play";
+    playBtn.id = editor.getPlay() ? "pause" : "play";
   });
 
   timePicker.addEventListener("submit", (e) => {
@@ -203,9 +290,7 @@ export default function initialize(editor) {
     Menu.style.display = "none";
   });
   downloadMap.addEventListener("click", () => {
-    URL.revokeObjectURL(downloadUrl);
-    downloadUrl = editor.beatMapDownload();
-    downloadMap.href = downloadUrl;
+    // add download url here
   });
 
   promptPosition.addEventListener("click", (e) => {
@@ -225,12 +310,12 @@ export default function initialize(editor) {
     console.log(`${e.target.id}  time: ${editor.getElapsedTime().toFixed(1)}`);
 
     if (timePoint.childElementCount !== 0) {
-      editor.removePrompt(Number(timePoint.id), Audio.duration);
+      editor.removePrompt(Number(timePoint.id));
       timePoint.textContent = "";
       return;
     }
 
-    editor.addPrompt(Number(timePoint.id), e.target.id, Audio.duration);
+    editor.addPrompt(Number(timePoint.id), e.target.id);
     switch (editor.getPromptType) {
       case "click":
         clickPrompt(timePoint, promptKey);
@@ -283,7 +368,7 @@ export default function initialize(editor) {
     editor.setMoveThumb(true);
     const timePosition = moveProgressThumb(e);
 
-    const position = editor.progressBarTimeUpdate(timePosition, Audio.duration);
+    const position = editor.progressBarTimeUpdate(timePosition);
     if (position) {
       progressBarTimeUpdate(position);
     }
@@ -295,10 +380,7 @@ export default function initialize(editor) {
   progressBar.addEventListener("mousemove", (e) => {
     if (editor.getMoveThumb()) {
       const timePosition = moveProgressThumb(e);
-      const position = editor.progressBarTimeUpdate(
-        timePosition,
-        Audio.duration
-      );
+      const position = editor.progressBarTimeUpdate(timePosition);
       if (position) {
         progressBarTimeUpdate(position);
       }
@@ -328,3 +410,5 @@ export default function initialize(editor) {
     playBtn.id = editor.getPlay() ? "pause" : "play";
   });
 }
+
+export { fillTimeline };

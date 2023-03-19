@@ -7,7 +7,7 @@
     <script src="editor.bundle.js" defer></script>
     <title>Document</title>
   </head>
-  <body>
+  <body class="dark_mode">
    
   
       <form id="time-picker">
@@ -100,9 +100,44 @@
  <div class="background"></div>
  
 <div id="modal">
- <button><a  id="download-map" download>Download Map</a></button>
- <button><a href="index.html">Home</a></button>
- <button id="exit">Exit</button>
+  <div class="editor-header">
+    <h1>Editor</h1>
+    <Button> Close</Button>
+  </div>
+  <div id="add-map">
+    <h2>Create Map</h2>
+    <Form id="add-map-form">
+      <label for="map-name">Map name</label>
+      <input type="text" name="map-name" id="map-name" required>
+      <label for="song"> Song Selection</label>
+      <select id="song-select" name="song" id="song" required>
+        <option value="">select a song</option>
+      </select>
+      <label for="background">Background</label>
+      <input type="file" name="background" id="background" required>
+      <Button>Add map</Button>
+    </Form>
+    <h2>Selected map</h2>
+    <h2>Login</h2>
+    <form action="" id="login" class="general-form">
+      <label for="email">EMAIL</label>
+      <input type="email" id="email" name="email">
+      <label for="password">PASSWORD</label>
+      <input type="password" id="password" name="password">
+      <button type="submit">SUBMIT</button>
+    </form>
+  </div>
+ <div id="map-list-container">
+  <h2>My Maps</h2>
+   <ul id="map-list">
+ 
+   </ul>
+ </div>
+ <div class="modal-toolbar">
+   <button id="download-map"><a  id="download-map" download>Download Map</a></button>
+   <button id="home"><a href="index.html">Home</a></button>
+   <button id="exit">Exit</button>
+ </div>
 </div>
 
   </body>

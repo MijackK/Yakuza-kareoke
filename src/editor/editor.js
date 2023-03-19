@@ -12,8 +12,18 @@ import {
   moveProgressThumb,
   autoThumbMovement,
 } from "../player-parts/display-parts";
-import surviveBar from "../images/survive_bar.png";
 
+import editorFactory from "../managers/editor_manager";
+import { initialize, fillTimeline } from "../utility.js/editor-dom";
+import beatMapManager from "../managers/map_manager";
+import userFactory from "../managers/user-manager";
+
+const editor = editorFactory();
+const mapManager = beatMapManager();
+const userManager = userFactory();
+init();
+
+/** 
 const timeOffset = 3.0;
 let elapsedTime = timeOffset;
 let previousTime = 0;
@@ -491,12 +501,20 @@ const editor = (() => {
     getPlayRate,
   };
 })();
-
+*/
 const timeController = () => {
-  if (elapsedTime > editor.Audio.duration) {
+  const elapsedTime = editor.getElapseTime();
+  const Play = editor.getPlay();
+  const audioDuration = editor.getAudioDuration();
+  let startTime = editor.getStartTime();
+  const timeOffset = editor.getTimeOffset();
+  let previousTime = editor.getPreviousTime();
+  const playRate = editor.getPlayRate();
+
+  if (elapsedTime > audioDuration) {
     // clearInterval(editorLoop);
     if (Play === true) {
-      Play = false;
+      editor.setPlay(false);
       const playBtn = document.querySelector(".tool-bar").children[0];
       playBtn.id = "play";
       playBtn.textContent = "Play";
@@ -509,7 +527,7 @@ const timeController = () => {
   if (!startTime) {
     startTime = Date.now();
   }
-  const playRate = editor.getPlayRate();
+
   let currentTime = Number((Date.now() - startTime) / 1000);
 
   if (Math.abs(elapsedTime - currentTime * playRate - timeOffset) > 0.1) {
@@ -520,7 +538,7 @@ const timeController = () => {
   }
 
   // elapsedTime += currentTime - previousTime;
-  elapsedTime = previousTime * playRate + timeOffset;
+  editor.setElapsedTime(previousTime * playRate + timeOffset);
   previousTime = currentTime;
   autoThumbMovement(
     (editor.Audio.currentTime - timeOffset) /
@@ -531,16 +549,26 @@ const timeController = () => {
 const AnimatePrompts = () => {
   timeController();
   validPrompts(
-    previousTime * editor.getPlayRate() + timeOffset,
+    editor.getPreviousTime() * editor.getPlayRate() + editor.getTimeOffset(),
     editor.getBeatMap(),
-    Play
+    editor.getPlay()
   );
   // enable this when computer player is working is working
   // gamePlayerLogic(elapsedTime);
 
   requestAnimationFrame(AnimatePrompts);
 };
-editor.Audio.onloadedmetadata = () => {
+userManager.isLogin().then(() => {
+  console.log(userManager.getUserData());
+  initialize({ user: userManager, map: mapManager, editor });
+});
+
+mapManager.generateBlobUrl({
+  audio: "kareoke/judgmentv9dUo1zKgrqyqfaJxmCkq25gGy6eEcPBSvLdqYPwAkI.mp3",
+  background: "kareoke/judgmentv9dUo1zKgrqyqfaJxmCkq25gGy6eEcPBSvLdqYPwAkI.mp3",
+});
+
+/** editor.Audio.onloadedmetadata = () => {
   editor.Audio.playbackRate = editor.getPlayRate();
   mapProgressPrompts(
     editor.getBeatMap(),
@@ -550,4 +578,4 @@ editor.Audio.onloadedmetadata = () => {
   editor.fillTimeline(editor.Audio.duration * 10);
   requestAnimationFrame(AnimatePrompts);
   editorLoop = setInterval(timeController, 0);
-};
+}; */

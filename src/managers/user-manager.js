@@ -2,7 +2,7 @@ import { login, logout, check, register } from "../api/authentication";
 import { getUserMaps } from "../api/kareoke";
 import { getUserInfo, saveUserInfo } from "../utility.js/storage";
 
-export default function userManager() {
+export default function userFactory() {
   let userData = { isLogin: false };
   const getUserData = () => userData;
   const setUserData = (data) => {};

@@ -121,7 +121,7 @@ export default function initialize(user, map) {
   userManager = user;
   mapManager = map;
 
-  mapManager.getSongs().then((songs) => {
+  mapManager.handleGetBeatMaps().then((songs) => {
     generateList(songs);
   });
 
