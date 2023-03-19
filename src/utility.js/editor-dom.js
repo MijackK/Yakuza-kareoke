@@ -293,11 +293,15 @@ export function initialize({ editor, map, user }) {
 
   timePicker.addEventListener("submit", (e) => {
     e.preventDefault();
-    editor.pickTime(Number(jumpInput.value));
-    stopTimeLine(Number(editor.getElapsedTime().toFixed(1)));
-    updateDomTime(editor.getElapsedTime());
-    timePicker.style.display = "none";
-    jumpInput.value = "";
+
+    const validTime = editor.pickTime(Number(jumpInput.value));
+    if (validTime) {
+      const postion = editor.stopTimeLine();
+      stopTimeLine(postion);
+      updateDomTime(editor.getElapsedTime());
+      timePicker.style.display = "none";
+      jumpInput.value = "";
+    }
   });
 
   setBtn.addEventListener("click", () => {

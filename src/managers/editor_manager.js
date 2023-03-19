@@ -170,11 +170,12 @@ export default function editorFactory() {
 
   const pickTime = (time) => {
     if (time < timeOffset) {
-      return;
+      return false;
     }
     previousTime = (time - timeOffset) / playbackRate;
     elapsedTime = previousTime * playbackRate + timeOffset;
     validPrompts(elapsedTime, beatMap);
+    return true;
   };
   const moveTimeLine = (songTime) => {
     const timePassed = Number(elapsedTime).toFixed(1);
