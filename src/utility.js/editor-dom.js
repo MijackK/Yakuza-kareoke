@@ -1,6 +1,7 @@
 import {
   moveProgressThumb,
   mapProgressPrompts,
+  autoThumbMovement,
 } from "../player-parts/display-parts";
 import surviveBar from "../images/survive_bar.png";
 import { validPrompts } from "../canvas/canvas";
@@ -358,7 +359,7 @@ export function initialize({ editor, map, user }) {
       timeOffset
     );
     const promptImages = editor.getImages();
-    switch (editor.getPromptType) {
+    switch (editor.getPromptType()) {
       case "click":
         clickPrompt(timePoint, promptImages[promptKey]);
         break;
@@ -366,8 +367,8 @@ export function initialize({ editor, map, user }) {
         longPrompt(
           timePoint,
           promptImages[promptKey],
-          editor.getPromptDuration,
-          editor.getPromptType
+          editor.getPromptDuration(),
+          editor.getPromptType()
         );
     }
   });
@@ -436,7 +437,12 @@ export function initialize({ editor, map, user }) {
     const direction = e.key === "ArrowRight" ? "foward" : "backward";
     const movePosition = editor.timeStep(direction);
     if (direction) {
+      const timeOffset = editor.getTimeOffset();
       validPrompts(editor.getElapsedTime(), editor.getBeatMap());
+      Audio.currentTime = editor.getElapsedTime();
+      autoThumbMovement(
+        (Audio.currentTime - timeOffset) / (Audio.duration - timeOffset)
+      );
       timeStep(movePosition);
     }
 

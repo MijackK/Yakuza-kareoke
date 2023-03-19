@@ -3,8 +3,6 @@ import down from "../images/down1.png";
 import left from "../images/left1.png";
 import right from "../images/right1.png";
 
-import { validPrompts } from "../canvas/canvas";
-
 export default function editorFactory() {
   const timeOffset = 3.0;
   let elapsedTime = timeOffset;
