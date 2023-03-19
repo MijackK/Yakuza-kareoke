@@ -49,8 +49,6 @@ const selectPlaySpeed = document.querySelector("#time_guage");
 const menuBtn = document.querySelector("#menu");
 const Menu = document.querySelector("#modal");
 const menuExit = document.querySelector("#exit");
-const downloadMap = document.querySelector("#download-map");
-let downloadUrl;
 
 const removeBtnFocus = () => {
   clickBtn.classList.remove("active-prompt");
@@ -318,9 +316,6 @@ export function initialize({ editor, map, user }) {
   });
   menuExit.addEventListener("click", () => {
     Menu.style.display = "none";
-  });
-  downloadMap.addEventListener("click", () => {
-    // add download url here
   });
 
   promptPosition.addEventListener("click", (e) => {
