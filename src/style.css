@@ -1,12 +1,10 @@
 :root {
-  --primary-font: "Finger Paint", cursive;
-  --secondary-font: "Courier New", Courier, monospace;
+  --primary-font: "Courier New", Courier, monospace;
 }
 body {
   margin: 0px;
   overflow: hidden;
   padding: 0.1px;
-  font-family: var(--secondary-font);
   font-family: var(--primary-font);
 }
 a {

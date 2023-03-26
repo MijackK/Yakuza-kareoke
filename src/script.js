@@ -1,4 +1,5 @@
 import "./style.css";
+import "./general.css";
 import initialize from "./utility.js/home-dom";
 import user from "./managers/user-manager";
 import map from "./managers/map_manager";

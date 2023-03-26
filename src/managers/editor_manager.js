@@ -10,7 +10,7 @@ export default function editorFactory() {
   let startTime;
   let Play = false;
   let moveThumb = false;
-  let beatMap = JSON.parse(localStorage.getItem("judgment"));
+  let beatMap = [];
   let audioDuration;
   const getAudioCurrentTime = () => timeOffset;
   let playbackRate = 1;

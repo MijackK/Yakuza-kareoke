@@ -11,19 +11,50 @@ import config from "../config";
 export default function beatMapManager() {
   let audioUrl;
   let backgroundUrl;
-  let selectedSong;
+  let selectedMap;
+  let backgroundExtension;
 
   const getBackgroundUrl = () => backgroundUrl;
   const getAudioUrl = () => audioUrl;
-  const getSelectedSong = () => selectedSong;
-  const setSelectedSong = (id) => {
-    selectedSong = id;
-    localStorage.setItem("selectedSong", id);
+  const getSelectedMap = () => selectedMap;
+
+  const setSelectedMap = (map) => {
+    selectedMap = map;
+    localStorage.setItem("selectedMap", JSON.stringify(map));
+  };
+  const generateBlobUrl = async ({ audio, background }) => {
+    URL.revokeObjectURL(backgroundUrl);
+    URL.revokeObjectURL(audioUrl);
+    console.log(background);
+
+    const [audioBlob, backgroundBloB] = await Promise.all([
+      getMedia(`http://${config.objectServer}/${audio}`),
+      getMedia(`http://${config.objectServer}/${background}`),
+    ]);
+
+    audioUrl = URL.createObjectURL(audioBlob);
+    backgroundUrl = URL.createObjectURL(backgroundBloB);
+    const backgroundType = background.split(".").pop();
+
+    return backgroundType;
+  };
+  const getExtension = (name) => name.split(".").pop();
+
+  const checkSelectedSong = async () => {
+    const map = JSON.parse(localStorage.getItem("selectedMap"));
+    if (map) {
+      backgroundExtension = await generateBlobUrl(map);
+      selectedMap = map;
+      console.log(backgroundExtension);
+      return true;
+    }
+    return false;
   };
   const addBeatMap = (formData) => {
     const response = uploadBeatmap(formData);
     return response;
   };
+  const directUrl = (path) => `http://${config.objectServer}/${path}`;
 
   const saveMapLocal = () => {};
   const saveMapRemote = async (id) => {};
@@ -42,21 +73,6 @@ export default function beatMapManager() {
     return songs;
   };
 
-  const generateBlobUrl = async ({ audio, background }) => {
-    URL.revokeObjectURL(backgroundUrl);
-    URL.revokeObjectURL(audioUrl);
-    console.log(background);
-
-    const [audioBlob, backgroundBloB] = await Promise.all([
-      getMedia(`http://${config.objectServer}/${audio}`),
-      getMedia(`http://${config.objectServer}/${background}`),
-    ]);
-
-    audioUrl = URL.createObjectURL(audioBlob);
-    backgroundUrl = URL.createObjectURL(backgroundBloB);
-    console.log(backgroundUrl);
-  };
-
   return {
     saveMapLocal,
     saveMapRemote,
@@ -67,8 +83,11 @@ export default function beatMapManager() {
     getBackgroundUrl,
     getAudioUrl,
     generateBlobUrl,
-    getSelectedSong,
-    setSelectedSong,
+    getSelectedMap,
+    setSelectedMap,
     addBeatMap,
+    checkSelectedSong,
+    directUrl,
+    getExtension,
   };
 }

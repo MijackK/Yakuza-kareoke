@@ -1,0 +1,57 @@
+:root {
+  --primary-font: "Courier New", Courier, monospace;
+  --secondary-bg-color: #091126;
+}
+
+.general-form {
+  display: flex;
+  min-height: 400px;
+  flex-direction: column;
+  padding: 10px;
+}
+.general-form > label {
+  font-size: 1.3rem;
+}
+.general-form > input[type="text"],
+input[type="email"],
+input[type="password"] {
+  background-color: transparent;
+  border: none;
+  border-bottom: solid grey;
+  border-width: 1px;
+  font-family: var(--primary-font);
+  color: var(--primary-color);
+  height: 35px;
+  font-size: 1.1rem;
+  outline: none;
+  margin-bottom: 20px;
+}
+.general-form > input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border: solid grey;
+  border-width: thin;
+}
+.general-form > button {
+  border: none;
+  background-color: var(--secondary-bg-color);
+  color: var(--primary-color);
+  font-family: var(--primary-font);
+  font-size: 1.3rem;
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.general-form > button:hover {
+  filter: brightness(1.2);
+}
+
+.dark_mode {
+  --primary-color: rgba(255, 255, 255, 0.811);
+  --primary-bg-color: #00000c;
+}
+
+.light_mode {
+  --primary-color: #000000;
+  --primary-bg-color: #eeeeee;
+}

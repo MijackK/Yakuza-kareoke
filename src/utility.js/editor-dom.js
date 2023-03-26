@@ -5,8 +5,13 @@ import {
 } from "../player-parts/display-parts";
 import surviveBar from "../images/survive_bar.png";
 import { validPrompts } from "../canvas/canvas";
+import config from "../config";
+import audiomp3 from "../audio/judgment.mp3";
 
-const background = document.querySelector(".background");
+let editorManager;
+const backgroundImage = document.querySelector("#background-image");
+const backgroundVideo = document.querySelector("#background-video");
+const selectedSummary = document.querySelector("#selected-summary");
 
 const Audio = document.querySelector("#editor-audio");
 const playBtn = document.querySelector("#play");
@@ -17,6 +22,7 @@ const setBtn = document.querySelector("#set");
 const Score = document.querySelector("#score");
 const Map = document.querySelector(".map");
 const addMapForm = document.querySelector("#add-map-form");
+const addMapArea = document.querySelector("#add-map");
 const loginForm = document.querySelector("#login");
 const clickMarker = document.createElement("div");
 clickMarker.classList.toggle("click-placement");
@@ -33,7 +39,7 @@ fullLine.className = "timemarker second";
 halfLine.className = "timemarker mili-second";
 const songSelect = document.querySelector("#song-select");
 const userMaps = document.querySelector("#map-list");
-
+const buttonGroup = document.querySelector(".button-group");
 const promptPosition = document.querySelector(".get-prompt");
 const toolBar = document.querySelector(".tool-bar");
 const clickBtn = document.querySelector("#click");
@@ -49,6 +55,16 @@ const selectPlaySpeed = document.querySelector("#time_guage");
 const menuBtn = document.querySelector("#menu");
 const Menu = document.querySelector("#modal");
 const menuExit = document.querySelector("#exit");
+const selectedInfoButton = document.querySelector("#selected");
+const addMapButton = document.querySelector("#add");
+const summaryWrapper = document.querySelector("#summary-wrapper");
+const selectedAudio = document.querySelector("#map-audio");
+selectedAudio.src = audiomp3;
+const selectName = document.querySelector("#map-name");
+const selectVideo = document.querySelector("#map-video");
+const selectImage = document.querySelector("#map-image");
+selectImage.src = surviveBar;
+const mapSection = document.querySelector("#map-section");
 
 const removeBtnFocus = () => {
   clickBtn.classList.remove("active-prompt");
@@ -134,13 +150,16 @@ const playPause = (action, editor) => {
     if (position) {
       moveTimeLine(position);
       Audio.currentTime = editor.getElapsedTime();
+      backgroundVideo.currentTime = editor.getElapsedTime();
       console.log("hi");
       Audio.play();
+      backgroundVideo.play();
     }
   }
   if (action === "pause") {
     const position = editor.stopTimeLine();
     Audio.pause();
+    backgroundVideo.pause();
     stopTimeLine(position);
   }
 };
@@ -160,6 +179,7 @@ const moveTimelineProgress = ({ leftStart, leftEnd, transition }) => {
 const progressBarTimeUpdate = (newPosition, elapsedTime) => {
   const positionValue = newPosition.value;
   Audio.currentTime = elapsedTime;
+  backgroundVideo.currentTime = elapsedTime;
   switch (newPosition.Play) {
     case false:
       stopTimeLine(positionValue);
@@ -172,34 +192,97 @@ const progressBarTimeUpdate = (newPosition, elapsedTime) => {
 
 const clearSongList = () => {};
 
-const loadMedia = ({ mapBackground, mapAudio, map, editor }) => {
-  const getMetaData = () => {
-    editor.setAudioDuration(Audio.duration);
-    fillTimeline(Audio.duration * 10, editor.getBeatMap(), editor.getImages());
-    const timeOffset = editor.getTimeOffset();
-    mapProgressPrompts(
-      editor.getBeatMap(),
-      Audio.duration - timeOffset,
-      timeOffset
-    );
-    Audio.removeEventListener("loadedmetadata", getMetaData);
-  };
+const getMetaData = () => {
+  editorManager.setAudioDuration(Audio.duration);
+  fillTimeline(
+    Audio.duration * 10,
+    editorManager.getBeatMap(),
+    editorManager.getImages()
+  );
+  const timeOffset = editorManager.getTimeOffset();
+  mapProgressPrompts(
+    editorManager.getBeatMap(),
+    Audio.duration - timeOffset,
+    timeOffset
+  );
+  Audio.removeEventListener("loadedmetadata", getMetaData);
+};
+const showSelectedSong = (beatMap, map) => {
+  // remove no selected message
+  const notSelectedSceen = document.querySelector(".not-selected");
+  notSelectedSceen.style.display = "none";
+  selectedSummary.style.display = "flex";
+  // add audio src
+  Audio.src = map.getAudioUrl();
+  selectVideo.style.display = "none";
+  selectImage.style.display = "none";
+
+  selectedAudio.src = map.getAudioUrl();
+  const extension = map.getExtension(beatMap.background);
+  // show either video or image based on background extension
+  if (extension === "mp4") {
+    backgroundVideo.src = map.getBackgroundUrl();
+
+    // for the summary
+    selectVideo.src = map.getBackgroundUrl();
+    selectVideo.style.display = "block";
+    selectVideo.play();
+  } else {
+    backgroundImage.style.backgroundImage = `url(${map.getBackgroundUrl()})`;
+    selectImage.src = map.getBackgroundUrl();
+    selectImage.style.display = "block";
+  }
+  Audio.addEventListener("loadedmetadata", getMetaData);
+  console.log("there is a selected map, load its assets");
+};
+
+const loadMedia = ({ mapBackground, mapAudio, map }) => {
   map
     .generateBlobUrl({
       audio: mapAudio,
       background: mapBackground,
     })
-    .then(() => {
-      Audio.src = map.getAudioUrl();
-      Audio.addEventListener("loadedmetadata", getMetaData);
+    .then((backgroundExtension) => {
+      showSelectedSong(map.getSelectedMap());
     });
 };
 const listBeatMaps = (beatMaps, editor, map) => {
   beatMaps.forEach((beatMap) => {
     const listItem = document.createElement("li");
-    listItem.textContent = `id:${beatMap.id} name: ${beatMap.name}`;
+    listItem.classList.add("beat-map");
+    const backgroundType = map.getExtension(beatMap.background);
+    let mapBackground;
+    if (backgroundType === "mp4") {
+      mapBackground = document.createElement("video");
+      mapBackground.addEventListener("mouseenter", (e) => {
+        e.target.play();
+      });
+      mapBackground.addEventListener("mouseleave", (e) => {
+        e.target.pause();
+      });
+    } else {
+      mapBackground = document.createElement("img");
+    }
+
+    mapBackground.classList.add("beat-map-image");
+    mapBackground.src = map.directUrl(beatMap.background);
+    listItem.appendChild(mapBackground);
+    const mapInfo = document.createElement("div");
+    mapInfo.classList.add("beat-map-text");
+    listItem.appendChild(mapInfo);
+    const mapName = document.createElement("span");
+    mapName.textContent = beatMap.name;
+    const mapUpdateDate = document.createElement("span");
+    mapUpdateDate.textContent = `last updated: 1/1/2001`;
+    mapInfo.append(mapName, mapUpdateDate);
+
     // add event listner
     listItem.addEventListener("click", () => {
+      const selectedMap = map.getSelectedMap();
+      if (selectedMap === beatMap.id) {
+        return;
+      }
+      map.setSelectedMap(beatMap);
       loadMedia({
         mapBackground: beatMap.background,
         mapAudio: beatMap.audio,
@@ -211,11 +294,51 @@ const listBeatMaps = (beatMaps, editor, map) => {
     userMaps.append(listItem);
   });
 };
+const viewSwitch = (button) => {
+  const buttonGroupMember = buttonGroup.children;
+
+  Object.keys(buttonGroupMember).forEach((child) => {
+    const element = buttonGroupMember[child];
+
+    if (element === button) {
+      button.classList.add("active");
+
+      const selectedButton = element.getAttribute("id");
+
+      const checkSelected = selectedButton === "selected";
+      const checkCreate = selectedButton === "add";
+      // add form style change
+      addMapForm.style.display = checkCreate ? "flex" : "none";
+
+      // login form style change
+      summaryWrapper.style.display = checkSelected ? "flex" : "none";
+
+      return;
+    }
+    element.classList.remove("active");
+  });
+};
+const authenicatedView = () => {
+  userMaps.style.display = "block";
+  addMapArea.style.display = "block";
+  loginForm.style.display = "none";
+};
+const notAuthenticatedView = () => {
+  loginForm.style.display = "flex";
+  addMapArea.style.display = "none";
+  userMaps.style.display = "none";
+};
+
 export function initialize({ editor, map, user }) {
+  editorManager = editor;
   // set attributes and stuff
-  background.style.backgroundImage = `url(${
-    map.getBackgroundUrl() || surviveBar
-  })`;
+  console.log();
+
+  const selectedMap = map.getSelectedMap();
+
+  if (selectedMap) {
+    showSelectedSong(selectedMap, map);
+  }
 
   Audio.currentTime = editor.getTimeOffset();
   Map.style.left = `${editor.getStartPosition()}px`;
@@ -226,7 +349,7 @@ export function initialize({ editor, map, user }) {
 
   // fcheck if user isn't logged in, a
   if (user.getUserData().isLogin === false) {
-    loginForm.style.display = "block";
+    notAuthenticatedView();
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const loginData = new FormData(loginForm);
@@ -241,6 +364,8 @@ export function initialize({ editor, map, user }) {
             loginForm.style.display = "none";
             // get user songs and display them on my map.
             const beatMaps = await map.handleGetUserBeatMaps();
+            authenicatedView();
+
             listBeatMaps(beatMaps, editor, map);
             alert("succesfully logged in");
           } else {
@@ -270,6 +395,12 @@ export function initialize({ editor, map, user }) {
   });
 
   // add event listners
+  addMapButton.addEventListener("click", (e) => {
+    viewSwitch(e.target);
+  });
+  selectedInfoButton.addEventListener("click", (e) => {
+    viewSwitch(e.target);
+  });
   addMapForm.addEventListener("submit", (e) => {
     console.log(map);
     e.preventDefault();
@@ -282,6 +413,7 @@ export function initialize({ editor, map, user }) {
     const position = editor.updateSpeed(Number(e.target.value));
     if (position) {
       Audio.playbackRate = editor.getPlayBackRate();
+      backgroundVideo.playbackRate = editor.getPlayBackRate();
       moveTimelineProgress(position);
     }
   });
@@ -312,7 +444,7 @@ export function initialize({ editor, map, user }) {
     playBtn.textContent = "Play";
   });
   menuBtn.addEventListener("click", () => {
-    Menu.style.display = "flex";
+    Menu.style.display = "grid";
   });
   menuExit.addEventListener("click", () => {
     Menu.style.display = "none";
@@ -425,6 +557,9 @@ export function initialize({ editor, map, user }) {
     }
   });
   document.querySelector("body").addEventListener("keydown", (e) => {
+    if (editor.getPlay()) {
+      return;
+    }
     if (["ArrowRight", "ArrowLeft"].includes(e.key) === false) {
       return;
     }
@@ -435,6 +570,7 @@ export function initialize({ editor, map, user }) {
       const timeOffset = editor.getTimeOffset();
       validPrompts(editor.getElapsedTime(), editor.getBeatMap());
       Audio.currentTime = editor.getElapsedTime();
+      backgroundVideo.currentTime = editor.getElapsedTime();
       autoThumbMovement(
         (Audio.currentTime - timeOffset) / (Audio.duration - timeOffset)
       );

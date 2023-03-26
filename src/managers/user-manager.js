@@ -21,6 +21,9 @@ export default function userFactory() {
   };
   const isLogin = async () => {
     const userInfo = getUserInfo();
+    if (!userInfo) {
+      return;
+    }
     const response = await check(userInfo);
     if (response.ok) {
       const responseData = await response.json();

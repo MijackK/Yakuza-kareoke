@@ -12,7 +12,7 @@ const imageIndicator = {
   bad: badImg,
   good: goodImg,
 };
-const buttons = JSON.parse(localStorage.getItem("judgment"));
+const buttons = [];
 
 const clickBtns = buttons.filter((element) => element.type === "click");
 const holdBtns = buttons.filter((element) => element.type === "hold");

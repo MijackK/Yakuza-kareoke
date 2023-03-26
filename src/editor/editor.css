@@ -1,8 +1,13 @@
+:root {
+  --primary-font: "Courier New", Courier, monospace;
+  --secondary-bg-color: #091126;
+}
+
 body {
   grid-template: 1fr 1fr 1fr/1fr;
   background-color: rgba(0, 0, 0, 0.508);
-  color: rgba(255, 255, 255, 0.811);
-  --secondary-bg-color: #091126;
+  font-family: var(--primary-font);
+  color: var(--primary-color);
 }
 .player {
   align-self: end;
@@ -45,6 +50,11 @@ body {
   align-self: start;
   gap: 18px;
 }
+h1 {
+  color: var(--primary-color);
+  font-family: var(--primary-font);
+  font-weight: normal;
+}
 
 .click-placement {
   position: absolute;
@@ -77,7 +87,7 @@ body {
   justify-content: space-around;
   font-size: 3rem;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: var(--secondary-bg-color);
   height: fit-content;
   align-self: center;
 }
@@ -216,15 +226,20 @@ body {
   padding: 5px;
   font-weight: bold;
 }
-.background {
+#background-image {
   filter: brightness(0.6);
   opacity: 0.7;
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
+#background-video {
+  height: auto;
+  filter: brightness(0.6);
+}
+
 #modal {
   display: grid;
-  grid-template: 5vh 80vh 12vh/50vw 50vw;
+  grid-template: 7vh 80vh 10vh/35vw 65vw;
   gap: 10px;
   position: absolute;
   height: 20vh;
@@ -243,25 +258,24 @@ body {
   grid-area: 3/1/4/3;
 }
 .editor-header {
-  background-color: var(--secondary-bg-color);
   display: flex;
-  justify-content: space-between;
   align-items: center;
   grid-area: 1/1/2/3;
   width: 100vw;
+  background-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0),
+    var(--secondary-bg-color)
+  );
 }
-.modal-toolbar > button {
-  background-color: rgb(0, 0, 0);
-  color: rgba(255, 255, 255, 0.861);
-  font-size: 3rem;
-  border: none;
-}
-.modal-toolbar > button:hover {
+.modal-toolbar > div {
   cursor: pointer;
-  border: blue solid thin;
 }
+
 #add-map {
-  grid-area: 2/1/3/2;
+  display: grid;
+  grid-template: 0.3fr 5fr/1fr;
+  height: 100%;
 }
 #add-map-form {
   display: flex;
@@ -276,8 +290,89 @@ a {
   color: rgba(255, 255, 255, 0.861);
   width: 100%;
 }
+.button-group {
+  display: flex;
+  color: var(--primary-color);
+  cursor: pointer;
+  height: 50px;
+}
+.button-group > div {
+  width: 50%;
+  text-align: center;
+  padding-top: 5px;
+  font-size: 1.5rem;
+}
+#add.active {
+  background-image: linear-gradient(
+    to top,
+    rgba(57, 166, 246, 0),
+    rgb(12, 80, 128)
+  );
+}
+#selected.active {
+  background-image: linear-gradient(
+    to top,
+    rgba(57, 166, 246, 0),
+    rgb(12, 80, 128)
+  );
+}
+#add-map-form {
+  display: none;
+}
+#selected-summary {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+}
+#map-name {
+  font-size: 2rem;
+}
+
+#map-video {
+  width: 100%;
+  height: auto;
+}
+#map-image {
+  width: 100%;
+  height: auto;
+}
+#summary-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.not-selected {
+  align-self: center;
+}
+.beat-map {
+  display: flex;
+  height: 100px;
+  gap: 50px;
+  border-bottom: solid;
+  border-width: thin;
+  border-color: var(--primary-color);
+  width: 90%;
+  padding: 10px;
+  cursor: pointer;
+}
+.beat-map:hover {
+  background-image: linear-gradient(
+    to left,
+    rgba(57, 166, 246, 0),
+    rgb(12, 80, 128)
+  );
+}
+
+.beat-map-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.beat-map-image {
+  max-width: 177px;
+  max-height: 99px;
+}
 .dark_mode {
-  --primary-color: #eeeeee;
+  --primary-color: rgba(255, 255, 255, 0.811);
   --primary-bg-color: #00000c;
 }
 
