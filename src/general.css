@@ -22,7 +22,7 @@ input[type="password"] {
   font-family: var(--primary-font);
   color: var(--primary-color);
   height: 35px;
-  font-size: 1.1rem;
+
   outline: none;
   margin-bottom: 20px;
 }
@@ -31,6 +31,20 @@ input[type="email"]:focus,
 input[type="password"]:focus {
   border: solid grey;
   border-width: thin;
+}
+.general-form > select {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-family: var(--primary-font);
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  background-color: var(--secondary-bg-color);
+  border: none;
+  padding: 5px;
+}
+.general-form > input[type="file"] {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .general-form > button {
   border: none;

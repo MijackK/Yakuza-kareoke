@@ -194,6 +194,13 @@ const clearSongList = () => {};
 
 const getMetaData = () => {
   editorManager.setAudioDuration(Audio.duration);
+  // clear previous time points
+  // eslint-disable-next-line no-restricted-syntax
+
+  while (Map.firstChild) {
+    Map.removeChild(Map.firstChild);
+  }
+
   fillTimeline(
     Audio.duration * 10,
     editorManager.getBeatMap(),
@@ -216,12 +223,15 @@ const showSelectedSong = (beatMap, map) => {
   Audio.src = map.getAudioUrl();
   selectVideo.style.display = "none";
   selectImage.style.display = "none";
+  backgroundVideo.style.display = "none";
+  backgroundImage.style.display = "none";
 
   selectedAudio.src = map.getAudioUrl();
   const extension = map.getExtension(beatMap.background);
   // show either video or image based on background extension
   if (extension === "mp4") {
     backgroundVideo.src = map.getBackgroundUrl();
+    backgroundVideo.style.display = "block";
 
     // for the summary
     selectVideo.src = map.getBackgroundUrl();
@@ -231,6 +241,7 @@ const showSelectedSong = (beatMap, map) => {
     backgroundImage.style.backgroundImage = `url(${map.getBackgroundUrl()})`;
     selectImage.src = map.getBackgroundUrl();
     selectImage.style.display = "block";
+    backgroundImage.style.display = "block";
   }
   Audio.addEventListener("loadedmetadata", getMetaData);
   console.log("there is a selected map, load its assets");
@@ -242,10 +253,11 @@ const loadMedia = ({ mapBackground, mapAudio, map }) => {
       audio: mapAudio,
       background: mapBackground,
     })
-    .then((backgroundExtension) => {
-      showSelectedSong(map.getSelectedMap());
+    .then(() => {
+      showSelectedSong(map.getSelectedMap(), map);
     });
 };
+
 const listBeatMaps = (beatMaps, editor, map) => {
   beatMaps.forEach((beatMap) => {
     const listItem = document.createElement("li");
@@ -279,7 +291,7 @@ const listBeatMaps = (beatMaps, editor, map) => {
     // add event listner
     listItem.addEventListener("click", () => {
       const selectedMap = map.getSelectedMap();
-      if (selectedMap === beatMap.id) {
+      if (selectedMap.id === beatMap.id) {
         return;
       }
       map.setSelectedMap(beatMap);
@@ -320,7 +332,7 @@ const viewSwitch = (button) => {
 };
 const authenicatedView = () => {
   userMaps.style.display = "block";
-  addMapArea.style.display = "block";
+  addMapArea.style.display = "grid";
   loginForm.style.display = "none";
 };
 const notAuthenticatedView = () => {
@@ -365,6 +377,11 @@ export function initialize({ editor, map, user }) {
             // get user songs and display them on my map.
             const beatMaps = await map.handleGetUserBeatMaps();
             authenicatedView();
+            map.checkSelectedSong().then((isSelected) => {
+              if (isSelected) {
+                showSelectedSong(map.getSelectedMap(), map);
+              }
+            });
 
             listBeatMaps(beatMaps, editor, map);
             alert("succesfully logged in");
@@ -405,8 +422,21 @@ export function initialize({ editor, map, user }) {
     console.log(map);
     e.preventDefault();
     const mapData = new FormData(addMapForm);
-    map.addBeatMap(mapData).then((res) => {
+    map.addBeatMap(mapData).then(async (res) => {
       console.log(res);
+      const beatMap = res.map;
+      listBeatMaps([beatMap], editor, map);
+      // make the selected map the added map
+      map.setSelectedMap(beatMap);
+      // load the assets for the added maps.
+      loadMedia({
+        mapBackground: beatMap.background,
+        mapAudio: beatMap.audio,
+        map,
+        editor,
+      });
+      addMapForm.reset();
+      alert("beatmap added");
     });
   });
   selectPlaySpeed.addEventListener("change", (e) => {

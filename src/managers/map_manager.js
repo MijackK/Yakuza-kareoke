@@ -12,7 +12,6 @@ export default function beatMapManager() {
   let audioUrl;
   let backgroundUrl;
   let selectedMap;
-  let backgroundExtension;
 
   const getBackgroundUrl = () => backgroundUrl;
   const getAudioUrl = () => audioUrl;
@@ -34,18 +33,16 @@ export default function beatMapManager() {
 
     audioUrl = URL.createObjectURL(audioBlob);
     backgroundUrl = URL.createObjectURL(backgroundBloB);
-    const backgroundType = background.split(".").pop();
-
-    return backgroundType;
+    console.log("audio", audioUrl);
   };
   const getExtension = (name) => name.split(".").pop();
 
   const checkSelectedSong = async () => {
     const map = JSON.parse(localStorage.getItem("selectedMap"));
     if (map) {
-      backgroundExtension = await generateBlobUrl(map);
-      selectedMap = map;
-      console.log(backgroundExtension);
+      selectedMap = await getBeatMap(map.id);
+      await generateBlobUrl(selectedMap);
+
       return true;
     }
     return false;

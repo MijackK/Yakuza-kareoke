@@ -29,6 +29,7 @@ const accountForm = document.querySelector("#account");
 const authButtonGroup = document.querySelector(".button-group");
 const accountPage = document.querySelector("#account-dialog");
 const accountPageClose = document.querySelector("#close-account");
+const logoutBtn = document.querySelector("#logout-btn");
 
 // add audio
 const audioHover = document.createElement("audio");
@@ -92,6 +93,11 @@ const authenticatedView = () => {
   authBtn.style.display = "none";
   accountBtn.style.display = "block";
   loginDialog.style.display = "none";
+};
+const notAuthenticatedView = () => {
+  accountBtn.style.display = "none";
+  authBtn.style.display = "block";
+  accountPage.style.display = "none";
 };
 // switches between login and signup form
 const authSwitch = (button) => {
@@ -210,6 +216,17 @@ export default function initialize(user, map) {
   });
   accountPageClose.addEventListener("click", () => {
     accountPage.style.display = "none";
+  });
+  logoutBtn.addEventListener("click", () => {
+    userManager
+      .handleLogout()
+      .then((res) => {
+        console.log(res);
+        notAuthenticatedView();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 
   // authentication button group

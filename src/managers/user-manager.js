@@ -31,6 +31,11 @@ export default function userFactory() {
       saveUserInfo(responseData);
     }
   };
+  const handleLogout = async () => {
+    const userInfo = getUserInfo();
+    const logoutResponse = await logout(userInfo);
+    return logoutResponse;
+  };
 
   return {
     getUserData,
@@ -38,6 +43,6 @@ export default function userFactory() {
     handleLogin,
     handleRegister,
     isLogin,
-    logout,
+    handleLogout,
   };
 }

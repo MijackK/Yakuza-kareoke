@@ -29,7 +29,16 @@ export async function check({ csrfToken }) {
   const response = await apiRequest({ url: "auth/check", options, headers });
   return response;
 }
-export async function logout() {}
+export async function logout({ csrfToken }) {
+  const options = { method: "post" };
+  const headers = {
+    CSRF_TOKEN: csrfToken,
+  };
+  const response = await apiRequest({ url: "auth/logout", options, headers });
+  const data = await response.json();
+
+  return data;
+}
 
 export async function register({ email, password, userName }) {
   const options = {

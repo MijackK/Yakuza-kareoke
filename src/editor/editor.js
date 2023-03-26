@@ -75,14 +75,23 @@ const AnimatePrompts = () => {
 userManager.isLogin().then(() => {
   const { isLogin } = userManager.getUserData();
   if (isLogin) {
-    mapManager.checkSelectedSong().then(() => {
-      initialize({ user: userManager, map: mapManager, editor });
-      requestAnimationFrame(AnimatePrompts);
-      editorLoop = setInterval(timeController, 0);
-    });
+    mapManager
+      .checkSelectedSong()
+      .then((selected) => {
+        if (selected) {
+          console.log("selected song loading");
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        initialize({ user: userManager, map: mapManager, editor });
+        requestAnimationFrame(AnimatePrompts);
+        editorLoop = setInterval(timeController, 0);
+      });
     return;
   }
-  console.log("popop");
   initialize({ user: userManager, map: mapManager, editor });
   requestAnimationFrame(AnimatePrompts);
   editorLoop = setInterval(timeController, 0);

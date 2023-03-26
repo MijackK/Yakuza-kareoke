@@ -9,6 +9,9 @@ body {
   font-family: var(--primary-font);
   color: var(--primary-color);
 }
+#map-list-container {
+  overflow-y: scroll;
+}
 .player {
   align-self: end;
 }
@@ -240,7 +243,6 @@ h1 {
 #modal {
   display: grid;
   grid-template: 7vh 80vh 10vh/35vw 65vw;
-  gap: 10px;
   position: absolute;
   height: 20vh;
   width: 100vw;
@@ -277,10 +279,7 @@ h1 {
   grid-template: 0.3fr 5fr/1fr;
   height: 100%;
 }
-#add-map-form {
-  display: flex;
-  flex-direction: column;
-}
+
 #login {
   display: None;
 }
@@ -371,6 +370,7 @@ a {
   max-width: 177px;
   max-height: 99px;
 }
+
 .dark_mode {
   --primary-color: rgba(255, 255, 255, 0.811);
   --primary-bg-color: #00000c;
