@@ -8,6 +8,5 @@ const userManager = user();
 const mapManager = map();
 
 userManager.isLogin().then(() => {
-  console.log(userManager.getUserData());
   initialize(userManager, mapManager);
 });

@@ -5,7 +5,7 @@
 
 body {
   grid-template: 1fr 1fr 1fr/1fr;
-  background-color: rgba(0, 0, 0, 0.508);
+  background-color: black;
   font-family: var(--primary-font);
   color: var(--primary-color);
 }
@@ -236,7 +236,7 @@ h1 {
   background-size: 100% 100%;
 }
 #background-video {
-  height: auto;
+  height: 100vh;
   filter: brightness(0.6);
 }
 
@@ -260,8 +260,6 @@ h1 {
   grid-area: 3/1/4/3;
 }
 .editor-header {
-  display: flex;
-  align-items: center;
   grid-area: 1/1/2/3;
   width: 100vw;
   background-image: linear-gradient(
@@ -269,6 +267,7 @@ h1 {
     rgba(0, 0, 0, 0),
     var(--secondary-bg-color)
   );
+  padding-left: 20px;
 }
 .modal-toolbar > div {
   cursor: pointer;
@@ -323,7 +322,7 @@ a {
   flex-direction: column;
   justify-content: space-around;
 }
-#map-name {
+#select-name {
   font-size: 2rem;
 }
 
@@ -338,6 +337,9 @@ a {
 #summary-wrapper {
   display: flex;
   justify-content: center;
+}
+#map-section {
+  padding: 20px;
 }
 .not-selected {
   align-self: center;
@@ -367,8 +369,9 @@ a {
   justify-content: space-between;
 }
 .beat-map-image {
-  max-width: 177px;
-  max-height: 99px;
+  width: 177px;
+  height: 99px;
+  object-fit: cover;
 }
 
 .dark_mode {

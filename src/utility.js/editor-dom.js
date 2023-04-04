@@ -11,6 +11,7 @@ import audiomp3 from "../audio/judgment.mp3";
 let editorManager;
 const backgroundImage = document.querySelector("#background-image");
 const backgroundVideo = document.querySelector("#background-video");
+backgroundVideo.volume = 0;
 const selectedSummary = document.querySelector("#selected-summary");
 
 const Audio = document.querySelector("#editor-audio");
@@ -60,7 +61,7 @@ const addMapButton = document.querySelector("#add");
 const summaryWrapper = document.querySelector("#summary-wrapper");
 const selectedAudio = document.querySelector("#map-audio");
 selectedAudio.src = audiomp3;
-const selectName = document.querySelector("#map-name");
+const selectName = document.querySelector("#select-name ");
 const selectVideo = document.querySelector("#map-video");
 const selectImage = document.querySelector("#map-image");
 selectImage.src = surviveBar;
@@ -225,6 +226,7 @@ const showSelectedSong = (beatMap, map) => {
   selectImage.style.display = "none";
   backgroundVideo.style.display = "none";
   backgroundImage.style.display = "none";
+  selectName.textContent = beatMap.name;
 
   selectedAudio.src = map.getAudioUrl();
   const extension = map.getExtension(beatMap.background);
@@ -264,6 +266,7 @@ const listBeatMaps = (beatMaps, editor, map) => {
     listItem.classList.add("beat-map");
     const backgroundType = map.getExtension(beatMap.background);
     let mapBackground;
+
     if (backgroundType === "mp4") {
       mapBackground = document.createElement("video");
       mapBackground.addEventListener("mouseenter", (e) => {
@@ -294,6 +297,7 @@ const listBeatMaps = (beatMaps, editor, map) => {
       if (selectedMap.id === beatMap.id) {
         return;
       }
+      map.abortSelection();
       map.setSelectedMap(beatMap);
       loadMedia({
         mapBackground: beatMap.background,

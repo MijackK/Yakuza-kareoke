@@ -7,6 +7,11 @@ body {
   padding: 0.1px;
   font-family: var(--primary-font);
 }
+#song-search {
+  padding: 10px;
+  font-family: var(--primary-font);
+  font-size: 1.3rem;
+}
 a {
   color: inherit;
   text-decoration: none;
@@ -44,44 +49,7 @@ a {
   color: var(--primary-color);
   background-color: var(--secondary-bg-color);
 }
-.general-form {
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  background-color: var(--primary-bg-color);
-  color: var(--primary-color);
-  font-size: 1.4rem;
-  gap: 5px;
-}
-.general-form > label {
-  margin-bottom: 10px;
-  align-self: flex-start;
-}
-.general-form > input[type="text"],
-input[type="email"],
-input[type="password"] {
-  margin-bottom: 10px;
-  border: none;
-  background-color: transparent;
-  border-bottom: solid #39a6f6;
-  color: var(--primary-color);
-  font-size: 1.5rem;
-}
-.general-form > button {
-  width: 50%;
-  border: none;
-  color: var(--primary-color);
-  background-color: rgb(220, 88, 88);
 
-  font-size: 1.4rem;
-
-  padding: 10px;
-  cursor: pointer;
-  margin-top: 5px;
-}
-.general-form > button:hover {
-  filter: brightness(1.2);
-}
 .button-group {
   display: flex;
   color: var(--primary-color);
@@ -143,9 +111,6 @@ input[type="password"] {
   text-align: center;
 }
 
-label {
-  text-align: center;
-}
 .add-form > button {
   background-color: rgb(17, 36, 184);
   border: none;
@@ -158,13 +123,13 @@ label {
 }
 
 .background_image {
-  width: 100vw;
-  height: 100vh;
   position: fixed;
+
+  min-width: 100%;
+  min-height: 100%;
   z-index: -2;
-  background-size: 100% 100%;
   filter: brightness(0.6);
-  background-color: black;
+  background-size: cover;
 }
 
 .logo {
@@ -344,7 +309,6 @@ label {
 .dark_mode {
   --primary-color: #eeeeee;
   --primary-bg-color: #091126;
-  --secondary-bg-color: #00000c;
 }
 
 .light_mode {

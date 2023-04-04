@@ -17,10 +17,7 @@ export async function uploadBeatmap(formData) {
 
   return data;
 }
-export async function getBeatmap() {
-  // get audio, map, background.
-  // a promise.all to get both the audio and background.
-}
+
 export async function getBeatMaps() {
   const options = {
     method: "get",
@@ -54,9 +51,10 @@ export async function getUserBeatMaps() {
   return data;
 }
 
-export async function getBeatMap(id) {
+export async function getBeatMap(id, signal) {
   const options = {
     method: "get",
+    signal,
   };
   const headers = {};
   const response = await apiRequest({
@@ -71,9 +69,10 @@ export async function getBeatMap(id) {
 
   return data;
 }
-export async function getMedia(url) {
+export async function getMedia(url, signal) {
   const response = await fetch(url, {
     method: "get",
+    signal,
   });
 
   if (response.ok === false) {

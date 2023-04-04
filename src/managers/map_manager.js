@@ -12,6 +12,7 @@ export default function beatMapManager() {
   let audioUrl;
   let backgroundUrl;
   let selectedMap;
+  let controller = new AbortController();
 
   const getBackgroundUrl = () => backgroundUrl;
   const getAudioUrl = () => audioUrl;
@@ -21,14 +22,22 @@ export default function beatMapManager() {
     selectedMap = map;
     localStorage.setItem("selectedMap", JSON.stringify(map));
   };
+  const abortSelection = () => {
+    console.log("aborted");
+    controller.abort();
+    controller = new AbortController();
+  };
   const generateBlobUrl = async ({ audio, background }) => {
     URL.revokeObjectURL(backgroundUrl);
     URL.revokeObjectURL(audioUrl);
     console.log(background);
 
     const [audioBlob, backgroundBloB] = await Promise.all([
-      getMedia(`http://${config.objectServer}/${audio}`),
-      getMedia(`http://${config.objectServer}/${background}`),
+      getMedia(`http://${config.objectServer}/${audio}`, controller.signal),
+      getMedia(
+        `http://${config.objectServer}/${background}`,
+        controller.signal
+      ),
     ]);
 
     audioUrl = URL.createObjectURL(audioBlob);
@@ -40,7 +49,7 @@ export default function beatMapManager() {
   const checkSelectedSong = async () => {
     const map = JSON.parse(localStorage.getItem("selectedMap"));
     if (map) {
-      selectedMap = await getBeatMap(map.id);
+      selectedMap = await getBeatMap(map.id, controller.signal);
       await generateBlobUrl(selectedMap);
 
       return true;
@@ -86,5 +95,6 @@ export default function beatMapManager() {
     checkSelectedSong,
     directUrl,
     getExtension,
+    abortSelection,
   };
 }
