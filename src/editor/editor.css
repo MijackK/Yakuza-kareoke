@@ -12,6 +12,7 @@ body {
 #map-list-container {
   overflow-y: scroll;
 }
+
 .player {
   align-self: end;
 }
@@ -355,11 +356,18 @@ a {
   padding: 10px;
   cursor: pointer;
 }
-.beat-map:hover {
+.beat-map.active {
   background-image: linear-gradient(
     to left,
     rgba(57, 166, 246, 0),
     rgb(12, 80, 128)
+  );
+}
+.beat-map:hover {
+  background-image: linear-gradient(
+    to left,
+    rgba(57, 166, 246, 0),
+    rgba(12, 80, 128, 0.638)
   );
 }
 

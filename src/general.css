@@ -61,6 +61,10 @@ input[type="password"]:focus {
 .general-form > button:hover {
   filter: brightness(1.2);
 }
+.general-form > button:disabled {
+  filter: grayscale(1);
+  cursor: wait;
+}
 
 .dark_mode {
   --primary-color: rgba(255, 255, 255, 0.811);

@@ -66,6 +66,7 @@ const selectVideo = document.querySelector("#map-video");
 const selectImage = document.querySelector("#map-image");
 selectImage.src = surviveBar;
 const mapSection = document.querySelector("#map-section");
+const notSelectedSceen = document.querySelector(".not-selected");
 
 const removeBtnFocus = () => {
   clickBtn.classList.remove("active-prompt");
@@ -121,6 +122,17 @@ const fillTimeline = (duration, beatMap, images) => {
     }
   }
 };
+const loadingMap = () => {
+  selectedSummary.style.display = "none";
+  notSelectedSceen.style.display = "flex";
+  const selectedStatus = notSelectedSceen.children[0];
+  selectedStatus.textContent = "Loading...";
+};
+const stopLoadingMap = () => {
+  notSelectedSceen.style.display = "none";
+  selectedSummary.style.display = "flex";
+};
+
 const updateDomTime = (elapsedTime) => {
   document.querySelector("#ptime").textContent = ` ${Audio.currentTime.toFixed(
     3
@@ -190,6 +202,40 @@ const progressBarTimeUpdate = (newPosition, elapsedTime) => {
   }
   updateDomTime(elapsedTime);
 };
+const highLightSelected = (id) => {
+  const beatMaps = document.querySelectorAll(".beat-map");
+  beatMaps.forEach((listItem) => {
+    if (Number(listItem.id) === Number(id)) {
+      listItem.classList.add("active");
+      return;
+    }
+    listItem.classList.remove("active");
+  });
+};
+const viewSwitch = (button) => {
+  const buttonGroupMember = buttonGroup.children;
+
+  Object.keys(buttonGroupMember).forEach((child) => {
+    const element = buttonGroupMember[child];
+
+    if (element === button) {
+      button.classList.add("active");
+
+      const selectedButton = element.getAttribute("id");
+
+      const checkSelected = selectedButton === "selected";
+      const checkCreate = selectedButton === "add";
+      // add form style change
+      addMapForm.style.display = checkCreate ? "flex" : "none";
+
+      // login form style change
+      summaryWrapper.style.display = checkSelected ? "flex" : "none";
+
+      return;
+    }
+    element.classList.remove("active");
+  });
+};
 
 const clearSongList = () => {};
 
@@ -217,9 +263,8 @@ const getMetaData = () => {
 };
 const showSelectedSong = (beatMap, map) => {
   // remove no selected message
-  const notSelectedSceen = document.querySelector(".not-selected");
-  notSelectedSceen.style.display = "none";
-  selectedSummary.style.display = "flex";
+  stopLoadingMap();
+  highLightSelected(beatMap.id);
   // add audio src
   Audio.src = map.getAudioUrl();
   selectVideo.style.display = "none";
@@ -263,6 +308,7 @@ const loadMedia = ({ mapBackground, mapAudio, map }) => {
 const listBeatMaps = (beatMaps, editor, map) => {
   beatMaps.forEach((beatMap) => {
     const listItem = document.createElement("li");
+    listItem.id = beatMap.id;
     listItem.classList.add("beat-map");
     const backgroundType = map.getExtension(beatMap.background);
     let mapBackground;
@@ -297,6 +343,7 @@ const listBeatMaps = (beatMaps, editor, map) => {
       if (selectedMap.id === beatMap.id) {
         return;
       }
+      loadingMap();
       map.abortSelection();
       map.setSelectedMap(beatMap);
       loadMedia({
@@ -307,33 +354,10 @@ const listBeatMaps = (beatMaps, editor, map) => {
       });
     });
 
-    userMaps.append(listItem);
+    userMaps.prepend(listItem);
   });
 };
-const viewSwitch = (button) => {
-  const buttonGroupMember = buttonGroup.children;
 
-  Object.keys(buttonGroupMember).forEach((child) => {
-    const element = buttonGroupMember[child];
-
-    if (element === button) {
-      button.classList.add("active");
-
-      const selectedButton = element.getAttribute("id");
-
-      const checkSelected = selectedButton === "selected";
-      const checkCreate = selectedButton === "add";
-      // add form style change
-      addMapForm.style.display = checkCreate ? "flex" : "none";
-
-      // login form style change
-      summaryWrapper.style.display = checkSelected ? "flex" : "none";
-
-      return;
-    }
-    element.classList.remove("active");
-  });
-};
 const authenicatedView = () => {
   userMaps.style.display = "block";
   addMapArea.style.display = "grid";
@@ -348,13 +372,6 @@ const notAuthenticatedView = () => {
 export function initialize({ editor, map, user }) {
   editorManager = editor;
   // set attributes and stuff
-  console.log();
-
-  const selectedMap = map.getSelectedMap();
-
-  if (selectedMap) {
-    showSelectedSong(selectedMap, map);
-  }
 
   Audio.currentTime = editor.getTimeOffset();
   Map.style.left = `${editor.getStartPosition()}px`;
@@ -368,6 +385,8 @@ export function initialize({ editor, map, user }) {
     notAuthenticatedView();
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
+      const submitButton = e.submitter;
+      submitButton.disabled = true;
       const loginData = new FormData(loginForm);
 
       user
@@ -395,7 +414,31 @@ export function initialize({ editor, map, user }) {
         })
         .catch((err) => {
           console.log(err);
+        })
+        .finally(() => {
+          submitButton.disabled = false;
         });
+    });
+  }
+
+  if (user.getUserData().isLogin) {
+    map
+      .checkSelectedSong()
+      .then((selected) => {
+        if (selected) {
+          showSelectedSong(map.getSelectedMap(), map);
+          return;
+        }
+        const selectedStatus = notSelectedSceen.children[0];
+        selectedStatus.textContent = "No map selected";
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    // get user beat maps
+    map.handleGetUserBeatMaps().then((beatMaps) => {
+      listBeatMaps(beatMaps, editor, map);
+      highLightSelected(map.getSelectedMap().id);
     });
   }
 
@@ -410,10 +453,6 @@ export function initialize({ editor, map, user }) {
       songSelect.append(option);
     });
   });
-  // get user beat maps
-  map.handleGetUserBeatMaps().then((beatMaps) => {
-    listBeatMaps(beatMaps, editor, map);
-  });
 
   // add event listners
   addMapButton.addEventListener("click", (e) => {
@@ -423,25 +462,35 @@ export function initialize({ editor, map, user }) {
     viewSwitch(e.target);
   });
   addMapForm.addEventListener("submit", (e) => {
-    console.log(map);
     e.preventDefault();
+    const submitButton = e.submitter;
+    submitButton.disabled = true;
+
     const mapData = new FormData(addMapForm);
-    map.addBeatMap(mapData).then(async (res) => {
-      console.log(res);
-      const beatMap = res.map;
-      listBeatMaps([beatMap], editor, map);
-      // make the selected map the added map
-      map.setSelectedMap(beatMap);
-      // load the assets for the added maps.
-      loadMedia({
-        mapBackground: beatMap.background,
-        mapAudio: beatMap.audio,
-        map,
-        editor,
+    map
+      .addBeatMap(mapData)
+      .then(async (res) => {
+        console.log(res);
+        const beatMap = res.map;
+        listBeatMaps([beatMap], editor, map);
+        // make the selected map the added map
+        map.setSelectedMap(beatMap);
+        // showSelectedSong(beatMap,map)
+        // load the assets for the added maps.
+        loadMedia({
+          mapBackground: beatMap.background,
+          mapAudio: beatMap.audio,
+          map,
+          editor,
+        });
+        addMapForm.reset();
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        submitButton.disabled = false;
       });
-      addMapForm.reset();
-      alert("beatmap added");
-    });
   });
   selectPlaySpeed.addEventListener("change", (e) => {
     const position = editor.updateSpeed(Number(e.target.value));
