@@ -1,7 +1,7 @@
 import "../kareoke_player/player.css";
 import "./editor.css";
 import "../general.css";
-import gamePlayerLogic from "../player-parts/map-visualizer";
+// import gamePlayerLogic from "../player-parts/map-visualizer";
 import { validPrompts, init } from "../canvas/canvas";
 import { autoThumbMovement } from "../player-parts/display-parts";
 

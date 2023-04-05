@@ -5,7 +5,6 @@ import {
 } from "../player-parts/display-parts";
 import surviveBar from "../images/survive_bar.png";
 import { validPrompts } from "../canvas/canvas";
-import config from "../config";
 import audiomp3 from "../audio/judgment.mp3";
 
 let editorManager;
@@ -65,7 +64,6 @@ const selectName = document.querySelector("#select-name ");
 const selectVideo = document.querySelector("#map-video");
 const selectImage = document.querySelector("#map-image");
 selectImage.src = surviveBar;
-const mapSection = document.querySelector("#map-section");
 const notSelectedSceen = document.querySelector(".not-selected");
 
 const removeBtnFocus = () => {
@@ -237,8 +235,6 @@ const viewSwitch = (button) => {
   });
 };
 
-const clearSongList = () => {};
-
 const getMetaData = () => {
   editorManager.setAudioDuration(Audio.duration);
   // clear previous time points
@@ -378,6 +374,7 @@ export function initialize({ editor, map, user }) {
   Audio.src = map.getAudioUrl();
   selectPlaySpeed.value = editor.getPlayBackRate();
   // alows editor to get the audio current time
+  // eslint-disable-next-line no-param-reassign
   editor.getAudioCurrentTime = () => Audio.currentTime;
 
   // fcheck if user isn't logged in, a
@@ -488,8 +485,8 @@ export function initialize({ editor, map, user }) {
         });
         addMapForm.reset();
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((error) => {
+        console.log(error);
       })
       .finally(() => {
         submitButton.disabled = false;

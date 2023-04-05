@@ -1,5 +1,4 @@
 import { login, logout, check, register } from "../api/authentication";
-import { getUserMaps } from "../api/kareoke";
 import { getUserInfo, saveUserInfo } from "../utility.js/storage";
 
 export default function userFactory() {
