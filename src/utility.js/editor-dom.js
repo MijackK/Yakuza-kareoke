@@ -422,6 +422,7 @@ export function initialize({ editor, map, user }) {
   }
 
   if (user.getUserData().isLogin) {
+    const selectedStatus = notSelectedSceen.children[0];
     map
       .checkSelectedSong()
       .then((selected) => {
@@ -429,16 +430,18 @@ export function initialize({ editor, map, user }) {
           showSelectedSong(map.getSelectedMap(), map);
           return;
         }
-        const selectedStatus = notSelectedSceen.children[0];
+
         selectedStatus.textContent = "No map selected";
       })
       .catch((e) => {
         console.log(e);
+        selectedStatus.textContent = "Error while fetching map";
+        map.clearSelectedMap();
       });
     // get user beat maps
     map.handleGetUserBeatMaps().then((beatMaps) => {
       listBeatMaps(beatMaps, editor, map);
-      highLightSelected(map.getSelectedMap().id);
+      highLightSelected(map.getSelectedMap()?.id);
     });
   }
 

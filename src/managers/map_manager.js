@@ -22,6 +22,9 @@ export default function beatMapManager() {
     selectedMap = map;
     localStorage.setItem("selectedMap", JSON.stringify(map));
   };
+  const clearSelectedMap = () => {
+    localStorage.removeItem("selectedMap");
+  };
   const abortSelection = () => {
     console.log("aborted");
     controller.abort();
@@ -96,5 +99,6 @@ export default function beatMapManager() {
     directUrl,
     getExtension,
     abortSelection,
+    clearSelectedMap,
   };
 }

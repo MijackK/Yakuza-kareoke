@@ -11,6 +11,9 @@ body {
 }
 #map-list-container {
   overflow-y: scroll;
+  border-left: solid;
+  border-width: thin;
+  border-color: var(--secondary-bg-color);
 }
 
 .player {
