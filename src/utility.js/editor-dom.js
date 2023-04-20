@@ -257,6 +257,7 @@ const getMetaData = () => {
   );
   Audio.removeEventListener("loadedmetadata", getMetaData);
 };
+
 const showSelectedSong = (beatMap, map) => {
   // remove no selected message
   stopLoadingMap();
@@ -289,7 +290,24 @@ const showSelectedSong = (beatMap, map) => {
   Audio.addEventListener("loadedmetadata", getMetaData);
   console.log("there is a selected map, load its assets");
 };
+const checkSelectedSong = (map) => {
+  const selectedStatus = notSelectedSceen.children[0];
 
+  map
+    .checkSelectedSong()
+    .then((isSelected) => {
+      if (isSelected) {
+        showSelectedSong(map.getSelectedMap(), map);
+        return;
+      }
+      selectedStatus.textContent = "No map selected";
+    })
+    .catch((error) => {
+      console.log(error);
+      selectedStatus.textContent = "Error while fetching map";
+      map.clearSelectedMap();
+    });
+};
 const loadMedia = ({ mapBackground, mapAudio, map }) => {
   map
     .generateBlobUrl({
@@ -393,18 +411,12 @@ export function initialize({ editor, map, user }) {
         })
         .then(async (res) => {
           if (res.success) {
-            loginForm.style.display = "none";
-            // get user songs and display them on my map.
-            const beatMaps = await map.handleGetUserBeatMaps();
             authenicatedView();
-            map.checkSelectedSong().then((isSelected) => {
-              if (isSelected) {
-                showSelectedSong(map.getSelectedMap(), map);
-              }
-            });
+            // get user songs and display them on my map.
+            checkSelectedSong(map);
+            const beatMaps = await map.handleGetUserBeatMaps();
 
             listBeatMaps(beatMaps, editor, map);
-            alert("succesfully logged in");
           } else {
             console.log(res.message);
           }
@@ -419,22 +431,9 @@ export function initialize({ editor, map, user }) {
   }
 
   if (user.getUserData().isLogin) {
-    const selectedStatus = notSelectedSceen.children[0];
-    map
-      .checkSelectedSong()
-      .then((selected) => {
-        if (selected) {
-          showSelectedSong(map.getSelectedMap(), map);
-          return;
-        }
+    authenicatedView();
+    checkSelectedSong(map);
 
-        selectedStatus.textContent = "No map selected";
-      })
-      .catch((e) => {
-        console.log(e);
-        selectedStatus.textContent = "Error while fetching map";
-        map.clearSelectedMap();
-      });
     // get user beat maps
     map.handleGetUserBeatMaps().then((beatMaps) => {
       listBeatMaps(beatMaps, editor, map);

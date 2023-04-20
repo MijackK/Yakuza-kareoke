@@ -278,7 +278,7 @@ h1 {
 }
 
 #add-map {
-  display: grid;
+  display: none;
   grid-template: 0.3fr 5fr/1fr;
   height: 100%;
 }
@@ -383,6 +383,15 @@ a {
   width: 177px;
   height: 99px;
   object-fit: cover;
+}
+@media only screen and (max-width: 768px) {
+  #modal {
+    display: flex;
+    flex-direction: column;
+  }
+  .tool-bar {
+    margin-top: auto;
+  }
 }
 
 .dark_mode {
