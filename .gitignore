@@ -7,4 +7,3 @@ webpack.config.js
 dist/bundle.js
 src/video/
 src/audio/
-.vscode
