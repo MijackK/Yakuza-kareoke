@@ -23,6 +23,7 @@
       <div class="map-container">
         <div class="current-time"></div>
         <div class="map"> </div>
+        <canvas height="150px" width="100vw"></canvas>
         <div class="progress_section">
         
           <canvas id="prompt_location" width="1728" height="80"></canvas>
@@ -115,10 +116,8 @@
         <Form id="add-map-form" class="general-form">
           <label for="map-name">Map name</label>
           <input type="text" name="map-name" id="map-name" required>
-          <label for="song"> Song Selection</label>
-          <select id="song-select" name="song" id="song" required>
-            <option value="">select a song</option>
-          </select>
+          <label for="song"> Audio</label>
+          <input type="file"id="song-select" name="song" id="song" required>
           <label for="background">Background</label>
           <input type="file" name="background" id="background" required>
           <Button>Add map</Button>
