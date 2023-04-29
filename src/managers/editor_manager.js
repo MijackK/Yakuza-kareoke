@@ -3,6 +3,8 @@ import down from "../images/down1.png";
 import left from "../images/left1.png";
 import right from "../images/right1.png";
 
+import { saveLocalMap, getLocalMap } from "../utility.js/storage";
+
 export default function editorFactory() {
   const timeOffset = 3.0;
   let elapsedTime = timeOffset;
@@ -10,7 +12,6 @@ export default function editorFactory() {
   let startTime;
   let Play = false;
   let moveThumb = false;
-  let beatMap = [];
   let audioDuration;
   const getAudioCurrentTime = () => timeOffset;
   let playbackRate = 1;
@@ -40,7 +41,6 @@ export default function editorFactory() {
     ArrowDown: down,
   };
   // getters
-  const getBeatMap = () => beatMap;
   const getPlayRate = () => playbackRate;
   const getElapsedTime = () => elapsedTime;
   const getStartTime = () => startTime;
@@ -126,23 +126,43 @@ export default function editorFactory() {
 
     return { time, type, duration, position, key };
   };
-  const saveChanges = () => {
-    localStorage.setItem("judgment", JSON.stringify(beatMap));
-  };
-  const canPlace = (time, duration) => {
+
+  const canPlace = (time, duration, mapID) => {
+    const beatMap = getLocalMap(mapID);
     // here we're  checking if adding a long prompt will overlap any other prompts in the beatMap
     const check = beatMap.find(
       (prompt) => prompt.time > time && prompt.time <= time + duration
     );
     return check;
   };
-  const checkOccupation = (time) => {
+  const checkOccupation = (time, mapID) => {
     // here we check if a user is trying to add a prompt within a long prompt.
+    const beatMap = getLocalMap(mapID);
+
     const occupied = beatMap.find(
       (prompt) => prompt.time < time && prompt.time + prompt.duration >= time
     );
 
     return occupied;
+  };
+  const removePrompt = (identifier, mapID) => {
+    const currentMap = getLocalMap(mapID);
+    const newMap = currentMap.filter((prompt) => prompt.time !== identifier);
+    saveLocalMap({ id: mapID, beatMap: newMap });
+
+    // eslint-disable-next-line no-param-reassign
+  };
+  const addPrompt = (time, place, mapID) => {
+    const promptObject = contructPrompt(
+      time,
+      promptType,
+      promptDuration,
+      place
+    );
+    const currentMap = getLocalMap(mapID);
+    currentMap.push(promptObject);
+    currentMap.sort((a, b) => a.time - b.time);
+    saveLocalMap({ id: mapID, beatMap: currentMap });
   };
 
   const timeStep = (direction) => {
@@ -196,22 +216,6 @@ export default function editorFactory() {
     return `${startPosition - position}px`;
   };
 
-  const removePrompt = (identifier) => {
-    beatMap = beatMap.filter((prompt) => prompt.time !== identifier);
-    // eslint-disable-next-line no-param-reassign
-    saveChanges();
-  };
-  const addPrompt = (time, place) => {
-    const promptObject = contructPrompt(
-      time,
-      promptType,
-      promptDuration,
-      place
-    );
-    beatMap.push(promptObject);
-    beatMap.sort((a, b) => a.time - b.time);
-    saveChanges();
-  };
   const moveTimelineProgress = (songTime) => {
     const timePassed = elapsedTime.toFixed(1);
     if (Play === false) return false;
@@ -269,7 +273,6 @@ export default function editorFactory() {
     translateToKey,
     moveTimeLine,
     stopTimeLine,
-    getBeatMap,
     getPlayRate,
     getStartTime,
     getHoldDuration,

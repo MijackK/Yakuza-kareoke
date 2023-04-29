@@ -8,6 +8,7 @@ import { validPrompts } from "../canvas/canvas";
 import audiomp3 from "../audio/judgment.mp3";
 
 let editorManager;
+
 const backgroundImage = document.querySelector("#background-image");
 const backgroundVideo = document.querySelector("#background-video");
 backgroundVideo.volume = 0;
@@ -246,12 +247,12 @@ const getMetaData = () => {
 
   fillTimeline(
     Audio.duration * 10,
-    editorManager.getBeatMap(),
+    [], // put the beatMap here
     editorManager.getImages()
   );
   const timeOffset = editorManager.getTimeOffset();
   mapProgressPrompts(
-    editorManager.getBeatMap(),
+    [], // replace with beatMap
     Audio.duration - timeOffset,
     timeOffset
   );
@@ -298,6 +299,7 @@ const checkSelectedSong = (map) => {
     .then((isSelected) => {
       if (isSelected) {
         showSelectedSong(map.getSelectedMap(), map);
+        console.log(map.getSelectedMap());
         return;
       }
       selectedStatus.textContent = "No map selected";
@@ -354,7 +356,7 @@ const listBeatMaps = (beatMaps, editor, map) => {
     // add event listner
     listItem.addEventListener("click", () => {
       const selectedMap = map.getSelectedMap();
-      if (selectedMap.id === beatMap.id) {
+      if (selectedMap?.id === beatMap.id) {
         return;
       }
       loadingMap();
@@ -385,6 +387,7 @@ const notAuthenticatedView = () => {
 
 export function initialize({ editor, map, user }) {
   editorManager = editor;
+
   // set attributes and stuff
 
   Audio.currentTime = editor.getTimeOffset();
@@ -441,18 +444,6 @@ export function initialize({ editor, map, user }) {
     });
   }
 
-  // start loadings for song list
-  map.getSongsList().then((songList) => {
-    console.log(songList);
-    // stop song list loading ui
-    songList.forEach((song) => {
-      const option = document.createElement("option");
-      option.value = song.id;
-      option.textContent = song.name;
-      songSelect.append(option);
-    });
-  });
-
   // add event listners
   addMapButton.addEventListener("click", (e) => {
     viewSwitch(e.target);
@@ -474,7 +465,6 @@ export function initialize({ editor, map, user }) {
         listBeatMaps([beatMap], editor, map);
         // make the selected map the added map
         map.setSelectedMap(beatMap);
-        // showSelectedSong(beatMap,map)
         // load the assets for the added maps.
         loadMedia({
           mapBackground: beatMap.background,

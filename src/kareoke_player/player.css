@@ -6,7 +6,7 @@ body {
   height: 100vh;
   min-width: 1920px;
   max-width: 1920px;
-  overflow: hidden;
+  overflow-x: hidden;
   color: white;
   background-color: rgb(0, 0, 0);
 }

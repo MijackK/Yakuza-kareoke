@@ -248,9 +248,8 @@ h1 {
   display: grid;
   grid-template: 7vh 80vh 10vh/35vw 65vw;
   position: absolute;
-  height: 20vh;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   z-index: 100;
   background-color: var(--primary-bg-color);
 }
@@ -384,10 +383,9 @@ a {
   height: 99px;
   object-fit: cover;
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 914px) {
   #modal {
-    display: flex;
-    flex-direction: column;
+    grid-template: 50px 1fr 1fr 1fr/1fr;
   }
   .tool-bar {
     margin-top: auto;
