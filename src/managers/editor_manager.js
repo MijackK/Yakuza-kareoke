@@ -3,7 +3,7 @@ import down from "../images/down1.png";
 import left from "../images/left1.png";
 import right from "../images/right1.png";
 
-import { saveLocalMap, getLocalMap } from "../utility.js/storage";
+import { saveLocalMap } from "../utility.js/storage";
 
 export default function editorFactory() {
   const timeOffset = 3.0;
@@ -15,6 +15,7 @@ export default function editorFactory() {
   let audioDuration;
   const getAudioCurrentTime = () => timeOffset;
   let playbackRate = 1;
+  let beatMap = [];
 
   const timePointsPerSecond = 10;
   const distanceBetweenTimePoints = 29;
@@ -41,6 +42,7 @@ export default function editorFactory() {
     ArrowDown: down,
   };
   // getters
+  const getBeatMap = () => beatMap;
   const getPlayRate = () => playbackRate;
   const getElapsedTime = () => elapsedTime;
   const getStartTime = () => startTime;
@@ -57,6 +59,10 @@ export default function editorFactory() {
   const getStartPosition = () => startPosition;
   const getPlayBackRate = () => playbackRate;
   // setters
+
+  const setBeatMap = (map) => {
+    beatMap = map;
+  };
   const setRapidDuration = (value) => {
     rapidDuration = value;
   };
@@ -127,17 +133,15 @@ export default function editorFactory() {
     return { time, type, duration, position, key };
   };
 
-  const canPlace = (time, duration, mapID) => {
-    const beatMap = getLocalMap(mapID);
+  const canPlace = (time, duration) => {
     // here we're  checking if adding a long prompt will overlap any other prompts in the beatMap
     const check = beatMap.find(
       (prompt) => prompt.time > time && prompt.time <= time + duration
     );
     return check;
   };
-  const checkOccupation = (time, mapID) => {
+  const checkOccupation = (time) => {
     // here we check if a user is trying to add a prompt within a long prompt.
-    const beatMap = getLocalMap(mapID);
 
     const occupied = beatMap.find(
       (prompt) => prompt.time < time && prompt.time + prompt.duration >= time
@@ -146,9 +150,8 @@ export default function editorFactory() {
     return occupied;
   };
   const removePrompt = (identifier, mapID) => {
-    const currentMap = getLocalMap(mapID);
-    const newMap = currentMap.filter((prompt) => prompt.time !== identifier);
-    saveLocalMap({ id: mapID, beatMap: newMap });
+    beatMap = beatMap.filter((prompt) => prompt.time !== identifier);
+    saveLocalMap({ id: mapID, beatMap });
 
     // eslint-disable-next-line no-param-reassign
   };
@@ -159,10 +162,10 @@ export default function editorFactory() {
       promptDuration,
       place
     );
-    const currentMap = getLocalMap(mapID);
-    currentMap.push(promptObject);
-    currentMap.sort((a, b) => a.time - b.time);
-    saveLocalMap({ id: mapID, beatMap: currentMap });
+
+    beatMap.push(promptObject);
+    beatMap.sort((a, b) => a.time - b.time);
+    saveLocalMap({ id: mapID, beatMap });
   };
 
   const timeStep = (direction) => {
@@ -260,6 +263,8 @@ export default function editorFactory() {
   };
 
   return {
+    getBeatMap,
+    setBeatMap,
     progressBarTimeUpdate,
     getElapsedTime,
     updateSpeed,

@@ -82,17 +82,3 @@ export async function getMedia(url, signal) {
 
   return data;
 }
-
-export async function getSongs() {
-  const options = {
-    method: "get",
-  };
-  const headers = {};
-  const response = await apiRequest({
-    url: `kareoke/get_songs`,
-    options,
-    headers,
-  });
-  const data = await response.json();
-  return data;
-}

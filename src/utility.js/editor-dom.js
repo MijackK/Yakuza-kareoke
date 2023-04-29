@@ -247,12 +247,12 @@ const getMetaData = () => {
 
   fillTimeline(
     Audio.duration * 10,
-    [], // put the beatMap here
+    editorManager.getBeatMap(), // put the beatMap here
     editorManager.getImages()
   );
   const timeOffset = editorManager.getTimeOffset();
   mapProgressPrompts(
-    [], // replace with beatMap
+    editorManager.getBeatMap(), // replace with beatMap
     Audio.duration - timeOffset,
     timeOffset
   );
@@ -291,7 +291,7 @@ const showSelectedSong = (beatMap, map) => {
   Audio.addEventListener("loadedmetadata", getMetaData);
   console.log("there is a selected map, load its assets");
 };
-const checkSelectedSong = (map) => {
+const checkSelectedSong = (map, editor) => {
   const selectedStatus = notSelectedSceen.children[0];
 
   map
@@ -300,6 +300,7 @@ const checkSelectedSong = (map) => {
       if (isSelected) {
         showSelectedSong(map.getSelectedMap(), map);
         console.log(map.getSelectedMap());
+        editor.setBeatMap(map.getSelectedMap().beatMap);
         return;
       }
       selectedStatus.textContent = "No map selected";
@@ -362,6 +363,7 @@ const listBeatMaps = (beatMaps, editor, map) => {
       loadingMap();
       map.abortSelection();
       map.setSelectedMap(beatMap);
+      editor.setBeatMap(map.getSelectedMap().beatMap);
       loadMedia({
         mapBackground: beatMap.background,
         mapAudio: beatMap.audio,
@@ -416,7 +418,7 @@ export function initialize({ editor, map, user }) {
           if (res.success) {
             authenicatedView();
             // get user songs and display them on my map.
-            checkSelectedSong(map);
+            checkSelectedSong(map, editor);
             const beatMaps = await map.handleGetUserBeatMaps();
 
             listBeatMaps(beatMaps, editor, map);
@@ -435,7 +437,7 @@ export function initialize({ editor, map, user }) {
 
   if (user.getUserData().isLogin) {
     authenicatedView();
-    checkSelectedSong(map);
+    checkSelectedSong(map, editor);
 
     // get user beat maps
     map.handleGetUserBeatMaps().then((beatMaps) => {
@@ -465,6 +467,8 @@ export function initialize({ editor, map, user }) {
         listBeatMaps([beatMap], editor, map);
         // make the selected map the added map
         map.setSelectedMap(beatMap);
+        editor.setBeatMap(map.getSelectedMap().beatMap);
+
         // load the assets for the added maps.
         loadMedia({
           mapBackground: beatMap.background,
@@ -528,18 +532,24 @@ export function initialize({ editor, map, user }) {
       `[id='${editor.getElapsedTime().toFixed(1)}']`
     );
     const promptKey = editor.translateToKey(e.target.id);
-    if (editor.checkOccupation(Number(timePoint.id))) {
+    if (editor.checkOccupation(Number(timePoint.id), map.getSelectedMap().id)) {
       console.log("space is occupied by a long prompt");
       return;
     }
-    if (editor.canPlace(Number(timePoint.id), editor.getPromptDuration())) {
+    if (
+      editor.canPlace(
+        Number(timePoint.id),
+        editor.getPromptDuration(),
+        map.getSelectedMap().id
+      )
+    ) {
       console.log("cant place that prompt here");
       return;
     }
     console.log(`${e.target.id}  time: ${editor.getElapsedTime().toFixed(1)}`);
 
     if (timePoint.childElementCount !== 0) {
-      editor.removePrompt(Number(timePoint.id));
+      editor.removePrompt(Number(timePoint.id), map.getSelectedMap().id);
       const timeOffset = editor.getTimeOffset();
       mapProgressPrompts(
         editor.getBeatMap(),
@@ -550,7 +560,11 @@ export function initialize({ editor, map, user }) {
       return;
     }
 
-    editor.addPrompt(Number(timePoint.id), e.target.id);
+    editor.addPrompt(
+      Number(timePoint.id),
+      e.target.id,
+      map.getSelectedMap().id
+    );
     const timeOffset = editor.getTimeOffset();
     mapProgressPrompts(
       editor.getBeatMap(),

@@ -9,7 +9,7 @@ import editorFactory from "../managers/editor_manager";
 import { initialize, updateDomTime } from "../utility.js/editor-dom";
 import beatMapManager from "../managers/map_manager";
 import userFactory from "../managers/user-manager";
-import { saveBeatMap, getBeatMap } from "../utility.js/storage";
+import { saveBeatMap, getLocalMap } from "../utility.js/storage";
 
 const editor = editorFactory();
 const mapManager = beatMapManager();
@@ -65,7 +65,7 @@ const AnimatePrompts = () => {
   timeController();
   validPrompts(
     editor.getPreviousTime() * editor.getPlayRate() + editor.getTimeOffset(),
-    [], // repl;ace with beatmap
+    editor.getBeatMap(), // repl;ace with beatmap
     editor.getPlay()
   );
   // enable this when computer player is working is working

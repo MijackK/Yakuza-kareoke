@@ -16,8 +16,8 @@ const getMaps = () => {
 };
 export function getLocalMap(id) {
   const maps = getMaps();
-  const beatMap = maps.find((map) => map.id === id);
-  return beatMap;
+  const found = maps.find((map) => map.id === id);
+  return found?.beatMap;
 }
 
 export function saveLocalMap({ id, beatMap }) {

@@ -2,7 +2,6 @@ import {
   getBeatMaps,
   getBeatMap,
   getMedia,
-  getSongs,
   uploadBeatmap,
   getUserBeatMaps,
 } from "../api/kareoke";
@@ -25,7 +24,7 @@ export default function beatMapManager() {
     const localMap = getLocalMap(selectedMap.id);
     console.log(localMap);
     if (localMap) {
-      selectedMap.beatMap = localMap.beatMap;
+      selectedMap.beatMap = localMap;
     }
     if (!localMap) {
       const remoteMap = JSON.parse(selectedMap.beatMap);
@@ -85,17 +84,11 @@ export default function beatMapManager() {
     const response = await getBeatMaps();
     return response;
   };
-  const getSongsList = async () => {
-    const songs = await getSongs();
-
-    return songs;
-  };
 
   return {
     saveMapRemote,
     handleGetUserBeatMaps,
     handleGetBeatMaps,
-    getSongsList,
     getBackgroundUrl,
     getAudioUrl,
     generateBlobUrl,
