@@ -23,7 +23,7 @@ input[type="password"] {
   font-family: var(--primary-font);
   color: var(--primary-color);
   height: 35px;
-
+  font-size: 1.4rem;
   outline: none;
   margin-bottom: 20px;
 }

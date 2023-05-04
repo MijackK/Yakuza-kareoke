@@ -9,7 +9,6 @@ import editorFactory from "../managers/editor_manager";
 import { initialize, updateDomTime } from "../utility.js/editor-dom";
 import beatMapManager from "../managers/map_manager";
 import userFactory from "../managers/user-manager";
-import { saveBeatMap, getLocalMap } from "../utility.js/storage";
 
 const editor = editorFactory();
 const mapManager = beatMapManager();

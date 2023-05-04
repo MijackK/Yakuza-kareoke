@@ -28,6 +28,7 @@ export default function beatMapManager() {
     }
     if (!localMap) {
       const remoteMap = JSON.parse(selectedMap.beatMap);
+      selectedMap.beatMap = remoteMap;
       saveLocalMap({ id: selectedMap.id, beatMap: remoteMap });
     }
   };
