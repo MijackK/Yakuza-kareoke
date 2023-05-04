@@ -2,8 +2,13 @@ import diskImage from "../images/disk.png";
 import hoverSound from "../audio/buttonpress-94482.mp3";
 import selectSound from "../audio/interface-124464.mp3";
 import stray from "../video/particles-27669.mp4";
+import homeSong from "../audio/reflected-light-147979.mp3";
 
 const backgroundImage = document.querySelector(".background_image");
+const homeAudio = document.querySelector("#home-audio");
+homeAudio.src = homeSong;
+homeAudio.volume = 0.2;
+homeAudio.play();
 let hoverDebounce = null;
 let userManager;
 let mapManager;
