@@ -59,7 +59,6 @@ const selectedInfoButton = document.querySelector("#selected");
 const addMapButton = document.querySelector("#add");
 const summaryWrapper = document.querySelector("#summary-wrapper");
 const selectedAudio = document.querySelector("#map-audio");
-selectedAudio.src = audiomp3;
 const selectName = document.querySelector("#select-name ");
 const selectVideo = document.querySelector("#map-video");
 const selectImage = document.querySelector("#map-image");

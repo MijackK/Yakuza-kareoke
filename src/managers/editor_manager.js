@@ -4,7 +4,6 @@ import left from "../images/left1.png";
 import right from "../images/right1.png";
 
 import { saveLocalMap } from "../utility.js/storage";
-import { saveLocalMap } from "../utility.js/storage";
 
 export default function editorFactory() {
   const timeOffset = 3.0;
