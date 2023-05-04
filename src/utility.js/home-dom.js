@@ -1,7 +1,7 @@
 import diskImage from "../images/disk.png";
-import hoverSound from "../audio/hover-sound.mp3";
-import selectSound from "../audio/select-sound.mp3";
-import stray from "../video/stray.mp4";
+import hoverSound from "../audio/buttonpress-94482.mp3";
+import selectSound from "../audio/interface-124464.mp3";
+import stray from "../video/particles-27669.mp4";
 
 const backgroundImage = document.querySelector(".background_image");
 let hoverDebounce = null;

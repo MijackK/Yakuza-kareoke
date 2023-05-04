@@ -1,5 +1,5 @@
 import "./player.css";
-import clickSound from "../audio/hitsound02.mp3";
+import clickSound from "../audio/bass1drum-43078.mp3";
 import greatImg from "../images/great.png";
 import missImg from "../images/miss.png";
 import badImg from "../images/bad.png";
@@ -8,8 +8,6 @@ import kareokeFactory from "../player-parts/general-parts";
 import { click, hold, rapid } from "../player-parts/input-parts";
 import { feedBackVisualiserFactory } from "../player-parts/display-parts";
 import { validPrompts, init } from "../canvas/canvas";
-import background from "../video/judgment.mp4";
-import audiomp3 from "../audio/judgment.mp3";
 
 init();
 

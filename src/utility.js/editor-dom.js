@@ -5,7 +5,6 @@ import {
 } from "../player-parts/display-parts";
 import surviveBar from "../images/survive_bar.png";
 import { validPrompts } from "../canvas/canvas";
-import audiomp3 from "../audio/judgment.mp3";
 
 let editorManager;
 
