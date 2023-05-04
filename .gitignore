@@ -2,7 +2,6 @@
 # Dependency directories
 node_modules/
 .eslintignore
-.eslintrc.json
 dist/bundle.js
 src/video/
 src/audio/
