@@ -3,7 +3,7 @@ import apiRequest from "./main";
 export async function uploadBeatmap(formData) {
   // upload map, audio, background.
   const options = {
-    method: "put",
+    method: "post",
     body: formData,
   };
   // make sure to add csrf toekn here
@@ -82,3 +82,24 @@ export async function getMedia(url, signal) {
 
   return data;
 }
+
+export async function saveBeatMap(id) {
+  const options = {
+    method: "put",
+    body: JSON.stringify({ id }),
+  };
+  const headers = { "Content-Type": "application/json" };
+  const response = await apiRequest({
+    url: `kareoke/save_map`,
+    options,
+    headers,
+  });
+  if (response.ok === false) {
+    throw new Error("Could not update Beat Map");
+  }
+  const data = await response.text();
+
+  return data;
+}
+
+export async function saveMedia(id) {}

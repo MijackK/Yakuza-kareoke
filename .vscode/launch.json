@@ -7,33 +7,33 @@
     {
       "type": "firefox",
       "request": "launch",
-      "reAttach": true,
       "name": "debug firefox",
       "url": "http://localhost:8080",
       "webRoot": "${workspaceFolder}",
+      "skipFiles": [
+        "${workspaceFolder}/node_modules/**/*.js",
+        "${workspaceFolder}/src/**/*.test.js",
+        "${workspaceFolder}/src/**/*.spec.js"
+      ],
+      "preLaunchTask": "start",
       "pathMappings": [
         {
           "url": "webpack://yakuza-kareoke",
           "path": "${workspaceFolder}"
         }
-      ],
-      "skipFiles": [
-        "${workspaceFolder}/<node_internals>/**",
-        "${workspaceFolder}/node_modules/**"
       ]
     },
     {
-      "preLaunchTask": "npm: start",
+      "preLaunchTask": "start",
       "type": "chrome",
       "request": "launch",
       "name": "debug chrome",
       "url": "http://localhost:8080",
-      "webRoot": "${workspaceFolder}",
-      "sourceMaps": true,
-      "trace": true,
+      "webRoot": "${workspaceFolder}/src",
       "skipFiles": [
-        "${workspaceFolder}/<node_internals>/**",
-        "${workspaceFolder}/node_modules/**"
+        "${workspaceFolder}/node_modules/**/*.js",
+        "${workspaceFolder}/src/**/*.test.js",
+        "${workspaceFolder}/src/**/*.spec.js"
       ]
     }
   ]

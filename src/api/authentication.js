@@ -1,5 +1,4 @@
 import apiRequest from "./main";
-import { saveUserInfo } from "../utility.js/storage";
 
 export async function login({ email, password }) {
   const options = {
@@ -35,7 +34,7 @@ export async function logout({ csrfToken }) {
     CSRF_TOKEN: csrfToken,
   };
   const response = await apiRequest({ url: "auth/logout", options, headers });
-  const data = await response.json();
+  const data = await response.text();
 
   return data;
 }

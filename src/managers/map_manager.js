@@ -4,6 +4,7 @@ import {
   getMedia,
   uploadBeatmap,
   getUserBeatMaps,
+  saveBeatMap,
 } from "../api/kareoke";
 import config from "../config";
 import { getLocalMap, saveLocalMap } from "../utility.js/storage";
@@ -76,7 +77,10 @@ export default function beatMapManager() {
   };
   const directUrl = (path) => `http://${config.objectServer}/${path}`;
 
-  const saveMapRemote = async (id) => {};
+  const saveMapRemote = async (id) => {
+    const response = await saveBeatMap(id);
+    return response;
+  };
   const handleGetUserBeatMaps = async () => {
     const beatMaps = await getUserBeatMaps();
     return beatMaps;
