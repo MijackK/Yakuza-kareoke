@@ -65,6 +65,8 @@ const selectImage = document.querySelector("#map-image");
 selectImage.src = surviveBar;
 const notSelectedSceen = document.querySelector(".not-selected");
 
+const saveMapButton = document.querySelector("#upload-map");
+
 const removeBtnFocus = () => {
   clickBtn.classList.remove("active-prompt");
   rapidBtn.classList.remove("active-prompt");
@@ -445,6 +447,11 @@ export function initialize({ editor, map, user }) {
   }
 
   // add event listners
+  saveMapButton.addEventListener("click", () => {
+    map.saveMapRemote("beatMap").then((res) => {
+      alert(res);
+    });
+  });
   addMapButton.addEventListener("click", (e) => {
     viewSwitch(e.target);
   });

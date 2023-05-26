@@ -83,10 +83,10 @@ export async function getMedia(url, signal) {
   return data;
 }
 
-export async function saveBeatMap(id) {
+export async function saveBeatMap(mapData) {
   const options = {
     method: "put",
-    body: JSON.stringify({ id }),
+    body: JSON.stringify(mapData),
   };
   const headers = { "Content-Type": "application/json" };
   const response = await apiRequest({

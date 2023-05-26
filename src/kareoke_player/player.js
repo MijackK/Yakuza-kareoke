@@ -8,21 +8,22 @@ import kareokeFactory from "../player-parts/general-parts";
 import { click, hold, rapid } from "../player-parts/input-parts";
 import { feedBackVisualiserFactory } from "../player-parts/display-parts";
 import { validPrompts, init } from "../canvas/canvas";
+import beatMapManager from "../managers/map_manager";
 
 init();
-
+const mapManager = beatMapManager();
 const audio = document.createElement("audio");
 
 const song = document.createElement("audio");
 audio.src = clickSound;
-song.src = audiomp3;
+// give song an src
 audio.playbackRate = 1;
 let play = true;
 
 document.querySelector("body").prepend(audio);
 document.querySelector("body").prepend(song);
 const backgroundVideo = document.querySelector(".background");
-backgroundVideo.src = background;
+// give background an src
 
 let timeElapsed = 0;
 let previousTime = 0;
@@ -39,11 +40,12 @@ const imageIndicator = {
   bad: badImg,
   good: goodImg,
 };
-const buttons = JSON.parse(localStorage.getItem("judgment"));
+let buttons;
+let clickInput;
 
-const clickBtns = buttons.filter((element) => element.type === "click");
-const holdBtns = buttons.filter((element) => element.type === "hold");
-const rapidBtns = buttons.filter((element) => element.type === "rapid");
+let holdInput;
+
+let rapidInput;
 
 const heatMode = (info) => {
   if (info.Success === true && info.incrementScore === 0 && heat === true) {
@@ -81,12 +83,6 @@ const incrementScore = (info) => {
   }
   heatMode(info);
 };
-
-const clickInput = click(clickBtns.slice(), kareokeFactory, imageIndicator);
-
-const holdInput = hold(holdBtns.slice(), kareokeFactory, imageIndicator);
-
-const rapidInput = rapid(rapidBtns.slice(), kareokeFactory, imageIndicator);
 
 const feedBackVisualiser = feedBackVisualiserFactory();
 
@@ -230,3 +226,40 @@ document.querySelector("body").addEventListener("keyup", (e) => {
     incrementScore(holdInfo);
   }
 });
+const songID = document.location.search.split("?song=")[1];
+
+mapManager
+  .loadMap(songID)
+  .then(({ mapInfo, audioUrl, backgroundUrl }) => {
+    console.log(mapInfo);
+    console.log("audio", audioUrl);
+    console.log("background", backgroundUrl);
+    buttons = JSON.parse(mapInfo.beatMap);
+    // separate button types
+
+    // load them
+    clickInput = click(
+      buttons.filter((element) => element.type === "click"),
+      kareokeFactory,
+      imageIndicator
+    );
+
+    holdInput = hold(
+      buttons.filter((element) => element.type === "hold"),
+      kareokeFactory,
+      imageIndicator
+    );
+
+    rapidInput = rapid(
+      buttons.filter((element) => element.type === "rapid"),
+      kareokeFactory,
+      imageIndicator
+    );
+    // add media sources
+    song.src = audioUrl;
+    backgroundVideo.src = backgroundUrl;
+  })
+  .catch((err) => {
+    console.log(err);
+    // open dialog to allow user to pick a song
+  });

@@ -34,7 +34,11 @@
         "${workspaceFolder}/node_modules/**/*.js",
         "${workspaceFolder}/src/**/*.test.js",
         "${workspaceFolder}/src/**/*.spec.js"
-      ]
+      ],
+      "sourceMapPathOverrides": {
+        "webpack:///./src/*": "${webRoot}/*"
+      },
+      "sourceMaps": true
     }
   ]
 }

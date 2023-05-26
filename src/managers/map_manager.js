@@ -23,7 +23,7 @@ export default function beatMapManager() {
     selectedMap = map;
     localStorage.setItem("selectedMap", JSON.stringify(map));
     const localMap = getLocalMap(selectedMap.id);
-    console.log(localMap);
+
     if (localMap) {
       selectedMap.beatMap = localMap;
     }
@@ -38,7 +38,6 @@ export default function beatMapManager() {
     localStorage.removeItem("selectedMap");
   };
   const abortSelection = () => {
-    console.log("aborted");
     controller.abort();
     controller = new AbortController();
   };
@@ -56,10 +55,7 @@ export default function beatMapManager() {
     audioUrl = URL.createObjectURL(audioBlob);
     backgroundUrl = URL.createObjectURL(backgroundBloB);
   };
-  const getExtension = (name) => {
-    console.log(name);
-    return name.split(".").pop();
-  };
+  const getExtension = (name) => name.split(".").pop();
 
   const checkSelectedSong = async () => {
     const map = JSON.parse(localStorage.getItem("selectedMap"));
@@ -77,8 +73,12 @@ export default function beatMapManager() {
   };
   const directUrl = (path) => `http://${config.objectServer}/${path}`;
 
-  const saveMapRemote = async (id) => {
-    const response = await saveBeatMap(id);
+  const saveMapRemote = async (column) => {
+    const response = await saveBeatMap({
+      id: selectedMap.id,
+      column,
+      value: selectedMap[column],
+    });
     return response;
   };
   const handleGetUserBeatMaps = async () => {
@@ -88,6 +88,12 @@ export default function beatMapManager() {
   const handleGetBeatMaps = async () => {
     const response = await getBeatMaps();
     return response;
+  };
+  const loadMap = async (id) => {
+    const mapInfo = await getBeatMap(id);
+    await generateBlobUrl(mapInfo);
+
+    return { mapInfo, audioUrl, backgroundUrl };
   };
 
   return {
@@ -105,5 +111,6 @@ export default function beatMapManager() {
     getExtension,
     abortSelection,
     clearSelectedMap,
+    loadMap,
   };
 }
