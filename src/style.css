@@ -30,16 +30,8 @@ a {
 #account {
   background-color: transparent;
 }
-#auth-dialog {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.452);
-}
-.dialog {
+
+#account-dialog {
   position: absolute;
   display: none;
   grid-template: 10vh 50vh 40vh/100vw;
@@ -88,7 +80,6 @@ a {
   min-width: 300px;
   background-color: var(--primary-bg-color);
   border: solid grey thin;
-  margin-top: 170px;
 }
 .account-wrapper {
   width: 30vw;

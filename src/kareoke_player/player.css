@@ -214,6 +214,17 @@ img {
     rgba(60, 239, 230, 0.7)
   );
 }
+#loading-disk {
+  width: 15vw;
+  height: 15vw;
+  border: solid white;
+  border-top: solid blue;
+  border-radius: 100%;
+  animation-name: spin;
+  animation-duration: 2s;
+  animation-timing-function: initial;
+  animation-iteration-count: infinite;
+}
 @keyframes explode {
   0% {
     opacity: 1;
@@ -263,5 +274,14 @@ img {
   }
   100% {
     transform: translateY(-10px);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
