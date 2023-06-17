@@ -1,4 +1,5 @@
 import "./player.css";
+import "../general.css";
 import clickSound from "../audio/bass1drum-43078.mp3";
 import greatImg from "../images/great.png";
 import missImg from "../images/miss.png";
@@ -9,20 +10,21 @@ import { click, hold, rapid } from "../player-parts/input-parts";
 import { feedBackVisualiserFactory } from "../player-parts/display-parts";
 import { validPrompts, init } from "../canvas/canvas";
 import beatMapManager from "../managers/map_manager";
+import {
+  addAudio,
+  playMap,
+  pauseMap,
+  playClick,
+  stopLoading,
+  startLoading,
+} from "../utility.js/player-dom";
 
 init();
 const mapManager = beatMapManager();
-const audio = document.createElement("audio");
 
-const song = document.createElement("audio");
-audio.src = clickSound;
 // give song an src
-audio.playbackRate = 1;
-let play = true;
+let play = false;
 
-document.querySelector("body").prepend(audio);
-document.querySelector("body").prepend(song);
-const backgroundVideo = document.querySelector(".background");
 // give background an src
 
 let timeElapsed = 0;
@@ -123,9 +125,10 @@ const removeGameInputs = (duration, inputObject, elapsedTime) => {
 };
 
 const timeController = () => {
+  if (play === false) return;
   let timeNow = Number((Date.now() - startTime) / 1000);
 
-  if (Math.abs(timeElapsed - timeNow) > 0.1 && play === false) {
+  if (Math.abs(timeElapsed - timeNow) > 0.1) {
     const startIncrease = timeNow - previousTime;
     startTime += startIncrease * 1000;
     timeNow = Number((Date.now() - startTime) / 1000);
@@ -139,6 +142,7 @@ const timeController = () => {
     rapidInput.inputList.length === 0
   ) {
     play = false;
+    pauseMap();
     clearInterval(gameLoop);
     cancelAnimationFrame(animationID);
     return;
@@ -182,13 +186,12 @@ const AnimatePrompts = () => {
   validPrompts(timeElapsed, promptArrays, play);
   animationID = requestAnimationFrame(AnimatePrompts);
 };
-
-backgroundVideo.onloadedmetadata = () => {
-  backgroundVideo.play();
-  song.play();
+const startMap = () => {
+  playMap();
   animationID = requestAnimationFrame(AnimatePrompts);
   gameLoop = setInterval(timeController, 0);
 };
+
 // Eventlistners and logic for getting
 document.querySelector("body").addEventListener("keydown", (e) => {
   if (!keydown) {
@@ -197,12 +200,8 @@ document.querySelector("body").addEventListener("keydown", (e) => {
       // this will make sure that they dont trigger at the same time.
       eventHandler(e.key, holdInput, "checkDown");
     }
-
     rapidInputHandler(e.key);
-
-    audio.currentTime = 0;
-    audio.play();
-
+    playClick();
     keydown = true;
   }
 });
@@ -220,20 +219,28 @@ document.querySelector("body").addEventListener("keyup", (e) => {
     feedBackVisualiser.showIndicator(holdInfo);
 
     if (holdInfo.Success === true) {
-      audio.currentTime = 0;
-      audio.play();
+      playClick();
     }
     incrementScore(holdInfo);
   }
 });
+document.querySelector("body").addEventListener("keyup", (e) => {
+  if (e.key === "Escape") {
+    if (play) {
+      play = false;
+      pauseMap();
+      return;
+    }
+    play = true;
+    playMap();
+  }
+});
 const songID = document.location.search.split("?song=")[1];
+startLoading();
 
 mapManager
   .loadMap(songID)
-  .then(({ mapInfo, audioUrl, backgroundUrl }) => {
-    console.log(mapInfo);
-    console.log("audio", audioUrl);
-    console.log("background", backgroundUrl);
+  .then(({ mapInfo, audioUrl, backgroundUrl, extension }) => {
     buttons = JSON.parse(mapInfo.beatMap);
     // separate button types
 
@@ -256,10 +263,12 @@ mapManager
       imageIndicator
     );
     // add media sources
-    song.src = audioUrl;
-    backgroundVideo.src = backgroundUrl;
+    addAudio(audioUrl, backgroundUrl, clickSound, extension);
   })
   .catch((err) => {
     console.log(err);
     // open dialog to allow user to pick a song
+  })
+  .finally(() => {
+    stopLoading();
   });

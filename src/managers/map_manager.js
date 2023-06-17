@@ -93,7 +93,12 @@ export default function beatMapManager() {
     const mapInfo = await getBeatMap(id);
     await generateBlobUrl(mapInfo);
 
-    return { mapInfo, audioUrl, backgroundUrl };
+    return {
+      mapInfo,
+      audioUrl,
+      backgroundUrl,
+      extension: getExtension(mapInfo.background),
+    };
   };
 
   return {
