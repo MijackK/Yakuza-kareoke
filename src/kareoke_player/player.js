@@ -17,6 +17,8 @@ import {
   playClick,
   stopLoading,
   startLoading,
+  openMenu,
+  closeMenu,
 } from "../utility.js/player-dom";
 
 init();
@@ -123,6 +125,12 @@ const removeGameInputs = (duration, inputObject, elapsedTime) => {
   feedBackVisualiser.showIndicator(info);
   incrementScore(info);
 };
+const stopMap = () => {
+  clearInterval(gameLoop);
+  cancelAnimationFrame(animationID);
+  play = false;
+  pauseMap();
+};
 
 const timeController = () => {
   if (play === false) return;
@@ -141,10 +149,7 @@ const timeController = () => {
     holdInput.inputList.length === 0 &&
     rapidInput.inputList.length === 0
   ) {
-    play = false;
-    pauseMap();
-    clearInterval(gameLoop);
-    cancelAnimationFrame(animationID);
+    stopMap();
     return;
   }
   // check the number of clicks for a rapid prompt
@@ -187,9 +192,11 @@ const AnimatePrompts = () => {
   animationID = requestAnimationFrame(AnimatePrompts);
 };
 const startMap = () => {
-  playMap();
   animationID = requestAnimationFrame(AnimatePrompts);
   gameLoop = setInterval(timeController, 0);
+  play = true;
+  playMap();
+  closeMenu();
 };
 
 // Eventlistners and logic for getting
@@ -227,13 +234,15 @@ document.querySelector("body").addEventListener("keyup", (e) => {
 document.querySelector("body").addEventListener("keyup", (e) => {
   if (e.key === "Escape") {
     if (play) {
-      play = false;
-      pauseMap();
+      stopMap();
+      openMenu();
       return;
     }
-    play = true;
-    playMap();
+    startMap();
   }
+});
+document.querySelector("#resume-btn").addEventListener("click", () => {
+  startMap();
 });
 const songID = document.location.search.split("?song=")[1];
 startLoading();
@@ -264,6 +273,7 @@ mapManager
     );
     // add media sources
     addAudio(audioUrl, backgroundUrl, clickSound, extension);
+    openMenu();
   })
   .catch((err) => {
     console.log(err);

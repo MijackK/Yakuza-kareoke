@@ -40,4 +40,13 @@ export function stopLoading() {
   const loading = document.querySelector("#loading-map");
   loading.style.display = "none";
 }
-export default function playerDOM() {}
+export function openMenu() {
+  const menu = document.querySelector("#menu-dialog");
+  menu.style.display = "flex";
+}
+export function closeMenu() {
+  const menu = document.querySelector("#menu-dialog");
+  menu.style.display = "none";
+}
+export function openFinalScore() {}
+export function closeFinalScore() {}

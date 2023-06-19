@@ -85,5 +85,5 @@ input[type="password"]:focus {
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.852);
-  z-index: 10;
+  z-index: 11;
 }
