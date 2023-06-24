@@ -9,6 +9,7 @@ body {
   overflow-x: hidden;
   color: white;
   background-color: rgb(0, 0, 0);
+  font-family: var(--primary-font);
 }
 #time {
   font-size: 1.7rem;
@@ -224,6 +225,43 @@ img {
   animation-duration: 2s;
   animation-timing-function: initial;
   animation-iteration-count: infinite;
+}
+#player-menu {
+  display: flex;
+  gap: 20px;
+  align-items: end;
+}
+#resume-btn {
+  cursor: pointer;
+  filter: brightness(0.8);
+}
+#pause-btn {
+  cursor: pointer;
+  position: fixed;
+  color: white;
+  background-color: transparent;
+
+  border: none;
+  font-size: 4rem;
+  right: 0;
+}
+.menu-button {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  font-size: 2rem;
+}
+.menu-button > button {
+  cursor: pointer;
+  color: white;
+  background-color: transparent;
+
+  border: none;
+  font-size: 4rem;
+}
+#resume-btn:hover {
+  filter: brightness(1);
 }
 @keyframes explode {
   0% {

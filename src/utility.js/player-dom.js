@@ -14,7 +14,16 @@ export function addAudio(songSrc, backgroundSRC, clickSrc, extension) {
   }
   backgroundImage.style.backgroundImage = `url(${backgroundSRC})`;
 }
-
+export function resetMap() {
+  const song = document.querySelector("#song");
+  const backgroundVideo = document.querySelector("#background-video");
+  const comboContainer = document.querySelector(".combo-container");
+  const score = document.querySelector("#score");
+  score.textContent = "";
+  comboContainer.style.opacity = "0";
+  song.currentTime = 0;
+  backgroundVideo.currentTime = 0;
+}
 export function pauseMap() {
   const song = document.querySelector("#song");
   const backgroundVideo = document.querySelector("#background-video");
@@ -41,12 +50,18 @@ export function stopLoading() {
   loading.style.display = "none";
 }
 export function openMenu() {
+  const pauseBtn = document.querySelector("#pause-btn");
+  pauseBtn.style.display = "none";
   const menu = document.querySelector("#menu-dialog");
   menu.style.display = "flex";
 }
 export function closeMenu() {
+  const pauseBtn = document.querySelector("#pause-btn");
+  pauseBtn.style.display = "block";
   const menu = document.querySelector("#menu-dialog");
   menu.style.display = "none";
 }
 export function openFinalScore() {}
 export function closeFinalScore() {}
+
+export function initialize() {}

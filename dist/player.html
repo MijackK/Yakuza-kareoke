@@ -11,6 +11,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@900&display=swap" rel="stylesheet">
   </head>
   <body class="cold-mode">
+    <button id="pause-btn">&#x23F8;</button>
+    
     <video id="background-video" class="background"></video>
     <div id="background-image"class="background"></div>
     <audio id="click-audio"> </audio>
@@ -24,7 +26,23 @@
     </div>
     <div id="menu-dialog" class="dialog" >
     <div id="player-menu">
-      <button id="resume-btn"> play</button>
+      
+      <div class="menu-button">
+        <button id="resume-btn">&#9654;</button>
+        <span>Resume</span>
+      </div>
+      <div  class="menu-button">
+   
+        <button id="restart-btn">&#8634;</button>
+        <span>Restart</span>
+      </div>
+      <div  class="menu-button">
+       
+        <button id="home-btn">&#x2302;</button>
+        <span>Home</span>
+      </div>
+
+    </div>
     </div>  
    
     </div>

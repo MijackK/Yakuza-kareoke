@@ -19,8 +19,11 @@ import {
   startLoading,
   openMenu,
   closeMenu,
+  initialize,
+  resetMap,
 } from "../utility.js/player-dom";
 
+initialize();
 init();
 const mapManager = beatMapManager();
 
@@ -198,6 +201,40 @@ const startMap = () => {
   playMap();
   closeMenu();
 };
+const initalizeButtons = () => {
+  clickInput = click(
+    buttons.filter((element) => element.type === "click"),
+    kareokeFactory,
+    imageIndicator
+  );
+
+  holdInput = hold(
+    buttons.filter((element) => element.type === "hold"),
+    kareokeFactory,
+    imageIndicator
+  );
+
+  rapidInput = rapid(
+    buttons.filter((element) => element.type === "rapid"),
+    kareokeFactory,
+    imageIndicator
+  );
+};
+const pause = () => {
+  stopMap();
+  openMenu();
+};
+const restart = () => {
+  timeElapsed = 0;
+  previousTime = 0;
+  score = 0;
+  combo = 0;
+  resetMap();
+  // reload them
+  initalizeButtons();
+
+  startMap();
+};
 
 // Eventlistners and logic for getting
 document.querySelector("body").addEventListener("keydown", (e) => {
@@ -234,8 +271,7 @@ document.querySelector("body").addEventListener("keyup", (e) => {
 document.querySelector("body").addEventListener("keyup", (e) => {
   if (e.key === "Escape") {
     if (play) {
-      stopMap();
-      openMenu();
+      pause();
       return;
     }
     startMap();
@@ -244,6 +280,14 @@ document.querySelector("body").addEventListener("keyup", (e) => {
 document.querySelector("#resume-btn").addEventListener("click", () => {
   startMap();
 });
+document.querySelector("#home-btn").addEventListener("click", () => {
+  window.location.href = "http://localhost:8080/index.html";
+  // change this to be dynamic instead of static
+});
+document
+  .querySelector("#restart-btn")
+  .addEventListener("click", () => restart());
+document.querySelector("#pause-btn").addEventListener("click", () => pause());
 const songID = document.location.search.split("?song=")[1];
 startLoading();
 
@@ -254,23 +298,7 @@ mapManager
     // separate button types
 
     // load them
-    clickInput = click(
-      buttons.filter((element) => element.type === "click"),
-      kareokeFactory,
-      imageIndicator
-    );
-
-    holdInput = hold(
-      buttons.filter((element) => element.type === "hold"),
-      kareokeFactory,
-      imageIndicator
-    );
-
-    rapidInput = rapid(
-      buttons.filter((element) => element.type === "rapid"),
-      kareokeFactory,
-      imageIndicator
-    );
+    initalizeButtons();
     // add media sources
     addAudio(audioUrl, backgroundUrl, clickSound, extension);
     openMenu();
