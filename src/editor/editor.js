@@ -3,6 +3,7 @@ import "./editor.css";
 import "../general.css";
 // import gamePlayerLogic from "../player-parts/map-visualizer";
 import { validPrompts, init } from "../canvas/canvas";
+import { initMap, drawMap } from "../canvas/time-map";
 import { autoThumbMovement } from "../player-parts/display-parts";
 
 import editorFactory from "../managers/editor_manager";
@@ -14,7 +15,10 @@ const editor = editorFactory();
 const mapManager = beatMapManager();
 const userManager = userFactory();
 init();
+initMap("#time-map");
+
 let editorLoop;
+let animationID;
 
 const timeController = () => {
   const elapsedTime = editor.getElapsedTime();
@@ -58,18 +62,21 @@ const timeController = () => {
   autoThumbMovement(
     (AudioCurrentTime - timeOffset) / (audioDuration - timeOffset)
   );
+
   updateDomTime(elapsedTime);
+  drawMap(editor.getBeatMap(), elapsedTime);
 };
 const AnimatePrompts = () => {
   timeController();
+
+  // enable this when computer player is working is working
+  // gamePlayerLogic(elapsedTime);
+  // drawMap(editor.getBeatMap(), editor.getElapsedTime());
   validPrompts(
     editor.getPreviousTime() * editor.getPlayRate() + editor.getTimeOffset(),
     editor.getBeatMap(), // repl;ace with beatmap
     editor.getPlay()
   );
-  // enable this when computer player is working is working
-  // gamePlayerLogic(elapsedTime);
-
   requestAnimationFrame(AnimatePrompts);
 };
 userManager

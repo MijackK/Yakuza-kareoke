@@ -112,7 +112,6 @@ const spanwLongPrompts = (time, duration, type, symbol, held, clicks) => {
   ctx.stroke();
 };
 export const validPrompts = (time, buttons, play) => {
-  console.log(time);
   ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
   verticleLines(time, lineArr.length, play);
   for (let i = 0; i < buttons.length; i += 1) {

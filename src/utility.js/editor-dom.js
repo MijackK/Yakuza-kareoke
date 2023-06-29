@@ -86,9 +86,9 @@ const longPrompt = (timePoint, imageURl, duration, type) => {
   longContainer.children[1].textContent = type;
   timePoint.appendChild(longContainer.cloneNode(true));
 };
-
+/* 
 const fillTimeline = (duration, beatMap, images) => {
-  for (let i = 0; i < duration; i += 1) {
+ for (let i = 0; i < duration; i += 1) {
     const timeId = (i * 0.1).toFixed(1);
     const promptInfo = beatMap.find((prompt) => prompt.time === Number(timeId));
     switch (i % 10) {
@@ -119,8 +119,9 @@ const fillTimeline = (duration, beatMap, images) => {
           );
       }
     }
-  }
+  } 
 };
+*/
 const loadingMap = () => {
   selectedSummary.style.display = "none";
   notSelectedSceen.style.display = "flex";
@@ -241,7 +242,8 @@ const getMetaData = () => {
   // clear previous time points
   // eslint-disable-next-line no-restricted-syntax
 
-  while (Map.firstChild) {
+  /*  
+ while (Map.firstChild) {
     Map.removeChild(Map.firstChild);
   }
 
@@ -250,13 +252,16 @@ const getMetaData = () => {
     editorManager.getBeatMap(), // put the beatMap here
     editorManager.getImages()
   );
+
+
+  Audio.removeEventListener("loadedmetadata", getMetaData); 
+  */
   const timeOffset = editorManager.getTimeOffset();
   mapProgressPrompts(
     editorManager.getBeatMap(), // replace with beatMap
     Audio.duration - timeOffset,
     timeOffset
   );
-  Audio.removeEventListener("loadedmetadata", getMetaData);
 };
 
 const showSelectedSong = (beatMap, map) => {
@@ -682,4 +687,4 @@ export function initialize({ editor, map, user }) {
   });
 }
 
-export { fillTimeline, updateDomTime };
+export { updateDomTime };
