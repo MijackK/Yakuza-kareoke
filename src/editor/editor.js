@@ -68,7 +68,6 @@ const timeController = () => {
 };
 const AnimatePrompts = () => {
   timeController();
-
   // enable this when computer player is working is working
   // gamePlayerLogic(elapsedTime);
   // drawMap(editor.getBeatMap(), editor.getElapsedTime());

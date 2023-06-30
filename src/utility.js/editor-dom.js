@@ -5,6 +5,7 @@ import {
 } from "../player-parts/display-parts";
 import surviveBar from "../images/survive_bar.png";
 import { validPrompts } from "../canvas/canvas";
+import { drawMap } from "../canvas/time-map";
 
 let editorManager;
 
@@ -103,11 +104,6 @@ const updateDomTime = (elapsedTime) => {
     3
   )} / ${Audio.duration}`;
   Score.textContent = elapsedTime.toFixed(1);
-};
-
-const timeStep = (leftPosition) => {
-  Map.style.transition = "";
-  Map.style.left = leftPosition;
 };
 
 const stopTimeLine = (newPosition) => {
@@ -430,12 +426,9 @@ export function initialize({ editor, map, user }) {
       });
   });
   selectPlaySpeed.addEventListener("change", (e) => {
-    const position = editor.updateSpeed(Number(e.target.value));
-    if (position) {
-      Audio.playbackRate = editor.getPlayBackRate();
-      backgroundVideo.playbackRate = editor.getPlayBackRate();
-      moveTimelineProgress(position);
-    }
+    editor.updateSpeed(Number(e.target.value));
+    Audio.playbackRate = editor.getPlayBackRate();
+    backgroundVideo.playbackRate = editor.getPlayBackRate();
   });
   playBtn.addEventListener("click", () => {
     playPause(playBtn.id, editor);
@@ -449,6 +442,7 @@ export function initialize({ editor, map, user }) {
     const validTime = editor.pickTime(Number(jumpInput.value));
     if (validTime) {
       validPrompts(editor.getElapsedTime(), editor.getBeatMap());
+      drawMap(editor.getBeatMap(), editor.getElapsedTime());
       const postion = editor.stopTimeLine();
       stopTimeLine(postion);
       updateDomTime(editor.getElapsedTime());
@@ -567,11 +561,9 @@ export function initialize({ editor, map, user }) {
   progressBar.addEventListener("mousedown", (e) => {
     editor.setMoveThumb(true);
     const timePosition = moveProgressThumb(e);
-
-    const position = editor.progressBarTimeUpdate(timePosition);
-    if (position) {
-      progressBarTimeUpdate(position, editor.getElapsedTime());
-    }
+    editor.progressBarTimeUpdate(timePosition);
+    progressBarTimeUpdate(editor.getElapsedTime());
+    drawMap(editor.getBeatMap(), editor.getElapsedTime());
   });
   progressBar.addEventListener("mouseup", () => {
     editor.setMoveThumb(false);
@@ -582,6 +574,7 @@ export function initialize({ editor, map, user }) {
       const timePosition = moveProgressThumb(e);
       editor.progressBarTimeUpdate(timePosition);
       progressBarTimeUpdate(editor.getElapsedTime());
+      drawMap(editor.getBeatMap(), editor.getElapsedTime());
     }
   });
   document.querySelector("body").addEventListener("keydown", (e) => {
@@ -593,17 +586,15 @@ export function initialize({ editor, map, user }) {
     }
 
     const direction = e.key === "ArrowRight" ? "foward" : "backward";
-    const movePosition = editor.timeStep(direction);
-    if (direction) {
-      const timeOffset = editor.getTimeOffset();
-      validPrompts(editor.getElapsedTime(), editor.getBeatMap());
-      Audio.currentTime = editor.getElapsedTime();
-      backgroundVideo.currentTime = editor.getElapsedTime();
-      autoThumbMovement(
-        (Audio.currentTime - timeOffset) / (Audio.duration - timeOffset)
-      );
-      timeStep(movePosition);
-    }
+    editor.timeStep(direction);
+    const timeOffset = editor.getTimeOffset();
+    validPrompts(editor.getElapsedTime(), editor.getBeatMap());
+    Audio.currentTime = editor.getElapsedTime();
+    backgroundVideo.currentTime = editor.getElapsedTime();
+    autoThumbMovement(
+      (Audio.currentTime - timeOffset) / (Audio.duration - timeOffset)
+    );
+    drawMap(editor.getBeatMap(), editor.getElapsedTime());
 
     updateDomTime(editor.getElapsedTime());
   });
