@@ -171,20 +171,14 @@ export default function editorFactory() {
   const timeStep = (direction) => {
     const timePassed = Number(elapsedTime.toFixed(1));
     if (Play) {
-      return false;
+      return;
     }
     if (previousTime - 0.1 < 0 && direction === "backward") {
-      return false;
+      return;
     }
     const move = direction === "foward" ? 0.1 : -0.1;
     previousTime = (timePassed + move - offSet) / playbackRate;
     elapsedTime = previousTime * playbackRate + timeOffset;
-    const position =
-      (timePassed - offSet + move) *
-      timePointsPerSecond *
-      distanceBetweenTimePoints;
-
-    return `${startPosition - position}px`;
   };
 
   const pickTime = (time) => {
@@ -196,21 +190,6 @@ export default function editorFactory() {
 
     return true;
   };
-  const moveTimeLine = (songTime) => {
-    const timePassed = Number(elapsedTime).toFixed(1);
-    if (timePassed >= Number(songTime)) {
-      Play = true;
-      return false;
-    }
-    Play = !Play;
-    const position =
-      (songTime - offSet) * timePointsPerSecond * distanceBetweenTimePoints;
-
-    return {
-      transitionValue: `left ${(songTime - timePassed) / playbackRate}s linear`,
-      leftValue: `${startPosition - position}px`,
-    };
-  };
 
   const stopTimeLine = () => {
     const timePassed = Number(elapsedTime).toFixed(1);
@@ -219,47 +198,18 @@ export default function editorFactory() {
     return `${startPosition - position}px`;
   };
 
-  const moveTimelineProgress = (songTime) => {
-    const timePassed = elapsedTime.toFixed(1);
-    if (Play === false) return false;
-    const position =
-      (timePassed - offSet) * timePointsPerSecond * distanceBetweenTimePoints;
-
-    return {
-      leftStart: `${startPosition - position}px`,
-      leftEnd: `${
-        startPosition -
-        (songTime - offSet) * timePointsPerSecond * distanceBetweenTimePoints
-      }px`,
-      transition: `left ${(songTime - timePassed) / playbackRate}s linear`,
-    };
-  };
   const updateSpeed = (speed) => {
     playbackRate = speed;
     previousTime = (elapsedTime - offSet) / playbackRate;
     elapsedTime = previousTime * playbackRate + timeOffset;
-    const position = moveTimelineProgress(audioDuration.toFixed(1));
-    return position;
   };
   const progressBarTimeUpdate = (timePosition) => {
     if (timePosition === undefined) {
       console.log("undefined");
-      return false;
+      return;
     }
     previousTime = ((audioDuration - timeOffset) * timePosition) / playbackRate;
     elapsedTime = previousTime * playbackRate + timeOffset;
-    switch (Play) {
-      case false:
-        return { value: stopTimeLine(), Play };
-      default:
-        return {
-          value: moveTimelineProgress(
-            audioDuration.toFixed(1),
-            elapsedTime.toFixed(1)
-          ),
-          Play,
-        };
-    }
   };
 
   return {
@@ -276,7 +226,6 @@ export default function editorFactory() {
     timeStep,
     switchPrompt,
     translateToKey,
-    moveTimeLine,
     stopTimeLine,
     getPlayRate,
     getStartTime,

@@ -86,42 +86,7 @@ const longPrompt = (timePoint, imageURl, duration, type) => {
   longContainer.children[1].textContent = type;
   timePoint.appendChild(longContainer.cloneNode(true));
 };
-/* 
-const fillTimeline = (duration, beatMap, images) => {
- for (let i = 0; i < duration; i += 1) {
-    const timeId = (i * 0.1).toFixed(1);
-    const promptInfo = beatMap.find((prompt) => prompt.time === Number(timeId));
-    switch (i % 10) {
-      case 0:
-        fullLine.id = timeId;
-        fullLine.title = timeId;
-        Map.appendChild(fullLine.cloneNode(true));
-        break;
-      default:
-        halfLine.id = timeId;
-        halfLine.title = timeId;
-        Map.appendChild(halfLine.cloneNode(true));
-    }
-    if (promptInfo) {
-      switch (promptInfo.type) {
-        case "click":
-          clickPrompt(
-            Map.children[Map.childElementCount - 1],
-            images[promptInfo.key]
-          );
-          break;
-        default:
-          longPrompt(
-            Map.children[Map.childElementCount - 1],
-            images[promptInfo.key],
-            promptInfo.duration,
-            promptInfo.type
-          );
-      }
-    }
-  } 
-};
-*/
+
 const loadingMap = () => {
   selectedSummary.style.display = "none";
   notSelectedSceen.style.display = "flex";
@@ -145,13 +110,6 @@ const timeStep = (leftPosition) => {
   Map.style.left = leftPosition;
 };
 
-const moveTimeLine = ({ transitionValue, leftValue }) => {
-  Map.style.transition = transitionValue;
-  // eslint-disable-next-line no-unused-expressions
-  Map.offSet;
-  Map.style.left = leftValue;
-};
-
 const stopTimeLine = (newPosition) => {
   Map.style.transition = "";
   Map.style.left = newPosition;
@@ -159,47 +117,23 @@ const stopTimeLine = (newPosition) => {
 };
 const playPause = (action, editor) => {
   if (action === "play") {
-    const position = editor.moveTimeLine(Number(Audio.duration).toFixed(1));
-    if (position) {
-      moveTimeLine(position);
-      Audio.currentTime = editor.getElapsedTime();
-      backgroundVideo.currentTime = editor.getElapsedTime();
-      console.log("hi");
-      Audio.play();
-      backgroundVideo.play();
-    }
+    editor.setPlay(true);
+    Audio.currentTime = editor.getElapsedTime();
+    backgroundVideo.currentTime = editor.getElapsedTime();
+    Audio.play();
+    backgroundVideo.play();
   }
   if (action === "pause") {
-    const position = editor.stopTimeLine();
+    editor.setPlay(false);
     Audio.pause();
     backgroundVideo.pause();
-    stopTimeLine(position);
   }
 };
 
-const moveTimelineProgress = ({ leftStart, leftEnd, transition }) => {
-  Map.style.transition = "";
-  Map.style.left = leftStart;
-  // review this
-  setTimeout(() => {
-    Map.style.transition = transition;
-    // eslint-disable-next-line no-unused-expressions
-    Map.offSet;
-    Map.style.left = leftEnd;
-  }, 10);
-};
-
-const progressBarTimeUpdate = (newPosition, elapsedTime) => {
-  const positionValue = newPosition.value;
+const progressBarTimeUpdate = (elapsedTime) => {
   Audio.currentTime = elapsedTime;
   backgroundVideo.currentTime = elapsedTime;
-  switch (newPosition.Play) {
-    case false:
-      stopTimeLine(positionValue);
-      break;
-    default:
-      moveTimelineProgress(positionValue);
-  }
+
   updateDomTime(elapsedTime);
 };
 const highLightSelected = (id) => {
@@ -646,10 +580,8 @@ export function initialize({ editor, map, user }) {
   progressBar.addEventListener("mousemove", (e) => {
     if (editor.getMoveThumb()) {
       const timePosition = moveProgressThumb(e);
-      const position = editor.progressBarTimeUpdate(timePosition);
-      if (position) {
-        progressBarTimeUpdate(position, editor.getElapsedTime());
-      }
+      editor.progressBarTimeUpdate(timePosition);
+      progressBarTimeUpdate(editor.getElapsedTime());
     }
   });
   document.querySelector("body").addEventListener("keydown", (e) => {

@@ -7,7 +7,7 @@ import rapidText from "../images/rapid.png";
 
 let myCanvas;
 let ctx;
-let timePointsAmount = 66;
+const timePointsAmount = 66;
 
 const symbols = {
   ArrowUp: document.createElement("img"),
@@ -106,28 +106,10 @@ export function drawMap(prompts = [], seconds = 0) {
       }
     }
   }
-
   // draw triangle
   ctx.moveTo(center, 30);
   ctx.lineTo(center - 15, 0);
   ctx.lineTo(center + 15, 0);
   ctx.fillStyle = "rgba(38, 199, 151, 0.741)";
   ctx.fill();
-
-  // draw time points
-  /*   for (let i = time; i < 33; i += 1) {
-
-
-    ctx.moveTo(center + gap * i, 0);
-    switch (i % 10) {
-      case 0:
-        ctx.lineTo(center + gap * i, 100);
-        break;
-      default:
-        ctx.lineTo(center + gap * i, 60);
-    }
-
-    ctx.strokeStyle = "white";
-    ctx.stroke();
-  } */
 }
