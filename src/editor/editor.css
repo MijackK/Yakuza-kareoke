@@ -54,31 +54,10 @@ h1 {
   font-weight: normal;
 }
 
-.click-placement {
-  position: absolute;
-  width: 45px;
-  height: 45px;
-  background-color: rgba(0, 0, 255, 0.7);
-  transform: translate(-21px, 5px);
-  cursor: pointer;
-  background-size: 100% 100%;
-  border-radius: 50%;
-  border: solid white thin;
-}
-.timemarker {
-  position: relative;
-  width: 5px;
-  background-color: white;
-  flex: 0 0 auto;
-  border: solid black;
-  cursor: pointer;
-}
 .second {
   height: 100px;
 }
-.mili-second {
-  height: 60px;
-}
+
 .tool-bar {
   display: flex;
   width: 100vw;
@@ -133,14 +112,7 @@ h1 {
 .tool-bar > div:hover > form {
   opacity: 1;
 }
-.long-container {
-  transform: translate(-18px, 5px);
-  left: auto;
-}
-.long-container > div {
-  transform: translate(0px);
-  color: aquamarine;
-}
+
 .duration-form {
   position: absolute;
   display: flex;

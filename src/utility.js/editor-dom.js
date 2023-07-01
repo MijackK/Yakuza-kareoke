@@ -25,20 +25,7 @@ const Map = document.querySelector(".map");
 const addMapForm = document.querySelector("#add-map-form");
 const addMapArea = document.querySelector("#add-map");
 const loginForm = document.querySelector("#login");
-const clickMarker = document.createElement("div");
-clickMarker.classList.toggle("click-placement");
-const durationLine = document.createElement("div");
-durationLine.classList.toggle("duration-line");
-const longContainer = document.createElement("div");
-longContainer.classList.toggle("long-container");
-longContainer.appendChild(clickMarker.cloneNode(true));
-longContainer.appendChild(durationLine.cloneNode(true));
-longContainer.appendChild(clickMarker.cloneNode(true));
-const fullLine = document.createElement("div");
-const halfLine = document.createElement("div");
-fullLine.className = "timemarker second";
-halfLine.className = "timemarker mili-second";
-const songSelect = document.querySelector("#song-select");
+
 const userMaps = document.querySelector("#map-list");
 const buttonGroup = document.querySelector(".button-group");
 const promptPosition = document.querySelector(".get-prompt");
@@ -72,20 +59,6 @@ const removeBtnFocus = () => {
   clickBtn.classList.remove("active-prompt");
   rapidBtn.classList.remove("active-prompt");
   holdBtn.classList.remove("active-prompt");
-};
-
-const clickPrompt = (timePoint, imageURL) => {
-  clickMarker.style.backgroundImage = `url(${imageURL})`;
-  timePoint.appendChild(clickMarker.cloneNode(true));
-};
-
-const longPrompt = (timePoint, imageURl, duration, type) => {
-  longContainer.title = `Duration: ${duration} Seconds`;
-  longContainer.children[0].style.backgroundImage = `url(${imageURl})`;
-  longContainer.children[2].style.backgroundImage = `url(${imageURl})`;
-  longContainer.children[1].style.width = `${29 * duration * 10 - 45}px`;
-  longContainer.children[1].textContent = type;
-  timePoint.appendChild(longContainer.cloneNode(true));
 };
 
 const loadingMap = () => {
@@ -172,20 +145,6 @@ const getMetaData = () => {
   // clear previous time points
   // eslint-disable-next-line no-restricted-syntax
 
-  /*  
- while (Map.firstChild) {
-    Map.removeChild(Map.firstChild);
-  }
-
-  fillTimeline(
-    Audio.duration * 10,
-    editorManager.getBeatMap(), // put the beatMap here
-    editorManager.getImages()
-  );
-
-
-  Audio.removeEventListener("loadedmetadata", getMetaData); 
-  */
   const timeOffset = editorManager.getTimeOffset();
   mapProgressPrompts(
     editorManager.getBeatMap(), // replace with beatMap
@@ -466,17 +425,15 @@ export function initialize({ editor, map, user }) {
 
   promptPosition.addEventListener("click", (e) => {
     if (e.target === promptPosition) return;
-    const timePoint = document.querySelector(
-      `[id='${editor.getElapsedTime().toFixed(1)}']`
-    );
-    const promptKey = editor.translateToKey(e.target.id);
-    if (editor.checkOccupation(Number(timePoint.id), map.getSelectedMap().id)) {
+    const time = editor.getElapsedTime().toFixed(1);
+
+    if (editor.checkOccupation(Number(time), map.getSelectedMap().id)) {
       console.log("space is occupied by a long prompt");
       return;
     }
     if (
       editor.canPlace(
-        Number(timePoint.id),
+        Number(time),
         editor.getPromptDuration(),
         map.getSelectedMap().id
       )
@@ -486,42 +443,14 @@ export function initialize({ editor, map, user }) {
     }
     console.log(`${e.target.id}  time: ${editor.getElapsedTime().toFixed(1)}`);
 
-    if (timePoint.childElementCount !== 0) {
-      editor.removePrompt(Number(timePoint.id), map.getSelectedMap().id);
-      const timeOffset = editor.getTimeOffset();
-      mapProgressPrompts(
-        editor.getBeatMap(),
-        Audio.duration - timeOffset,
-        timeOffset
-      );
-      timePoint.textContent = "";
-      return;
-    }
-
-    editor.addPrompt(
-      Number(timePoint.id),
-      e.target.id,
-      map.getSelectedMap().id
-    );
+    editor.addPrompt(Number(time), e.target.id, map.getSelectedMap().id);
     const timeOffset = editor.getTimeOffset();
     mapProgressPrompts(
       editor.getBeatMap(),
       Audio.duration - timeOffset,
       timeOffset
     );
-    const promptImages = editor.getImages();
-    switch (editor.getPromptType()) {
-      case "click":
-        clickPrompt(timePoint, promptImages[promptKey]);
-        break;
-      default:
-        longPrompt(
-          timePoint,
-          promptImages[promptKey],
-          editor.getPromptDuration(),
-          editor.getPromptType()
-        );
-    }
+    drawMap(editor.getBeatMap(), editor.getElapsedTime());
   });
 
   toolBar.addEventListener("click", (e) => {

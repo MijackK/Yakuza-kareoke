@@ -156,6 +156,12 @@ export default function editorFactory() {
     // eslint-disable-next-line no-param-reassign
   };
   const addPrompt = (time, place, mapID) => {
+    // check if prompt is there
+    const check = beatMap.find((beat) => beat.time === time);
+    if (check) {
+      removePrompt(time, mapID);
+      return;
+    }
     const promptObject = contructPrompt(
       time,
       promptType,
