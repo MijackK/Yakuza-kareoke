@@ -85,6 +85,12 @@ const stopEditor = () => {
   editor.setPlay(false);
   editorPause();
 };
+const updateGraphics = () => {
+  validPrompts(editor.getElapsedTime(), editor.getBeatMap());
+  drawMap(editor.getBeatMap(), editor.getElapsedTime());
+  updateDomTime(editor.getElapsedTime());
+  updateMediaTime(editor.getElapsedTime());
+};
 const timeController = () => {
   const elapsedTime = editor.getElapsedTime();
   const Play = editor.getPlay();
@@ -224,10 +230,7 @@ document.querySelector("#time-picker").addEventListener("submit", (e) => {
   const formData = new FormData(e.target);
   const validTime = editor.pickTime(formData.get("time"));
   if (validTime) {
-    validPrompts(editor.getElapsedTime(), editor.getBeatMap());
-    drawMap(editor.getBeatMap(), editor.getElapsedTime());
-    updateDomTime(editor.getElapsedTime());
-    updateMediaTime(editor.getElapsedTime());
+    updateGraphics();
     closeTimePicker();
   }
 });
@@ -266,36 +269,36 @@ promptPosition.addEventListener("click", (e) => {
 
   editor.addPrompt(Number(time), e.target.id, mapManager.getSelectedMap().id);
 
-  mapProgressPrompts(editor.getBeatMap(), editor.getAudioDuration());
-  drawMap(editor.getBeatMap(), editor.getElapsedTime());
+  updateGraphics();
 });
 
 document.querySelector("#click").addEventListener("click", (e) => {
-  editor.switchPrompt(e.target.id, 0);
+  editor.switchPrompt("click", 0);
   focusBtn(e.target);
 });
 document.querySelector("#hold").addEventListener("click", (e) => {
-  editor.switchPrompt(e.target.id, editor.getHoldDuration());
+  editor.switchPrompt("hold", editor.getHoldDuration());
   focusBtn(e.target);
 });
 document.querySelector("#rapid").addEventListener("click", (e) => {
-  editor.switchPrompt(e.target.id, editor.getRapidDuration());
+  editor.switchPrompt("rapid", editor.getRapidDuration());
   focusBtn(e.target);
 });
 
 document.querySelector("#r-form").addEventListener("submit", (e) => {
   e.preventDefault();
-  e.stopPropagation();
-  editor.setRapidDuration(Number(e.target.children[1].value));
-  if (editor.getPromptType() === "rapid") {
-    editor.setRapidDuration(editor.getRapidDuration());
+  const rapidForm = new FormData(e.target);
+  editor.setRapidDuration(Number(rapidForm.get("duration")));
+  const promptType = editor.getPromptType();
+  if (promptType === "rapid") {
+    editor.setPromptDuration(editor.getRapidDuration());
   }
 });
 
 document.querySelector("#h-form").addEventListener("submit", (e) => {
   e.preventDefault();
-  e.stopPropagation();
-  editor.setHoldDuration(Number(e.target.children[1].value));
+  const holdForm = new FormData(e.target);
+  editor.setHoldDuration(Number(holdForm.get("duration")));
   if (editor.getPromptType === "hold") {
     editor.setPromptDuration(editor.getHoldDuration());
   }
@@ -306,9 +309,7 @@ progressBar.addEventListener("mousedown", (e) => {
   editor.setMoveThumb(true);
   const timePosition = moveProgressThumb(e);
   editor.progressBarTimeUpdate(timePosition);
-  updateDomTime(editor.getElapsedTime());
-  updateMediaTime(editor.getElapsedTime());
-  drawMap(editor.getBeatMap(), editor.getElapsedTime());
+  updateGraphics();
 });
 
 progressBar.addEventListener("mouseup", () => {
@@ -319,9 +320,7 @@ progressBar.addEventListener("mousemove", (e) => {
   if (editor.getMoveThumb()) {
     const timePosition = moveProgressThumb(e);
     editor.progressBarTimeUpdate(timePosition);
-    updateDomTime(editor.getElapsedTime());
-    updateMediaTime(editor.getElapsedTime());
-    drawMap(editor.getBeatMap(), editor.getElapsedTime());
+    updateGraphics();
   }
 });
 
@@ -335,12 +334,8 @@ document.querySelector("body").addEventListener("keydown", (e) => {
 
   const direction = e.key === "ArrowRight" ? "foward" : "backward";
   editor.timeStep(direction);
-  validPrompts(editor.getElapsedTime(), editor.getBeatMap());
   autoThumbMovement(currentAudioTime() / editor.getAudioDuration());
-  drawMap(editor.getBeatMap(), editor.getElapsedTime());
-
-  updateDomTime(editor.getElapsedTime());
-  updateMediaTime(editor.getElapsedTime());
+  updateGraphics();
 });
 
 document.querySelector("body").addEventListener("keydown", (e) => {
@@ -348,7 +343,6 @@ document.querySelector("body").addEventListener("keydown", (e) => {
   // prevents play when the timepicker modal is opened
   if (editor.getPlay() === false) {
     startEditor();
-    console.log("hi spacebar");
     return;
   }
   if (editor.getPlay() === true) {
@@ -394,9 +388,7 @@ document
       editor.getBeatMap(), // replace with beatMap
       e.target.duration
     );
-    drawMap(editor.getBeatMap(), editor.getElapsedTime());
-    updateDomTime(editor.getElapsedTime());
-    validPrompts(editor.getElapsedTime(), editor.getBeatMap());
+    updateGraphics();
   });
 userManager
   .isLogin()

@@ -2,10 +2,12 @@ export function focusBtn(button) {
   const clickBtn = document.querySelector("#click");
   const holdBtn = document.querySelector("#hold");
   const rapidBtn = document.querySelector("#rapid");
-  clickBtn.classList.remove("active-prompt");
-  rapidBtn.classList.remove("active-prompt");
-  holdBtn.classList.remove("active-prompt");
-  button.classList.toggle("active-prompt");
+  if ([clickBtn, holdBtn, rapidBtn].includes(button)) {
+    clickBtn.classList.remove("active-prompt");
+    rapidBtn.classList.remove("active-prompt");
+    holdBtn.classList.remove("active-prompt");
+    button.classList.toggle("active-prompt");
+  }
 }
 export function closeEditorMenu() {
   const Menu = document.querySelector("#modal");
