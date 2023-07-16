@@ -407,6 +407,9 @@ document
       e.target.duration - timeOffset,
       timeOffset
     );
+    drawMap(editor.getBeatMap(), editor.getElapsedTime());
+    updateDomTime(editor.getElapsedTime());
+    validPrompts(editor.getElapsedTime(), editor.getBeatMap());
   });
 userManager
   .isLogin()
