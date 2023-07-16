@@ -72,13 +72,13 @@ export const moveProgressThumb = (event) => {
   // eslint-disable-next-line consistent-return
   return (event.pageX - coords.left) / coords.width;
 };
-export const mapProgressPrompts = (beatMap, time, offSet) => {
+export const mapProgressPrompts = (beatMap, duration) => {
   const prompMap = document.querySelector("#prompt_location");
   const ctx = prompMap.getContext("2d");
   ctx.clearRect(0, 0, prompMap.width, prompMap.height);
 
   for (let i = 0; i < beatMap.length; i += 1) {
-    const xPosition = ((beatMap[i].time - offSet) / time) * prompMap.width;
+    const xPosition = (beatMap[i].time / duration) * prompMap.width;
     const yPosition = beatMap[i].type === "click" ? 40 : 0;
     ctx.strokeStyle =
       // eslint-disable-next-line no-nested-ternary

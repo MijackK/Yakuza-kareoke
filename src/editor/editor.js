@@ -31,7 +31,7 @@ import {
   focusBtn,
   currentAudioTime,
   displaySelectedStatus,
-} from "../utility.js/editor-dom";
+} from "../dom-manipulation/editor-dom";
 import beatMapManager from "../managers/map_manager";
 import userFactory from "../managers/user-manager";
 
@@ -86,12 +86,10 @@ const stopEditor = () => {
   editorPause();
 };
 const timeController = () => {
-  console.log("hi");
   const elapsedTime = editor.getElapsedTime();
   const Play = editor.getPlay();
   const audioDuration = editor.getAudioDuration();
 
-  const timeOffset = editor.getTimeOffset();
   const previousTime = editor.getPreviousTime();
   const playRate = editor.getPlayRate();
   const AudioCurrentTime = currentAudioTime();
@@ -111,7 +109,7 @@ const timeController = () => {
 
   let currentTime = Number((Date.now() - editor.getStartTime()) / 1000);
 
-  if (Math.abs(elapsedTime - currentTime * playRate - timeOffset) > 0.1) {
+  if (Math.abs(elapsedTime - currentTime * playRate) > 0.1) {
     const startIncrease = currentTime - previousTime;
 
     editor.setStartTime(editor.getStartTime() + startIncrease * 1000);
@@ -119,11 +117,9 @@ const timeController = () => {
   }
 
   // elapsedTime += currentTime - previousTime;
-  editor.setElapsedTime(previousTime * playRate + timeOffset);
+  editor.setElapsedTime(previousTime * playRate);
   editor.setPreviousTime(currentTime);
-  autoThumbMovement(
-    (AudioCurrentTime - timeOffset) / (audioDuration - timeOffset)
-  );
+  autoThumbMovement(AudioCurrentTime / audioDuration);
 
   updateDomTime(elapsedTime);
   drawMap(editor.getBeatMap(), elapsedTime);
@@ -134,7 +130,7 @@ const AnimatePrompts = () => {
   // gamePlayerLogic(elapsedTime);
   // drawMap(editor.getBeatMap(), editor.getElapsedTime());
   validPrompts(
-    editor.getPreviousTime() * editor.getPlayRate() + editor.getTimeOffset(),
+    editor.getPreviousTime() * editor.getPlayRate(),
     editor.getBeatMap(), // repl;ace with beatmap
     editor.getPlay()
   );
@@ -269,12 +265,8 @@ promptPosition.addEventListener("click", (e) => {
   console.log(`${e.target.id}  time: ${editor.getElapsedTime().toFixed(1)}`);
 
   editor.addPrompt(Number(time), e.target.id, mapManager.getSelectedMap().id);
-  const timeOffset = editor.getTimeOffset();
-  mapProgressPrompts(
-    editor.getBeatMap(),
-    Audio.duration - timeOffset,
-    timeOffset
-  );
+
+  mapProgressPrompts(editor.getBeatMap(), editor.getAudioDuration());
   drawMap(editor.getBeatMap(), editor.getElapsedTime());
 });
 
@@ -343,11 +335,8 @@ document.querySelector("body").addEventListener("keydown", (e) => {
 
   const direction = e.key === "ArrowRight" ? "foward" : "backward";
   editor.timeStep(direction);
-  const timeOffset = editor.getTimeOffset();
   validPrompts(editor.getElapsedTime(), editor.getBeatMap());
-  autoThumbMovement(
-    (Audio.currentTime - timeOffset) / (Audio.duration - timeOffset)
-  );
+  autoThumbMovement(currentAudioTime() / editor.getAudioDuration());
   drawMap(editor.getBeatMap(), editor.getElapsedTime());
 
   updateDomTime(editor.getElapsedTime());
@@ -401,11 +390,9 @@ document
   .querySelector("#editor-audio")
   .addEventListener("loadedmetadata", (e) => {
     editor.setAudioDuration(e.target.duration);
-    const timeOffset = editor.getTimeOffset();
     mapProgressPrompts(
       editor.getBeatMap(), // replace with beatMap
-      e.target.duration - timeOffset,
-      timeOffset
+      e.target.duration
     );
     drawMap(editor.getBeatMap(), editor.getElapsedTime());
     updateDomTime(editor.getElapsedTime());

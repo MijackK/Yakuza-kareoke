@@ -6,8 +6,7 @@ import right from "../images/right1.png";
 import { saveLocalMap } from "../utility.js/storage";
 
 export default function editorFactory() {
-  const timeOffset = 3.0;
-  let elapsedTime = timeOffset;
+  let elapsedTime = 0;
   let previousTime = 0;
   let startTime;
   let Play = false;
@@ -16,7 +15,6 @@ export default function editorFactory() {
   let playbackRate = 1;
   let beatMap = [];
 
-  const offSet = timeOffset;
   let promptType = "click";
   let promptDuration = 0;
   let holdDuration = 1;
@@ -49,7 +47,7 @@ export default function editorFactory() {
   const getPreviousTime = () => previousTime;
   const getAudioDuration = () => audioDuration;
   const getPlay = () => Play;
-  const getTimeOffset = () => timeOffset;
+
   const getPlayBackRate = () => playbackRate;
   // setters
 
@@ -176,32 +174,29 @@ export default function editorFactory() {
       return;
     }
     const move = direction === "foward" ? 0.1 : -0.1;
-    previousTime = (timePassed + move - offSet) / playbackRate;
-    elapsedTime = previousTime * playbackRate + timeOffset;
+    previousTime = (timePassed + move) / playbackRate;
+    elapsedTime = previousTime * playbackRate;
   };
 
   const pickTime = (time) => {
-    if (time < timeOffset) {
-      return false;
-    }
-    previousTime = (time - timeOffset) / playbackRate;
-    elapsedTime = previousTime * playbackRate + timeOffset;
+    previousTime = time / playbackRate;
+    elapsedTime = previousTime * playbackRate;
 
     return true;
   };
 
   const updateSpeed = (speed) => {
     playbackRate = speed;
-    previousTime = (elapsedTime - offSet) / playbackRate;
-    elapsedTime = previousTime * playbackRate + timeOffset;
+    previousTime = elapsedTime / playbackRate;
+    elapsedTime = previousTime * playbackRate;
   };
   const progressBarTimeUpdate = (timePosition) => {
     if (timePosition === undefined) {
       console.log("undefined");
       return;
     }
-    previousTime = ((audioDuration - timeOffset) * timePosition) / playbackRate;
-    elapsedTime = previousTime * playbackRate + timeOffset;
+    previousTime = (audioDuration * timePosition) / playbackRate;
+    elapsedTime = previousTime * playbackRate;
   };
 
   return {
@@ -237,7 +232,6 @@ export default function editorFactory() {
     setAudioDuration,
     getPlay,
     setPlay,
-    getTimeOffset,
     setElapsedTime,
     getPlayBackRate,
     setStartTime,

@@ -21,7 +21,7 @@ import {
   closeMenu,
   initialize,
   resetMap,
-} from "../utility.js/player-dom";
+} from "../dom-manipulation/player-dom";
 
 initialize();
 init();
