@@ -13,14 +13,8 @@ export default function editorFactory() {
   let Play = false;
   let moveThumb = false;
   let audioDuration;
-  const getAudioCurrentTime = () => timeOffset;
   let playbackRate = 1;
   let beatMap = [];
-
-  const timePointsPerSecond = 10;
-  const distanceBetweenTimePoints = 29;
-  const startPosition =
-    (3.3 - timeOffset) * timePointsPerSecond * distanceBetweenTimePoints;
 
   const offSet = timeOffset;
   let promptType = "click";
@@ -56,7 +50,6 @@ export default function editorFactory() {
   const getAudioDuration = () => audioDuration;
   const getPlay = () => Play;
   const getTimeOffset = () => timeOffset;
-  const getStartPosition = () => startPosition;
   const getPlayBackRate = () => playbackRate;
   // setters
 
@@ -197,13 +190,6 @@ export default function editorFactory() {
     return true;
   };
 
-  const stopTimeLine = () => {
-    const timePassed = Number(elapsedTime).toFixed(1);
-    Play = false;
-    const position = (timePassed - offSet) * 10 * 29;
-    return `${startPosition - position}px`;
-  };
-
   const updateSpeed = (speed) => {
     playbackRate = speed;
     previousTime = (elapsedTime - offSet) / playbackRate;
@@ -232,7 +218,6 @@ export default function editorFactory() {
     timeStep,
     switchPrompt,
     translateToKey,
-    stopTimeLine,
     getPlayRate,
     getStartTime,
     getHoldDuration,
@@ -254,9 +239,7 @@ export default function editorFactory() {
     setPlay,
     getTimeOffset,
     setElapsedTime,
-    getStartPosition,
     getPlayBackRate,
-    getAudioCurrentTime,
     setStartTime,
     setMoveThumb,
   };

@@ -1,110 +1,87 @@
-import {
-  moveProgressThumb,
-  mapProgressPrompts,
-  autoThumbMovement,
-} from "../player-parts/display-parts";
-import surviveBar from "../images/survive_bar.png";
-import { validPrompts } from "../canvas/canvas";
-import { drawMap } from "../canvas/time-map";
-
-let editorManager;
-
-const backgroundImage = document.querySelector("#background-image");
-const backgroundVideo = document.querySelector("#background-video");
-backgroundVideo.volume = 0;
-const selectedSummary = document.querySelector("#selected-summary");
-
-const Audio = document.querySelector("#editor-audio");
-const playBtn = document.querySelector("#play");
-playBtn.id = "play";
-const timePicker = document.querySelector("#time-picker");
-const jumpInput = document.querySelector("#jump-to");
-const setBtn = document.querySelector("#set");
-const Score = document.querySelector("#score");
-const Map = document.querySelector(".map");
-const addMapForm = document.querySelector("#add-map-form");
-const addMapArea = document.querySelector("#add-map");
-const loginForm = document.querySelector("#login");
-
-const userMaps = document.querySelector("#map-list");
-const buttonGroup = document.querySelector(".button-group");
-const promptPosition = document.querySelector(".get-prompt");
-const toolBar = document.querySelector(".tool-bar");
-const clickBtn = document.querySelector("#click");
-const holdBtn = document.querySelector("#hold");
-const rapidBtn = document.querySelector("#rapid");
-const rapidForm = document.querySelector("#r-form");
-rapidForm.children[1].value = 1;
-const holdForm = document.querySelector("#h-form");
-holdForm.children[1].value = 1;
-const progressBar = document.querySelector(".progress_section");
-const selectPlaySpeed = document.querySelector("#time_guage");
-
-const menuBtn = document.querySelector("#menu");
-const Menu = document.querySelector("#modal");
-const menuExit = document.querySelector("#exit");
-const selectedInfoButton = document.querySelector("#selected");
-const addMapButton = document.querySelector("#add");
-const summaryWrapper = document.querySelector("#summary-wrapper");
-const selectedAudio = document.querySelector("#map-audio");
-const selectName = document.querySelector("#select-name ");
-const selectVideo = document.querySelector("#map-video");
-const selectImage = document.querySelector("#map-image");
-selectImage.src = surviveBar;
-const notSelectedSceen = document.querySelector(".not-selected");
-
-const saveMapButton = document.querySelector("#upload-map");
-
-const removeBtnFocus = () => {
+export function focusBtn(button) {
+  const clickBtn = document.querySelector("#click");
+  const holdBtn = document.querySelector("#hold");
+  const rapidBtn = document.querySelector("#rapid");
   clickBtn.classList.remove("active-prompt");
   rapidBtn.classList.remove("active-prompt");
   holdBtn.classList.remove("active-prompt");
-};
+  button.classList.toggle("active-prompt");
+}
+export function closeEditorMenu() {
+  const Menu = document.querySelector("#modal");
+  Menu.style.display = "none";
+}
+export function openEditorMenu() {
+  const Menu = document.querySelector("#modal");
+  Menu.style.display = "grid";
+}
 
-const loadingMap = () => {
+export function loadingMap() {
+  const notSelectedSceen = document.querySelector(".not-selected");
+  const selectedSummary = document.querySelector("#selected-summary");
+  const selectedStatus = document.querySelector("#selected-status");
   selectedSummary.style.display = "none";
   notSelectedSceen.style.display = "flex";
-  const selectedStatus = notSelectedSceen.children[0];
+
   selectedStatus.textContent = "Loading...";
-};
+}
 const stopLoadingMap = () => {
+  const notSelectedSceen = document.querySelector(".not-selected");
+  const selectedSummary = document.querySelector("#selected-summary");
   notSelectedSceen.style.display = "none";
   selectedSummary.style.display = "flex";
 };
-
-const updateDomTime = (elapsedTime) => {
+export function updateMediaTime(elapsedTime) {
+  const Audio = document.querySelector("#editor-audio");
+  const backgroundVideo = document.querySelector("#background-video");
+  Audio.currentTime = elapsedTime;
+  backgroundVideo.currentTime = elapsedTime;
+}
+export function updateDomTime(elapsedTime) {
+  const Audio = document.querySelector("#editor-audio");
   document.querySelector("#ptime").textContent = ` ${Audio.currentTime.toFixed(
     3
   )} / ${Audio.duration}`;
+
+  const Score = document.querySelector("#score");
   Score.textContent = elapsedTime.toFixed(1);
-};
+}
 
-const stopTimeLine = (newPosition) => {
-  Map.style.transition = "";
-  Map.style.left = newPosition;
-  // Map.style.left = `-${(timePassed - offSet) * 10 * 29}px`;
-};
-const playPause = (action, editor) => {
-  if (action === "play") {
-    editor.setPlay(true);
-    Audio.currentTime = editor.getElapsedTime();
-    backgroundVideo.currentTime = editor.getElapsedTime();
-    Audio.play();
-    backgroundVideo.play();
-  }
-  if (action === "pause") {
-    editor.setPlay(false);
-    Audio.pause();
-    backgroundVideo.pause();
-  }
-};
+export function closeTimePicker() {
+  const timePicker = document.querySelector("#time-picker");
+  const jumpInput = document.querySelector("#jump-to");
+  timePicker.style.display = "none";
+  jumpInput.value = "";
+}
+export function openTimePicker() {
+  const timePicker = document.querySelector("#time-picker");
+  timePicker.style.display = "flex";
+}
+export function editorPlay(time) {
+  const Audio = document.querySelector("#editor-audio");
+  const backgroundVideo = document.querySelector("#background-video");
+  const playBtn = document.querySelector("#play");
 
-const progressBarTimeUpdate = (elapsedTime) => {
-  Audio.currentTime = elapsedTime;
-  backgroundVideo.currentTime = elapsedTime;
+  Audio.currentTime = time;
+  backgroundVideo.currentTime = time;
+  Audio.play();
+  backgroundVideo.play();
 
-  updateDomTime(elapsedTime);
-};
+  playBtn.textContent = "Pause";
+  playBtn.id = "pause";
+}
+export function editorPause() {
+  const Audio = document.querySelector("#editor-audio");
+  const backgroundVideo = document.querySelector("#background-video");
+  const playBtn = document.querySelector("#pause");
+
+  Audio.pause();
+  backgroundVideo.pause();
+
+  playBtn.textContent = "Play";
+  playBtn.id = "play";
+}
+
 const highLightSelected = (id) => {
   const beatMaps = document.querySelectorAll(".beat-map");
   beatMaps.forEach((listItem) => {
@@ -115,7 +92,10 @@ const highLightSelected = (id) => {
     listItem.classList.remove("active");
   });
 };
-const viewSwitch = (button) => {
+export function viewSwitch(button) {
+  const buttonGroup = document.querySelector(".button-group");
+  const addMapForm = document.querySelector("#add-map-form");
+  const summaryWrapper = document.querySelector("#summary-wrapper");
   const buttonGroupMember = buttonGroup.children;
 
   Object.keys(buttonGroupMember).forEach((child) => {
@@ -138,405 +118,114 @@ const viewSwitch = (button) => {
     }
     element.classList.remove("active");
   });
-};
+}
 
-const getMetaData = () => {
-  editorManager.setAudioDuration(Audio.duration);
-  // clear previous time points
-  // eslint-disable-next-line no-restricted-syntax
+export function updatePlaySpeed(playBackRate) {
+  const Audio = document.querySelector("#editor-audio");
+  const backgroundVideo = document.querySelector("#background-video");
+  Audio.playbackRate = playBackRate;
+  backgroundVideo.playbackRate = playBackRate;
+}
 
-  const timeOffset = editorManager.getTimeOffset();
-  mapProgressPrompts(
-    editorManager.getBeatMap(), // replace with beatMap
-    Audio.duration - timeOffset,
-    timeOffset
-  );
-};
-
-const showSelectedSong = (beatMap, map) => {
+export function showSelectedSong(
+  beatMap,
+  previewExtension,
+  audioURL,
+  backgroundURL
+) {
+  const Audio = document.querySelector("#editor-audio");
+  const backgroundVideo = document.querySelector("#background-video");
+  const backgroundImage = document.querySelector("#background-image");
+  const selectedAudio = document.querySelector("#map-audio");
+  const selectName = document.querySelector("#select-name ");
+  const selectVideo = document.querySelector("#map-video");
+  const selectImage = document.querySelector("#map-image");
   // remove no selected message
   stopLoadingMap();
   highLightSelected(beatMap.id);
   // add audio src
-  Audio.src = map.getAudioUrl();
+  Audio.src = audioURL;
   selectVideo.style.display = "none";
   selectImage.style.display = "none";
   backgroundVideo.style.display = "none";
   backgroundImage.style.display = "none";
   selectName.textContent = beatMap.name;
 
-  selectedAudio.src = map.getAudioUrl();
-  const extension = map.getExtension(beatMap.background);
+  selectedAudio.src = audioURL;
+  const extension = previewExtension;
   // show either video or image based on background extension
   if (extension === "mp4") {
-    backgroundVideo.src = map.getBackgroundUrl();
+    backgroundVideo.src = backgroundURL;
     backgroundVideo.style.display = "block";
 
     // for the summary
-    selectVideo.src = map.getBackgroundUrl();
+    selectVideo.src = backgroundURL;
     selectVideo.style.display = "block";
     selectVideo.play();
   } else {
-    backgroundImage.style.backgroundImage = `url(${map.getBackgroundUrl()})`;
-    selectImage.src = map.getBackgroundUrl();
+    backgroundImage.style.backgroundImage = `url(${backgroundURL})`;
+    selectImage.src = backgroundURL;
     selectImage.style.display = "block";
     backgroundImage.style.display = "block";
   }
-  Audio.addEventListener("loadedmetadata", getMetaData);
-  console.log("there is a selected map, load its assets");
-};
-const checkSelectedSong = (map, editor) => {
-  const selectedStatus = notSelectedSceen.children[0];
+}
+export function displaySelectedStatus(text) {
+  const selectedStatus = document.querySelector("#selected-status");
+  selectedStatus.textContent = text;
+}
 
-  map
-    .checkSelectedSong()
-    .then((isSelected) => {
-      if (isSelected) {
-        showSelectedSong(map.getSelectedMap(), map);
-        console.log(map.getSelectedMap());
-        editor.setBeatMap(map.getSelectedMap().beatMap);
-        return;
-      }
-      selectedStatus.textContent = "No map selected";
-    })
-    .catch((error) => {
-      console.log(error);
-      selectedStatus.textContent = "Error while fetching map";
-      map.clearSelectedMap();
+export function listBeatMap(beatMap, extension, source) {
+  const mapList = document.querySelector("#map-list");
+  const listItem = document.createElement("li");
+  listItem.id = beatMap.id;
+  listItem.classList.add("beat-map");
+  const backgroundType = extension;
+  let mapBackground;
+
+  if (backgroundType === "mp4") {
+    mapBackground = document.createElement("video");
+    mapBackground.addEventListener("mouseenter", (e) => {
+      e.target.play();
     });
-};
-const loadMedia = ({ mapBackground, mapAudio, map }) => {
-  map
-    .generateBlobUrl({
-      audio: mapAudio,
-      background: mapBackground,
-    })
-    .then(() => {
-      showSelectedSong(map.getSelectedMap(), map);
+    mapBackground.addEventListener("mouseleave", (e) => {
+      e.target.pause();
     });
-};
+  } else {
+    mapBackground = document.createElement("img");
+  }
 
-const listBeatMaps = (beatMaps, editor, map) => {
-  beatMaps.forEach((beatMap) => {
-    const listItem = document.createElement("li");
-    listItem.id = beatMap.id;
-    listItem.classList.add("beat-map");
-    const backgroundType = map.getExtension(beatMap.background);
-    let mapBackground;
+  mapBackground.classList.add("beat-map-image");
+  mapBackground.src = source;
+  listItem.appendChild(mapBackground);
+  const mapInfo = document.createElement("div");
+  mapInfo.classList.add("beat-map-text");
+  listItem.appendChild(mapInfo);
+  const mapName = document.createElement("span");
+  mapName.textContent = beatMap.name;
+  const mapUpdateDate = document.createElement("span");
+  mapUpdateDate.textContent = `last updated: 1/1/2001`;
+  mapInfo.append(mapName, mapUpdateDate);
+  mapList.prepend(listItem);
+  return listItem;
+}
 
-    if (backgroundType === "mp4") {
-      mapBackground = document.createElement("video");
-      mapBackground.addEventListener("mouseenter", (e) => {
-        e.target.play();
-      });
-      mapBackground.addEventListener("mouseleave", (e) => {
-        e.target.pause();
-      });
-    } else {
-      mapBackground = document.createElement("img");
-    }
-
-    mapBackground.classList.add("beat-map-image");
-    mapBackground.src = map.directUrl(beatMap.background);
-    listItem.appendChild(mapBackground);
-    const mapInfo = document.createElement("div");
-    mapInfo.classList.add("beat-map-text");
-    listItem.appendChild(mapInfo);
-    const mapName = document.createElement("span");
-    mapName.textContent = beatMap.name;
-    const mapUpdateDate = document.createElement("span");
-    mapUpdateDate.textContent = `last updated: 1/1/2001`;
-    mapInfo.append(mapName, mapUpdateDate);
-
-    // add event listner
-    listItem.addEventListener("click", () => {
-      const selectedMap = map.getSelectedMap();
-      if (selectedMap?.id === beatMap.id) {
-        return;
-      }
-      loadingMap();
-      map.abortSelection();
-      map.setSelectedMap(beatMap);
-      editor.setBeatMap(map.getSelectedMap().beatMap);
-      loadMedia({
-        mapBackground: beatMap.background,
-        mapAudio: beatMap.audio,
-        map,
-        editor,
-      });
-    });
-
-    userMaps.prepend(listItem);
-  });
-};
-
-const authenicatedView = () => {
+export function authenicatedView() {
+  const loginForm = document.querySelector("#login");
+  const addMapArea = document.querySelector("#add-map");
+  const userMaps = document.querySelector("#map-list");
   userMaps.style.display = "block";
   addMapArea.style.display = "grid";
   loginForm.style.display = "none";
-};
-const notAuthenticatedView = () => {
+}
+export function notAuthenticatedView() {
+  const loginForm = document.querySelector("#login");
+  const addMapArea = document.querySelector("#add-map");
+  const userMaps = document.querySelector("#map-list");
   loginForm.style.display = "flex";
   addMapArea.style.display = "none";
   userMaps.style.display = "none";
-};
-
-export function initialize({ editor, map, user }) {
-  editorManager = editor;
-
-  // set attributes and stuff
-
-  Audio.currentTime = editor.getTimeOffset();
-  Map.style.left = `${editor.getStartPosition()}px`;
-  Audio.src = map.getAudioUrl();
-  selectPlaySpeed.value = editor.getPlayBackRate();
-  // alows editor to get the audio current time
-  // eslint-disable-next-line no-param-reassign
-  editor.getAudioCurrentTime = () => Audio.currentTime;
-
-  // fcheck if user isn't logged in, a
-  if (user.getUserData().isLogin === false) {
-    notAuthenticatedView();
-    loginForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const submitButton = e.submitter;
-      submitButton.disabled = true;
-      const loginData = new FormData(loginForm);
-
-      user
-        .handleLogin({
-          email: loginData.get("email"),
-          password: loginData.get("password"),
-        })
-        .then(async (res) => {
-          if (res.success) {
-            authenicatedView();
-            // get user songs and display them on my map.
-            checkSelectedSong(map, editor);
-            const beatMaps = await map.handleGetUserBeatMaps();
-
-            listBeatMaps(beatMaps, editor, map);
-          } else {
-            console.log(res.message);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => {
-          submitButton.disabled = false;
-        });
-    });
-  }
-
-  if (user.getUserData().isLogin) {
-    authenicatedView();
-    checkSelectedSong(map, editor);
-
-    // get user beat maps
-    map.handleGetUserBeatMaps().then((beatMaps) => {
-      listBeatMaps(beatMaps, editor, map);
-      highLightSelected(map.getSelectedMap()?.id);
-    });
-  }
-
-  // add event listners
-  saveMapButton.addEventListener("click", () => {
-    map.saveMapRemote("beatMap").then((res) => {
-      alert(res);
-    });
-  });
-  addMapButton.addEventListener("click", (e) => {
-    viewSwitch(e.target);
-  });
-  selectedInfoButton.addEventListener("click", (e) => {
-    viewSwitch(e.target);
-  });
-  addMapForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const submitButton = e.submitter;
-    submitButton.disabled = true;
-
-    const mapData = new FormData(addMapForm);
-    map
-      .addBeatMap(mapData)
-      .then(async (res) => {
-        console.log(res);
-        const beatMap = res.map;
-        listBeatMaps([beatMap], editor, map);
-        // make the selected map the added map
-        map.setSelectedMap(beatMap);
-        editor.setBeatMap(map.getSelectedMap().beatMap);
-
-        // load the assets for the added maps.
-        loadMedia({
-          mapBackground: beatMap.background,
-          mapAudio: beatMap.audio,
-          map,
-          editor,
-        });
-        addMapForm.reset();
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        submitButton.disabled = false;
-      });
-  });
-  selectPlaySpeed.addEventListener("change", (e) => {
-    editor.updateSpeed(Number(e.target.value));
-    Audio.playbackRate = editor.getPlayBackRate();
-    backgroundVideo.playbackRate = editor.getPlayBackRate();
-  });
-  playBtn.addEventListener("click", () => {
-    playPause(playBtn.id, editor);
-    playBtn.textContent = editor.getPlay() ? "Pause" : "Play";
-    playBtn.id = editor.getPlay() ? "pause" : "play";
-  });
-
-  timePicker.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const validTime = editor.pickTime(Number(jumpInput.value));
-    if (validTime) {
-      validPrompts(editor.getElapsedTime(), editor.getBeatMap());
-      drawMap(editor.getBeatMap(), editor.getElapsedTime());
-      const postion = editor.stopTimeLine();
-      stopTimeLine(postion);
-      updateDomTime(editor.getElapsedTime());
-      timePicker.style.display = "none";
-      jumpInput.value = "";
-    }
-  });
-
-  setBtn.addEventListener("click", () => {
-    timePicker.style.display = "flex";
-    playPause("pause", editor);
-    playBtn.id = "play";
-    playBtn.textContent = "Play";
-  });
-  menuBtn.addEventListener("click", () => {
-    Menu.style.display = "grid";
-  });
-  menuExit.addEventListener("click", () => {
-    Menu.style.display = "none";
-  });
-
-  promptPosition.addEventListener("click", (e) => {
-    if (e.target === promptPosition) return;
-    const time = editor.getElapsedTime().toFixed(1);
-
-    if (editor.checkOccupation(Number(time), map.getSelectedMap().id)) {
-      console.log("space is occupied by a long prompt");
-      return;
-    }
-    if (
-      editor.canPlace(
-        Number(time),
-        editor.getPromptDuration(),
-        map.getSelectedMap().id
-      )
-    ) {
-      console.log("cant place that prompt here");
-      return;
-    }
-    console.log(`${e.target.id}  time: ${editor.getElapsedTime().toFixed(1)}`);
-
-    editor.addPrompt(Number(time), e.target.id, map.getSelectedMap().id);
-    const timeOffset = editor.getTimeOffset();
-    mapProgressPrompts(
-      editor.getBeatMap(),
-      Audio.duration - timeOffset,
-      timeOffset
-    );
-    drawMap(editor.getBeatMap(), editor.getElapsedTime());
-  });
-
-  toolBar.addEventListener("click", (e) => {
-    if (![clickBtn, rapidBtn, holdBtn].includes(e.target)) return;
-    removeBtnFocus();
-    e.target.classList.toggle("active-prompt");
-    switch (e.target) {
-      case clickBtn:
-        editor.switchPrompt(e.target.id, 0);
-        break;
-      case rapidBtn:
-        editor.switchPrompt(e.target.id, editor.getRapidDuration());
-        break;
-      case holdBtn:
-        editor.switchPrompt(e.target.id, editor.getHoldDuration());
-        break;
-      default:
-        console.log("error in selection");
-    }
-  });
-
-  rapidForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    editor.setRapidDuration(Number(rapidForm.children[1].value));
-    if (editor.getPromptType() === "rapid") {
-      editor.setRapidDuration(editor.getRapidDuration());
-    }
-    console.log(editor.getPromptDuration());
-  });
-  holdForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    editor.setHoldDuration(Number(holdForm.children[1].value));
-    if (editor.getPromptType === "hold") {
-      editor.setPromptDuration(editor.getHoldDuration());
-    }
-  });
-  progressBar.addEventListener("mousedown", (e) => {
-    editor.setMoveThumb(true);
-    const timePosition = moveProgressThumb(e);
-    editor.progressBarTimeUpdate(timePosition);
-    progressBarTimeUpdate(editor.getElapsedTime());
-    drawMap(editor.getBeatMap(), editor.getElapsedTime());
-  });
-  progressBar.addEventListener("mouseup", () => {
-    editor.setMoveThumb(false);
-  });
-
-  progressBar.addEventListener("mousemove", (e) => {
-    if (editor.getMoveThumb()) {
-      const timePosition = moveProgressThumb(e);
-      editor.progressBarTimeUpdate(timePosition);
-      progressBarTimeUpdate(editor.getElapsedTime());
-      drawMap(editor.getBeatMap(), editor.getElapsedTime());
-    }
-  });
-  document.querySelector("body").addEventListener("keydown", (e) => {
-    if (editor.getPlay()) {
-      return;
-    }
-    if (["ArrowRight", "ArrowLeft"].includes(e.key) === false) {
-      return;
-    }
-
-    const direction = e.key === "ArrowRight" ? "foward" : "backward";
-    editor.timeStep(direction);
-    const timeOffset = editor.getTimeOffset();
-    validPrompts(editor.getElapsedTime(), editor.getBeatMap());
-    Audio.currentTime = editor.getElapsedTime();
-    backgroundVideo.currentTime = editor.getElapsedTime();
-    autoThumbMovement(
-      (Audio.currentTime - timeOffset) / (Audio.duration - timeOffset)
-    );
-    drawMap(editor.getBeatMap(), editor.getElapsedTime());
-
-    updateDomTime(editor.getElapsedTime());
-  });
-
-  document.querySelector("body").addEventListener("keydown", (e) => {
-    if (e.key !== " ") return; // if the key pressed is not spacebar
-    // prevents play when the timepicker modal is opened
-    if (!["", "none"].includes(timePicker.style.display)) return;
-
-    playPause(playBtn.id, editor);
-    playBtn.textContent = editor.getPlay() === "Play" ? "Pause" : "Play";
-    playBtn.id = editor.getPlay() ? "pause" : "play";
-  });
 }
-
-export { updateDomTime };
+export function currentAudioTime() {
+  const Audio = document.querySelector("#editor-audio");
+  return Audio.currentTime;
+}
