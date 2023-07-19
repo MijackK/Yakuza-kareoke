@@ -49,13 +49,6 @@ export function updateDomTime(elapsedTime) {
   Score.textContent = elapsedTime.toFixed(1);
 }
 
-export function closeTimePicker() {
-  const timePicker = document.querySelector("#time-picker");
-  const jumpInput = document.querySelector("#jump-to");
-  timePicker.style.display = "none";
-  jumpInput.value = "";
-}
-
 export function editorPlay(time) {
   const Audio = document.querySelector("#editor-audio");
   const backgroundVideo = document.querySelector("#background-video");

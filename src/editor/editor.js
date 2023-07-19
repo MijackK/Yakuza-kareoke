@@ -24,7 +24,6 @@ import {
   updatePlaySpeed,
   editorPlay,
   editorPause,
-  closeTimePicker,
   closeEditorMenu,
   openEditorMenu,
   focusBtn,
