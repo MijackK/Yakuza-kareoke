@@ -87,3 +87,18 @@ input[type="password"]:focus {
   background-color: rgba(0, 0, 0, 0.852);
   z-index: 11;
 }
+.menu-button {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  font-size: 2rem;
+}
+.menu-button > button {
+  cursor: pointer;
+  color: white;
+  background-color: transparent;
+
+  border: none;
+  font-size: 4rem;
+}
