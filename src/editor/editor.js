@@ -25,7 +25,6 @@ import {
   editorPlay,
   editorPause,
   closeTimePicker,
-  openTimePicker,
   closeEditorMenu,
   openEditorMenu,
   focusBtn,
@@ -88,8 +87,8 @@ const stopEditor = () => {
 const updateGraphics = () => {
   validPrompts(editor.getElapsedTime(), editor.getBeatMap());
   drawMap(editor.getBeatMap(), editor.getElapsedTime());
-  updateDomTime(editor.getElapsedTime());
   updateMediaTime(editor.getElapsedTime());
+  updateDomTime(editor.getElapsedTime());
 };
 const timeController = () => {
   const elapsedTime = editor.getElapsedTime();
@@ -225,20 +224,6 @@ document.querySelector("#play").addEventListener("click", (e) => {
   }
 });
 
-document.querySelector("#time-picker").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const formData = new FormData(e.target);
-  const validTime = editor.pickTime(formData.get("time"));
-  if (validTime) {
-    updateGraphics();
-    closeTimePicker();
-  }
-});
-
-document.querySelector("#set").addEventListener("click", () => {
-  openTimePicker();
-  stopEditor();
-});
 document.querySelector("#menu").addEventListener("click", () => {
   openEditorMenu();
 });

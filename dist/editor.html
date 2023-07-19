@@ -9,14 +9,6 @@
   </head>
   <body class="dark_mode">
    
-  
-    <form id="time-picker">
-      <h1>Pick where you'd like to Jump</h1>
-      <input type="number" name="time" id="jump-to" step="0.1" min="0" placeholder="Enter Seconds">
-      <button>Jump</button>
-    </form>
-  
- 
 
     <audio id="editor-audio"> </audio>
  
@@ -80,8 +72,7 @@
   
   
       <div class="tool-bar">
-        <div id="play">Play</div>
-        <div id="set">Jump</div>
+        <div id="play">&#9654</div>
         <div  id ="click" class="active-prompt">Click</div>
         <div id="rapid">Rapid 
           <form id ="r-form" class="duration-form">
@@ -159,7 +150,11 @@
    <ul id="map-list"></ul>
  </div>
  <div class="tool-bar">
-   <div id="home"><a href="index.html">Home</a></div>
+  <div id="home"  class="menu-button"> 
+    <button id="home-btn">&#x2302;</button>
+    <span>Home</span>
+  </div>
+</a>
    <div id="upload-map">Save</div>
    <div id="publish-map">Publish</div>
    <div id="exit" >Close</div>

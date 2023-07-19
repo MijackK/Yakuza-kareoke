@@ -81,17 +81,6 @@ h1 {
   color: rgb(12, 240, 240);
 }
 
-#time-picker {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 32;
-}
 .get-prompt {
   position: absolute;
   width: 1520px;

@@ -55,10 +55,7 @@ export function closeTimePicker() {
   timePicker.style.display = "none";
   jumpInput.value = "";
 }
-export function openTimePicker() {
-  const timePicker = document.querySelector("#time-picker");
-  timePicker.style.display = "flex";
-}
+
 export function editorPlay(time) {
   const Audio = document.querySelector("#editor-audio");
   const backgroundVideo = document.querySelector("#background-video");
@@ -69,7 +66,7 @@ export function editorPlay(time) {
   Audio.play();
   backgroundVideo.play();
 
-  playBtn.textContent = "Pause";
+  playBtn.textContent = "⏸";
   playBtn.id = "pause";
 }
 export function editorPause() {
@@ -80,7 +77,7 @@ export function editorPause() {
   Audio.pause();
   backgroundVideo.pause();
 
-  playBtn.textContent = "Play";
+  playBtn.textContent = "▶";
   playBtn.id = "play";
 }
 
