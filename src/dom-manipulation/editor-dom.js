@@ -11,11 +11,13 @@ export function focusBtn(button) {
 }
 export function closeEditorMenu() {
   const Menu = document.querySelector("#modal");
+  const selectedAudio = document.querySelector("#map-audio");
   Menu.style.display = "none";
+  selectedAudio.pause();
 }
 export function openEditorMenu() {
   const Menu = document.querySelector("#modal");
-  Menu.style.display = "grid";
+  Menu.style.display = "flex";
 }
 
 export function loadingMap() {
@@ -171,6 +173,9 @@ export function listBeatMap(beatMap, extension, source) {
   const listItem = document.createElement("li");
   listItem.id = beatMap.id;
   listItem.classList.add("beat-map");
+  const mapOptions = document.createElement("span");
+  mapOptions.innerHTML = "&#x22EF";
+  mapOptions.classList.add("map-option");
   const backgroundType = extension;
   let mapBackground;
 
@@ -197,6 +202,7 @@ export function listBeatMap(beatMap, extension, source) {
   const mapUpdateDate = document.createElement("span");
   mapUpdateDate.textContent = `last updated: 1/1/2001`;
   mapInfo.append(mapName, mapUpdateDate);
+  listItem.append(mapOptions);
   mapList.prepend(listItem);
   return listItem;
 }
