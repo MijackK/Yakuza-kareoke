@@ -21,7 +21,7 @@ import {
   closeMenu,
   initialize,
   resetMap,
-} from "../utility.js/player-dom";
+} from "../dom-manipulation/player-dom";
 
 initialize();
 init();
@@ -65,7 +65,7 @@ const heatMode = (info) => {
   }
 };
 
-const finalScoreCalculator = () => {};
+// const finalScoreCalculator = () => {};
 const incrementScore = (info) => {
   const multiplier = heat ? 1.5 : 1;
   const container = document.querySelector(".combo-container");

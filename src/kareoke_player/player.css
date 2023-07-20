@@ -245,21 +245,7 @@ img {
   font-size: 4rem;
   right: 0;
 }
-.menu-button {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 10px;
-  font-size: 2rem;
-}
-.menu-button > button {
-  cursor: pointer;
-  color: white;
-  background-color: transparent;
 
-  border: none;
-  font-size: 4rem;
-}
 #resume-btn:hover {
   filter: brightness(1);
 }

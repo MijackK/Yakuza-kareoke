@@ -9,20 +9,13 @@
   </head>
   <body class="dark_mode">
    
-  
-      <form id="time-picker">
-      <h1>Pick where you'd like to Jump</h1>
-      <input type="number" name="" id="jump-to" step="0.1" min="3.0" placeholder="Enter Seconds">
-      <button>Jump</button>
-    </form>
-  
- 
 
     <audio id="editor-audio"> </audio>
  
       <div class="map-container">
-        <div class="current-time"></div>
+    
         <div class="map"> </div>
+        <canvas id="time-map" ></canvas>
 
         <div class="progress_section">
         
@@ -79,24 +72,23 @@
   
   
       <div class="tool-bar">
-        <div id="play">Play</div>
-        <div id="set">Jump</div>
+        <div id="play">&#9654</div>
         <div  id ="click" class="active-prompt">Click</div>
         <div id="rapid">Rapid 
           <form id ="r-form" class="duration-form">
           <label >Duration</label>
-          <input type="number"  step="0.1" value="1" min="0.1" >
+          <input type="number" name="duration"  step="0.1" value="1" min="0.1" >
           <button>set</button>
           </form> 
         </div>
         <div id="hold">Hold 
           <form  id ="h-form" class="duration-form">
             <label >Duration</label>
-          <input type="number"  step="0.1" value="1" min="0.1" >
+          <input type="number" name="duration"  step="0.1" value="1" min="0.1" >
           <button>set</button>
           </form> 
         </div>
-        <div id="menu"> Menu</div>
+        <div id="menu">&#x22EF;</div>
     </div>
  <div id="background-image"class="background"></div>
  <video id="background-video" src="" class="background"></video>
@@ -104,8 +96,10 @@
 <div id="modal">
   <div class="editor-header">
     <h1>Editor</h1>
+    
  
   </div>
+  <div id ="menu-body">
   <div id="map-section">
 
   <div id="add-map">
@@ -128,7 +122,7 @@
   
       <div class="not-selected">
       
-        <span>Loading..</span>
+        <span id="selected-status">Loading..</span>
       </div>
       
       
@@ -157,8 +151,8 @@
 
    <ul id="map-list"></ul>
  </div>
- <div class="tool-bar">
-   <div id="home"><a href="index.html">Home</a></div>
+</div>
+ <div class="modal-toolbar">
    <div id="upload-map">Save</div>
    <div id="publish-map">Publish</div>
    <div id="exit" >Close</div>
