@@ -73,9 +73,9 @@ export default function beatMapManager() {
   };
   const directUrl = (path) => `http://${config.objectServer}/${path}`;
 
-  const saveMapRemote = async (column) => {
+  const saveMapRemote = async (column, id) => {
     const response = await saveBeatMap({
-      id: selectedMap.id,
+      id,
       column,
       value: selectedMap[column],
     });

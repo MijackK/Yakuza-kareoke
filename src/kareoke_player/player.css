@@ -181,9 +181,7 @@ body {
   animation-duration: 0.1s;
   animation-timing-function: linear;
 }
-img {
-  filter: brightness(1.5);
-}
+
 .cplayer {
   margin-top: 10px;
   width: 100vw;

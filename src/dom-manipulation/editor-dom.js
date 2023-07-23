@@ -1,12 +1,16 @@
-export function focusBtn(button) {
-  const clickBtn = document.querySelector("#click");
-  const holdBtn = document.querySelector("#hold");
-  const rapidBtn = document.querySelector("#rapid");
-  if ([clickBtn, holdBtn, rapidBtn].includes(button)) {
+import rapidText from "../images/rapid.png";
+import holdText from "../images/hold.png";
+import clickText from "../images/click.png";
+
+export function focusBtn(element) {
+  const clickBtn = document.querySelector("#click-image");
+  const holdBtn = document.querySelector("#hold-image");
+  const rapidBtn = document.querySelector("#rapid-image");
+  if ([clickBtn, holdBtn, rapidBtn].includes(element)) {
     clickBtn.classList.remove("active-prompt");
     rapidBtn.classList.remove("active-prompt");
     holdBtn.classList.remove("active-prompt");
-    button.classList.toggle("active-prompt");
+    element.classList.toggle("active-prompt");
   }
 }
 export function closeEditorMenu() {
@@ -62,18 +66,16 @@ export function editorPlay(time) {
   backgroundVideo.play();
 
   playBtn.textContent = "⏸";
-  playBtn.id = "pause";
 }
 export function editorPause() {
   const Audio = document.querySelector("#editor-audio");
   const backgroundVideo = document.querySelector("#background-video");
-  const playBtn = document.querySelector("#pause");
+  const playBtn = document.querySelector("#play");
 
   Audio.pause();
   backgroundVideo.pause();
 
   playBtn.textContent = "▶";
-  playBtn.id = "play";
 }
 
 const highLightSelected = (id) => {
@@ -173,9 +175,24 @@ export function listBeatMap(beatMap, extension, source) {
   const listItem = document.createElement("li");
   listItem.id = beatMap.id;
   listItem.classList.add("beat-map");
-  const mapOptions = document.createElement("span");
-  mapOptions.innerHTML = "&#x22EF";
-  mapOptions.classList.add("map-option");
+  const optionButton = document.createElement("span");
+  optionButton.innerHTML = "&#x22EF";
+  optionButton.classList.add("map-option");
+  const optionsList = document.createElement("ul");
+  optionsList.classList.add("option-list");
+  listItem.append(optionsList);
+  // create the options
+
+  const saveMap = document.createElement("li");
+  saveMap.textContent = "save";
+  optionsList.append(saveMap);
+  const publishMap = document.createElement("li");
+  publishMap.textContent = "publish";
+  optionsList.append(publishMap);
+  const deleteMap = document.createElement("li");
+  deleteMap.textContent = "delete";
+  optionsList.append(deleteMap);
+
   const backgroundType = extension;
   let mapBackground;
 
@@ -202,9 +219,23 @@ export function listBeatMap(beatMap, extension, source) {
   const mapUpdateDate = document.createElement("span");
   mapUpdateDate.textContent = `last updated: 1/1/2001`;
   mapInfo.append(mapName, mapUpdateDate);
-  listItem.append(mapOptions);
+
+  listItem.append(optionButton);
   mapList.prepend(listItem);
-  return listItem;
+  return {
+    listItem,
+    optionsList,
+    optionButton,
+    deleteMap,
+    saveMap,
+    publishMap,
+  };
+}
+
+export function showHideOption(optionList) {
+  const element = optionList;
+  const { display } = getComputedStyle(element);
+  element.style.display = display === "none" ? "block" : "none";
 }
 
 export function authenicatedView() {
@@ -226,4 +257,13 @@ export function notAuthenticatedView() {
 export function currentAudioTime() {
   const Audio = document.querySelector("#editor-audio");
   return Audio.currentTime;
+}
+
+export function addPromptSrc() {
+  const rapidButton = document.querySelector("#rapid-image");
+  rapidButton.src = rapidText;
+  const holdButton = document.querySelector("#hold-image");
+  holdButton.src = holdText;
+  const clickButton = document.querySelector("#click-image");
+  clickButton.src = clickText;
 }

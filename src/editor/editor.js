@@ -29,6 +29,8 @@ import {
   focusBtn,
   currentAudioTime,
   displaySelectedStatus,
+  showHideOption,
+  addPromptSrc,
 } from "../dom-manipulation/editor-dom";
 import beatMapManager from "../managers/map_manager";
 import userFactory from "../managers/user-manager";
@@ -38,6 +40,7 @@ const mapManager = beatMapManager();
 const userManager = userFactory();
 init();
 initMap("#time-map");
+addPromptSrc();
 
 let intervalID;
 let animationID;
@@ -66,7 +69,11 @@ const setSelectedMap = (beatMap, extension) => {
 const addMapToList = (beatMap) => {
   const mediaExtension = mapManager.getExtension(beatMap.background);
   const mediaSource = mapManager.directUrl(beatMap.background);
-  const listItem = listBeatMap(beatMap, mediaExtension, mediaSource);
+  const { listItem, optionButton, optionsList, saveMap } = listBeatMap(
+    beatMap,
+    mediaExtension,
+    mediaSource
+  );
   listItem.addEventListener("click", () => {
     const selectedMap = mapManager.getSelectedMap();
     if (selectedMap?.id === beatMap.id) {
@@ -75,6 +82,21 @@ const addMapToList = (beatMap) => {
     loadingMap();
     mapManager.abortSelection();
     setSelectedMap(beatMap, mediaExtension);
+  });
+  optionButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    showHideOption(optionsList);
+  });
+  optionsList.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+  saveMap.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const column = "beatMap";
+    const { id } = beatMap;
+    mapManager.saveMapRemote(column, id).then((res) => {
+      alert(res);
+    });
   });
 };
 const stopEditor = () => {
@@ -168,11 +190,7 @@ const checkSelectedSong = () => {
 };
 
 // add event listners
-document.querySelector("#upload-map").addEventListener("click", () => {
-  mapManager.saveMapRemote("beatMap").then((res) => {
-    alert(res);
-  });
-});
+
 document.querySelector("#add").addEventListener("click", (e) => {
   viewSwitch(e.target);
 });
@@ -214,17 +232,18 @@ document.querySelector("#time_guage").addEventListener("change", (e) => {
 });
 
 document.querySelector("#play").addEventListener("click", (e) => {
-  if (e.target.id === "play") {
+  if (editor.getPlay() === false) {
     startEditor();
     return;
   }
-  if (e.target.id === "pause") {
+  if (editor.getPlay()) {
     stopEditor();
   }
 });
 
 document.querySelector("#menu").addEventListener("click", () => {
   openEditorMenu();
+  stopEditor();
 });
 document.querySelector("#exit").addEventListener("click", () => {
   closeEditorMenu();
@@ -256,15 +275,15 @@ promptPosition.addEventListener("click", (e) => {
   updateGraphics();
 });
 
-document.querySelector("#click").addEventListener("click", (e) => {
+document.querySelector("#click-image").addEventListener("click", (e) => {
   editor.switchPrompt("click", 0);
   focusBtn(e.target);
 });
-document.querySelector("#hold").addEventListener("click", (e) => {
+document.querySelector("#hold-image").addEventListener("click", (e) => {
   editor.switchPrompt("hold", editor.getHoldDuration());
   focusBtn(e.target);
 });
-document.querySelector("#rapid").addEventListener("click", (e) => {
+document.querySelector("#rapid-image").addEventListener("click", (e) => {
   editor.switchPrompt("rapid", editor.getRapidDuration());
   focusBtn(e.target);
 });

@@ -1,4 +1,5 @@
 :root {
+  --highlight: rgb(12, 80, 128);
   --primary-font: "Courier New", Courier, monospace;
   --secondary-bg-color: #091126;
 }
@@ -81,12 +82,18 @@ h1 {
 .tool-bar > div {
   cursor: pointer;
 }
+.tool-bar img {
+  width: 96px;
+  filter: grayscale(100%);
+}
 
 .player {
   color: black;
 }
-.active-prompt {
+
+img.active-prompt {
   color: rgb(12, 240, 240);
+  filter: grayscale(0);
 }
 
 .get-prompt {
@@ -206,24 +213,17 @@ h1 {
   background-color: var(--primary-bg-color);
   overflow-x: auto;
 }
-.modal-toolbar {
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: solid;
-  border-color: var(--secondary-bg-color);
-}
+
 .editor-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
   background-image: linear-gradient(
     to top,
     rgba(0, 0, 0, 0),
     var(--secondary-bg-color)
   );
   padding-left: 20px;
-}
-.modal-toolbar > div {
-  cursor: pointer;
 }
 
 #add-map {
@@ -356,6 +356,20 @@ a {
 }
 .map-option:hover {
   background-color: rgba(255, 255, 255, 0.4);
+}
+.option-list {
+  display: none;
+  position: absolute;
+  background-color: var(--primary-bg-color);
+  border: solid var(--primary-color);
+  border-width: thin;
+  padding: 13px;
+  right: 40px;
+  margin-top: 20px;
+  list-style: none;
+}
+.option-list > li:hover {
+  color: var(--highlight);
 }
 @media only screen and (max-width: 914px) {
 }

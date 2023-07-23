@@ -73,15 +73,20 @@
   
       <div class="tool-bar">
         <div id="play">&#9654</div>
-        <div  id ="click" class="active-prompt">Click</div>
-        <div id="rapid">Rapid 
+    
+        <div  id ="click" >
+          <img id="click-image" class="active-prompt"  alt="Click"/>
+        </div>
+        <div id="rapid"  >
+          <img id="rapid-image"  alt="Rapid"/>
           <form id ="r-form" class="duration-form">
           <label >Duration</label>
           <input type="number" name="duration"  step="0.1" value="1" min="0.1" >
           <button>set</button>
           </form> 
         </div>
-        <div id="hold">Hold 
+        <div id="hold">
+          <img id="hold-image" alt="Hold"/>
           <form  id ="h-form" class="duration-form">
             <label >Duration</label>
           <input type="number" name="duration"  step="0.1" value="1" min="0.1" >
@@ -96,8 +101,13 @@
 <div id="modal">
   <div class="editor-header">
     <h1>Editor</h1>
-    
+<div>
+  <button id="exit" >Close Menu</button>
+  <Button>Go Home</Button>
+</div>
  
+
+
   </div>
   <div id ="menu-body">
   <div id="map-section">
@@ -152,11 +162,7 @@
    <ul id="map-list"></ul>
  </div>
 </div>
- <div class="modal-toolbar">
-   <div id="upload-map">Save</div>
-   <div id="publish-map">Publish</div>
-   <div id="exit" >Close</div>
- </div>
+
 </div>
 
   </body>
