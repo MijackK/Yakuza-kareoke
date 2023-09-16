@@ -69,11 +69,8 @@ const setSelectedMap = (beatMap, extension) => {
 const addMapToList = (beatMap) => {
   const mediaExtension = mapManager.getExtension(beatMap.background);
   const mediaSource = mapManager.directUrl(beatMap.background);
-  const { listItem, optionButton, optionsList, saveMap } = listBeatMap(
-    beatMap,
-    mediaExtension,
-    mediaSource
-  );
+  const { listItem, optionButton, optionsList, saveMap, deleteMap } =
+    listBeatMap(beatMap, mediaExtension, mediaSource);
   listItem.addEventListener("click", () => {
     const selectedMap = mapManager.getSelectedMap();
     if (selectedMap?.id === beatMap.id) {
@@ -95,6 +92,15 @@ const addMapToList = (beatMap) => {
     const column = "beatMap";
     const { id } = beatMap;
     mapManager.saveMapRemote(column, id).then((res) => {
+      alert(res);
+    });
+  });
+  deleteMap.addEventListener("click", () => {
+    // eslint-disable-next-line no-restricted-globals
+    const acceptDelete = confirm("Are you sure");
+    if (!acceptDelete) return;
+    mapManager.deleteBeatMap(beatMap.id).then((res) => {
+      listItem.remove();
       alert(res);
     });
   });

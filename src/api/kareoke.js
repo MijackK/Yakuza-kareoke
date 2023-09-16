@@ -101,5 +101,22 @@ export async function saveBeatMap(mapData) {
 
   return data;
 }
+export async function deleteMap(id) {
+  const options = {
+    method: "delete",
+    body: JSON.stringify({ id }),
+  };
+  const headers = { "Content-Type": "application/json" };
+  const response = await apiRequest({
+    url: `kareoke/delete_map`,
+    options,
+    headers,
+  });
+  if (response.ok === false) {
+    throw new Error("Problem deleting beat map");
+  }
+  const data = await response.text();
 
+  return data;
+}
 export async function saveMedia(id) {}

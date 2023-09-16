@@ -5,6 +5,7 @@ import {
   uploadBeatmap,
   getUserBeatMaps,
   saveBeatMap,
+  deleteMap,
 } from "../api/kareoke";
 import config from "../config";
 import { getLocalMap, saveLocalMap } from "../utility.js/storage";
@@ -71,6 +72,10 @@ export default function beatMapManager() {
     const response = uploadBeatmap(formData);
     return response;
   };
+  const deleteBeatMap = (id) => {
+    const response = deleteMap(id);
+    return response;
+  };
   const directUrl = (path) => `http://${config.objectServer}/${path}`;
 
   const saveMapRemote = async (column, id) => {
@@ -117,5 +122,6 @@ export default function beatMapManager() {
     abortSelection,
     clearSelectedMap,
     loadMap,
+    deleteBeatMap,
   };
 }
