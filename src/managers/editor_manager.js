@@ -118,10 +118,9 @@ export default function editorFactory() {
   };
 
   const contructPrompt = (time, type, duration, place) => {
-    const position = Location[place];
     const key = input[place];
 
-    return { time, type, duration, position, key };
+    return { time, type, duration, key };
   };
 
   const canPlace = (time, duration) => {
@@ -149,10 +148,14 @@ export default function editorFactory() {
   const addPrompt = (time, place, mapID) => {
     // check if prompt is there
     const check = beatMap.find((beat) => beat.time === time);
+
     if (check) {
       removePrompt(time, mapID);
-      return;
+      if (check.key === input[place]) {
+        return;
+      }
     }
+
     const promptObject = contructPrompt(
       time,
       promptType,
