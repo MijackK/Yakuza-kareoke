@@ -198,10 +198,10 @@ const checkSelectedSong = () => {
 // add event listners
 
 document.querySelector("#add").addEventListener("click", (e) => {
-  viewSwitch(e.target);
+  viewSwitch(e.target.id);
 });
 document.querySelector("#selected").addEventListener("click", (e) => {
-  viewSwitch(e.target);
+  viewSwitch(e.target.id);
 });
 const addMapForm = document.querySelector("#add-map-form");
 addMapForm.addEventListener("submit", (e) => {
@@ -218,11 +218,10 @@ addMapForm.addEventListener("submit", (e) => {
 
       // put the map on the list of maps
       addMapToList(beatMap);
-
       // make the selected map the added map
       setSelectedMap(beatMap, mapManager.getExtension(beatMap.background));
-
       addMapForm.reset();
+      viewSwitch("selected");
     })
     .catch((error) => {
       console.log(error);
@@ -237,7 +236,7 @@ document.querySelector("#time_guage").addEventListener("change", (e) => {
   updatePlaySpeed(editor.getPlayBackRate());
 });
 
-document.querySelector("#play").addEventListener("click", (e) => {
+document.querySelector("#play").addEventListener("click", () => {
   if (editor.getPlay() === false) {
     startEditor();
     return;

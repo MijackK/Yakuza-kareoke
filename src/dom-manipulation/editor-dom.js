@@ -88,7 +88,7 @@ const highLightSelected = (id) => {
     listItem.classList.remove("active");
   });
 };
-export function viewSwitch(button) {
+export function viewSwitch(buttonID) {
   const buttonGroup = document.querySelector(".button-group");
   const addMapForm = document.querySelector("#add-map-form");
   const summaryWrapper = document.querySelector("#summary-wrapper");
@@ -97,8 +97,8 @@ export function viewSwitch(button) {
   Object.keys(buttonGroupMember).forEach((child) => {
     const element = buttonGroupMember[child];
 
-    if (element === button) {
-      button.classList.add("active");
+    if (element.id === buttonID) {
+      element.classList.add("active");
 
       const selectedButton = element.getAttribute("id");
 
@@ -164,6 +164,10 @@ export function showSelectedSong(
     selectImage.style.display = "block";
     backgroundImage.style.display = "block";
   }
+}
+export function removeSelectedSong() {
+  // clean up the blob url
+  // switch selected map screen to no map selected.
 }
 export function displaySelectedStatus(text) {
   const selectedStatus = document.querySelector("#selected-status");
