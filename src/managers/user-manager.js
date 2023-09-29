@@ -4,7 +4,6 @@ import { getUserInfo, saveUserInfo } from "../utility.js/storage";
 export default function userFactory() {
   let userData = { isLogin: false };
   const getUserData = () => userData;
-  const setUserData = (data) => {};
   const handleLogin = async (authData) => {
     const loginResponse = await login(authData);
     if (loginResponse.success) {
@@ -38,7 +37,6 @@ export default function userFactory() {
 
   return {
     getUserData,
-    setUserData,
     handleLogin,
     handleRegister,
     isLogin,

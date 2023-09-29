@@ -4,109 +4,102 @@ import selectSound from "../audio/interface-124464.mp3";
 import stray from "../video/particles-27669.mp4";
 import homeSong from "../audio/reflected-light-147979.mp3";
 
-const backgroundImage = document.querySelector(".background_image");
-const homeAudio = document.querySelector("#home-audio");
-homeAudio.src = homeSong;
-homeAudio.volume = 0.2;
-homeAudio.play();
-let hoverDebounce = null;
-let userManager;
-let mapManager;
+export function initialize() {
+  // add the  audio elements
+  const audioHover = document.createElement("audio");
+  audioHover.id = "hover-sound";
+  const audioSelect = document.createElement("audio");
+  audioSelect.id = "select-sound";
 
-const Disk = document.querySelector(".disk");
-const menuOptions = document.querySelector(".menu-options");
-Disk.style.backgroundImage = `url(${diskImage})`;
-// backgroundImage.style.backgroundImage = `url(${surviveBar})`;
-backgroundImage.src = stray;
-backgroundImage.play();
+  audioSelect.setAttribute(
+    "data-artist",
+    "Sound Effect by Universfield from Pixabay"
+  );
+  audioHover.src = hoverSound;
+  audioSelect.src = selectSound;
+  audioSelect.playbackRate = 1;
+  document.querySelector("body").prepend(audioHover, audioSelect);
 
-const diskTag = document.querySelector("#tag").children[0];
-const songList = document.querySelector(".song_list");
-const songModal = document.querySelector(".song_wrapper");
-const playBtn = document.querySelector(".play");
-const startSongBtn = document.querySelector("#start-song");
-const authBtn = document.querySelector(".auth");
-const accountBtn = document.querySelector(".account");
-const loginDialog = document.querySelector("#auth-dialog");
-const loginForm = document.querySelector("#login");
-const registerForm = document.querySelector("#register");
-const accountForm = document.querySelector("#account");
-const authButtonGroup = document.querySelector(".button-group");
-const accountPage = document.querySelector("#account-dialog");
-const accountPageClose = document.querySelector("#close-account");
-const logoutBtn = document.querySelector("#logout-btn");
+  // add background image & audio
+  const backgroundImage = document.querySelector(".background_image");
+  const homeAudio = document.querySelector("#home-audio");
+  homeAudio.src = homeSong;
+  homeAudio.volume = 0.2;
+  homeAudio.play();
+  backgroundImage.src = stray;
+  backgroundImage.play();
 
-// add audio
-const audioHover = document.createElement("audio");
-const audioSelect = document.createElement("audio");
+  // add disk image
+  const Disk = document.querySelector(".disk");
+  Disk.style.backgroundImage = `url(${diskImage})`;
+}
 
-audioSelect.setAttribute(
-  "data-artist",
-  "Sound Effect by Universfield from Pixabay"
-);
-audioHover.src = hoverSound;
-audioSelect.src = selectSound;
-audioSelect.playbackRate = 1;
-document.querySelector("body").prepend(audioHover, audioSelect);
-
-const removeSongFocus = () => {
-  const items = songList.children;
+export function removeSongFocus() {
+  const items = document.querySelector("#song_list").children;
   Array.from(items).forEach((song) => {
     if (song.classList.contains("selected")) {
       song.classList.remove("selected");
     }
   });
-};
+}
 
-const animateDisk = () => {
+export function animateDisk() {
+  const Disk = document.querySelector(".disk");
+
   Disk.classList.toggle("disk_slide");
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       Disk.classList.toggle("disk_slide");
     });
   });
-};
-const generateList = (songs) => {
-  for (let i = 0; i < songs.length; i += 1) {
-    const songItem = document.createElement("li");
-    songItem.title = songs[i].name;
-    songItem.dataset.song = songs[i].name;
-    const numberPoint = document.createElement("span");
-    numberPoint.className = "list_number";
-    numberPoint.textContent = i;
-    songItem.append(numberPoint);
-    const songName = document.createElement("span");
-    songName.className = "song-name";
-    songName.textContent = songs[i].name;
+}
+export function generateSong(song) {
+  const songList = document.querySelector("#song_list");
 
-    songItem.append(songName);
-    songItem.addEventListener("click", () => {
-      startSongBtn.parentNode.href = `player.html?song=${songs[i].id}`;
-    });
-    songList.append(songItem);
-  }
-};
+  const songItem = document.createElement("li");
+  songItem.title = song.name;
+  const numberPoint = document.createElement("span");
+  numberPoint.className = "list_number";
+  numberPoint.textContent = songList.children.length;
+  songItem.append(numberPoint);
+  const songName = document.createElement("span");
+  songName.className = "song-name";
+  songName.textContent = song.name;
+  songItem.append(songName);
+  songList.append(songItem);
+  return songItem;
+}
 
-const selectSong = (song) => {
+export function selectSong(song, listItem) {
+  const diskTag = document.querySelector("#tag").children[0];
   removeSongFocus();
-  diskTag.textContent = song.dataset.song;
-  // selectedSong = song.dataset.song;
-  song.classList.toggle("selected");
+  diskTag.textContent = song.name;
+  listItem.classList.toggle("selected");
   animateDisk();
-};
-const authenticatedView = () => {
+  const startSongBtn = document.querySelector("#start-song");
+  startSongBtn.parentNode.href = `player.html?song=${song.id}`;
+}
+export function authenticatedView() {
+  const authBtn = document.querySelector(".auth");
+  const accountBtn = document.querySelector(".account");
+  const loginDialog = document.querySelector("#auth-dialog");
   authBtn.style.display = "none";
   accountBtn.style.display = "block";
   loginDialog.style.display = "none";
-};
-const notAuthenticatedView = () => {
+}
+export function notAuthenticatedView() {
+  const authBtn = document.querySelector(".auth");
+  const accountBtn = document.querySelector(".account");
+  const accountPage = document.querySelector("#account-dialog");
   accountBtn.style.display = "none";
   authBtn.style.display = "block";
   accountPage.style.display = "none";
-};
+}
 // switches between login and signup form
-const authSwitch = (button) => {
-  const buttonGroupMember = authButtonGroup.children;
+export function authSwitch(button) {
+  const buttonGroupMember = document.querySelector(".button-group").children;
+  const registerForm = document.querySelector("#register");
+  const loginForm = document.querySelector("#login");
 
   Object.keys(buttonGroupMember).forEach((child) => {
     const element = buttonGroupMember[child];
@@ -127,139 +120,40 @@ const authSwitch = (button) => {
     }
     element.classList.remove("active");
   });
-};
-export default function initialize(user, map) {
-  userManager = user;
-  mapManager = map;
+}
+export function handleLoginDialog(open) {
+  const loginDialog = document.querySelector("#auth-dialog");
+  loginDialog.style.display = open ? "flex" : "none";
+}
+export function handleAccountPage(open) {
+  const accountPage = document.querySelector("#account-dialog");
+  accountPage.style.display = open ? "grid" : "none";
+}
+export function handleSongModal(open) {
+  const songModal = document.querySelector("#song_wrapper");
+  songModal.style.display = open ? "flex" : "none";
+  const startSongBtn = document.querySelector("#start-song");
+  // eslint-disable-next-line no-script-url
+  startSongBtn.parentNode.href = "javascript:void(0)";
+}
+export function populateAccountForm(userName, email) {
+  const accountForm = document.querySelector("#account");
+  accountForm.elements.username.value = userName;
+  accountForm.elements.email.value = email;
+}
 
-  mapManager.handleGetBeatMaps().then((songs) => {
-    generateList(songs);
-  });
+export function playHoverSound() {
+  const audioHover = document.querySelector("#hover-sound");
 
-  if (user.getUserData()?.isLogin) {
-    authenticatedView();
-  }
-  songList.addEventListener("click", (e) => {
-    if (e.target.nodeName !== "LI" && e.target.parentNode.nodeName === "LI") {
-      selectSong(e.target.parentNode);
-      return;
-    }
-    if (e.target === songList) return;
-
-    selectSong(e.target);
-  });
-  // auto populate account
-
-  // modals
-  songModal.addEventListener("click", (e) => {
-    if (e.target === songModal) {
-      songModal.style.display = "none";
-      // eslint-disable-next-line no-script-url
-      startSongBtn.parentNode.href = "javascript:void(0)";
-      removeSongFocus();
-    }
-  });
-  loginDialog.addEventListener("click", (e) => {
-    if (e.target === loginDialog) {
-      loginDialog.style.display = "none";
-    }
-  });
-  // add events to menu options
-
-  playBtn.addEventListener("click", () => {
-    songModal.style.display = "flex";
-  });
-
-  authBtn.addEventListener("click", () => {
-    loginDialog.style.display = "flex";
-  });
-  accountBtn.addEventListener("click", () => {
-    accountPage.style.display = "grid";
-    accountForm.elements.username.value = userManager.getUserData().userName;
-    accountForm.elements.email.value = userManager.getUserData().email;
-  });
-  loginForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const loginData = new FormData(loginForm);
-
-    userManager
-      .handleLogin({
-        email: loginData.get("email"),
-        password: loginData.get("password"),
-      })
-      .then((res) => {
-        if (res.success) {
-          authenticatedView();
-        } else {
-          console.log(res.message);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-  registerForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const registerData = new FormData(registerForm);
-    userManager
-      .handleRegister({
-        email: registerData.get("email"),
-        password: registerData.get("password"),
-        userName: registerData.get("username"),
-      })
-      .then((res) => {
-        if (res.success) {
-          alert("registration sucessfull");
-          loginDialog.style.display = "none";
-          return;
-        }
-        console.log(res.message);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-  accountPageClose.addEventListener("click", () => {
-    accountPage.style.display = "none";
-  });
-  logoutBtn.addEventListener("click", () => {
-    userManager
-      .handleLogout()
-      .then((res) => {
-        console.log(res);
-        notAuthenticatedView();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-
-  // authentication button group
-  const buttonGroupMember = authButtonGroup.children;
-  Object.keys(buttonGroupMember).forEach((button) => {
-    buttonGroupMember[button].addEventListener("click", (e) => {
-      authSwitch(e.target);
-    });
-  });
-
-  // add audio to menu options
-  const optionElements = menuOptions.children;
-
-  Object.keys(optionElements).forEach((option) => {
-    optionElements[option].addEventListener("mouseover", () => {
-      hoverDebounce = setTimeout(() => {
-        audioHover.currentTime = 0;
-        audioHover.play();
-      }, 50);
-    });
-    optionElements[option].addEventListener("mouseout", () => {
-      audioHover.pause();
-      clearTimeout(hoverDebounce);
-    });
-
-    optionElements[option].addEventListener("click", () => {
-      audioSelect.currentTime = 0;
-      audioSelect.play();
-    });
-  });
+  audioHover.currentTime = 0;
+  audioHover.play();
+}
+export function pauseHoverSound() {
+  const audioHover = document.querySelector("#hover-sound");
+  audioHover.pause();
+}
+export function playClickSound() {
+  const audioSelect = document.querySelector("#select-sound");
+  audioSelect.currentTime = 0;
+  audioSelect.play();
 }

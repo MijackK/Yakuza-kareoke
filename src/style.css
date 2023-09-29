@@ -168,7 +168,7 @@ a {
     rgba(255, 0, 0, 0) 100%
   );
 }
-.song_wrapper {
+#song_wrapper {
   position: absolute;
   width: 100vw;
   height: 100vh;
@@ -196,7 +196,7 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.song_list {
+#song_list {
   width: 100%;
   background-color: #ffdbe6;
   padding: 0px;
@@ -206,10 +206,10 @@ a {
   scrollbar-width: thin;
   scrollbar-color: #e96fdc rgba(0, 0, 0, 0.382);
 }
-.song_list a {
+#song_list a {
   color: black;
 }
-.song_list > li {
+#song_list > li {
   list-style: none;
   margin: 0px;
   padding: 7px;
@@ -219,7 +219,7 @@ a {
   display: grid;
   grid-template: 1fr/ 0.2fr 1fr;
 }
-.song_list > li:hover {
+#song_list > li:hover {
   border: #e96fdc solid;
 }
 .disk {
