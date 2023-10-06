@@ -1,16 +1,4 @@
-const kareokeFactory = (images) => {
-  const buttonPrompt = document.createElement("div");
-  buttonPrompt.classList.toggle("button");
-
-  const durationLine = document.createElement("div");
-  durationLine.classList.toggle("duration-line");
-
-  const longPrompt = document.createElement("div");
-  longPrompt.classList.toggle("long-container");
-  longPrompt.appendChild(buttonPrompt.cloneNode(true));
-  longPrompt.appendChild(durationLine);
-  longPrompt.appendChild(buttonPrompt.cloneNode(true));
-
+const kareokeFactory = () => {
   const timeRange = (inputList) => [
     Number((inputList[0].time - 0.1).toFixed(1)),
     inputList[0].time,
@@ -44,26 +32,18 @@ const kareokeFactory = (images) => {
     );
 
     if (lengthBefore - inputObject.inputList.length !== 0) {
-      return { Success: true, Performance: images.miss, incrementScore: 0 };
+      return { Success: true, Performance: "miss", incrementScore: 0 };
     }
 
     return { Success: false };
   };
 
-  const displayButton = (shouldAdd, prompt) => {
-    if (shouldAdd) document.querySelector("body").appendChild(prompt);
-  };
-
   return {
-    buttonPrompt,
-    longPrompt,
     timeRange,
     greatRange,
     endRange,
     shouldRun,
     removeInput,
-
-    displayButton,
   };
 };
 

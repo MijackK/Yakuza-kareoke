@@ -1,3 +1,15 @@
+import greatImg from "../images/great.png";
+import missImg from "../images/miss.png";
+import badImg from "../images/bad.png";
+import goodImg from "../images/good.png";
+
+const performanceImage = {
+  great: greatImg,
+  miss: missImg,
+  bad: badImg,
+  good: goodImg,
+};
+
 export const feedBackVisualiserFactory = () => {
   const performanceIndicator = document.querySelector(
     ".performance-visualiser"
@@ -42,7 +54,10 @@ export const feedBackVisualiserFactory = () => {
   };
   const showIndicator = (showInfo) => {
     if (showInfo.Success) {
-      performanceIndicator.style.backgroundImage = `url(${showInfo.Performance})`;
+      console.log(showInfo);
+      performanceIndicator.style.backgroundImage = `url(${
+        performanceImage[showInfo.Performance]
+      })`;
       clearAnimation([performanceIndicator], "performance-visualiser");
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
