@@ -19,12 +19,51 @@
     <audio id="song"> </audio>
 
 
-   
+   <div class="dialog"  id="calculate-score">
+    
+    <div id="score-wrapper">
+      <span id="highscore-name" class="song-name" >Judgment shinpan</span>
+      <div id="score-number" >
+        <div style="display:flex; flex-direction: column;gap:5px">
+          <span  id="final-score" style=" font-size: 2.4rem"> Scored: 9999</span>
+          <span id="high-score" >High Score</span>
+        </div>
+        <span id="score-letter" >S</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div id="great-hits" class="score-summary" >
+          <span>Great:1</span> <span>100%</span>
+        </div>
+        <div id="good-hits" class="score-summary" >
+          <span>Good:1</span> <span>100%</span>
+        </div>
+        <div id="Bad-hits" class="score-summary" >
+          <span>Bad:1</span> <span>100%</span>
+        </div>
+        <div id="miss-hits" class="score-summary" >
+          <span>Miss:1</span> <span>100%</span>
+        </div>
+      </div>
+      <div id="end-options" >
+        <div>Play Again</div>
+    
+        <a href="http://localhost:8080/index.html">
+          <div>Go Home</div>
+        </a>
+      </div>
+    </div>
+   </div>
     <div id="loading-map" class="dialog">
       <span  id="loading-disk"> </span>
    
     </div>
     <div id="menu-dialog" class="dialog" >
+      <div style="position: fixed; top:0; left:20px;margin-top:20px">
+        <span id="menu-name" class="song-name" >Song Name</span>
+        <br>
+        <span id="map-author"> Mapped by Anon</span>
+
+      </div>
     <div id="player-menu">
       
       <div class="menu-button">
@@ -50,8 +89,8 @@
    <div class="info-container">
      <span id="time"></span>
      <div class="combo-container jump-animation">
-      <div class="combo-score">10</div>
-      <div class="combo-text">COMBO</div>
+      <div id="combo-score">10</div>
+      <div id="combo-text">COMBO</div>
     </div> 
     </div>
    
