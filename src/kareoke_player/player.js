@@ -1,11 +1,7 @@
 import "./player.css";
 import "../general.css";
 import clickSound from "../audio/bass1drum-43078.mp3";
-import greatImg from "../images/great.png";
-import missImg from "../images/miss.png";
-import badImg from "../images/bad.png";
-import goodImg from "../images/good.png";
-import kareokeFactory from "../player-parts/general-parts";
+
 import { click, hold, rapid } from "../player-parts/input-parts";
 import { feedBackVisualiserFactory } from "../player-parts/display-parts";
 import { validPrompts, init } from "../canvas/canvas";
@@ -21,6 +17,9 @@ import {
   closeMenu,
   initialize,
   resetMap,
+  addMapInfo,
+  openFinalScore,
+  updateScore,
 } from "../dom-manipulation/player-dom";
 
 initialize();
@@ -36,17 +35,13 @@ let timeElapsed = 0;
 let previousTime = 0;
 let startTime = Date.now();
 let gameLoop;
+const scoreSummary = { great: 0, good: 0, bad: 0, miss: 0 };
 let score = 0;
 let combo = 0;
-let heat = false;
+
 let keydown = false;
 let animationID;
-const imageIndicator = {
-  great: greatImg,
-  miss: missImg,
-  bad: badImg,
-  good: goodImg,
-};
+
 let buttons;
 let clickInput;
 
@@ -54,46 +49,28 @@ let holdInput;
 
 let rapidInput;
 
-const heatMode = (info) => {
-  if (info.Success === true && info.incrementScore === 0 && heat === true) {
-    heat = false;
-    document.body.className = "cold-mode";
-  }
-  if (heat === false && combo >= 20) {
-    heat = true;
-    document.body.className = "heat-mode";
-  }
-};
-
 // const finalScoreCalculator = () => {};
 const incrementScore = (info) => {
-  const multiplier = heat ? 1.5 : 1;
-  const container = document.querySelector(".combo-container");
-  if (info.incrementScore > 0) {
-    score += info.incrementScore * multiplier;
-    combo += 1;
-    if (combo === 1) {
-      container.style.opacity = 1;
-    }
-    document.querySelector("#score").textContent = score;
-    document.querySelector(".combo-score").textContent = combo;
-    container.classList.toggle("jump-animation");
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        container.classList.toggle("jump-animation");
-      });
-    });
-  }
-  if (info.incrementScore === 0 && info.Success === true) {
+  if (!info.Success) return;
+  scoreSummary[info.Performance] += 1;
+  console.log(scoreSummary);
+
+  const multiplier = combo >= 20 ? 1.5 : 1;
+  if (["bad", "miss"].includes(info.Performance)) {
     combo = 0;
-    container.style.opacity = 0;
+    updateScore(score, combo);
+    return;
   }
-  heatMode(info);
+
+  score += info.incrementScore * multiplier;
+  combo += 1;
+
+  updateScore(score, combo);
 };
 
 const feedBackVisualiser = feedBackVisualiserFactory();
 
-const eventHandler = (key, inputObject, methodName) => {
+const handleKeyDown = (key, inputObject, methodName) => {
   let Success = false;
   if (inputObject.inputList.length !== 0) {
     // eslint-disable-next-line dot-notation
@@ -120,11 +97,7 @@ const rapidInputHandler = (key) => {
 };
 
 const removeGameInputs = (duration, inputObject, elapsedTime) => {
-  const info = inputObject.prototype.removeInput(
-    duration,
-    elapsedTime,
-    inputObject
-  );
+  const info = inputObject.removeInput(duration, elapsedTime, inputObject);
   feedBackVisualiser.showIndicator(info);
   incrementScore(info);
 };
@@ -133,6 +106,11 @@ const stopMap = () => {
   cancelAnimationFrame(animationID);
   play = false;
   pauseMap();
+  validPrompts(
+    timeElapsed,
+    [...clickInput.inputList, ...rapidInput.inputList, ...holdInput.inputList],
+    play
+  );
 };
 
 const timeController = () => {
@@ -153,6 +131,7 @@ const timeController = () => {
     rapidInput.inputList.length === 0
   ) {
     stopMap();
+    openFinalScore(score);
     return;
   }
   // check the number of clicks for a rapid prompt
@@ -202,23 +181,11 @@ const startMap = () => {
   closeMenu();
 };
 const initalizeButtons = () => {
-  clickInput = click(
-    buttons.filter((element) => element.type === "click"),
-    kareokeFactory,
-    imageIndicator
-  );
+  clickInput = click(buttons.filter((element) => element.type === "click"));
 
-  holdInput = hold(
-    buttons.filter((element) => element.type === "hold"),
-    kareokeFactory,
-    imageIndicator
-  );
+  holdInput = hold(buttons.filter((element) => element.type === "hold"));
 
-  rapidInput = rapid(
-    buttons.filter((element) => element.type === "rapid"),
-    kareokeFactory,
-    imageIndicator
-  );
+  rapidInput = rapid(buttons.filter((element) => element.type === "rapid"));
 };
 const pause = () => {
   stopMap();
@@ -239,10 +206,10 @@ const restart = () => {
 // Eventlistners and logic for getting
 document.querySelector("body").addEventListener("keydown", (e) => {
   if (!keydown) {
-    if (eventHandler(e.key, clickInput, "checkInput") !== true) {
+    if (handleKeyDown(e.key, clickInput, "checkInput") !== true) {
       // sometimes hold and click inputs can be valid in the same time frame,
       // this will make sure that they dont trigger at the same time.
-      eventHandler(e.key, holdInput, "checkDown");
+      handleKeyDown(e.key, holdInput, "checkDown");
     }
     rapidInputHandler(e.key);
     playClick();
@@ -295,7 +262,7 @@ mapManager
   .loadMap(songID)
   .then(({ mapInfo, audioUrl, backgroundUrl, extension }) => {
     buttons = JSON.parse(mapInfo.beatMap);
-    // separate button types
+    addMapInfo(mapInfo.name, mapInfo.author);
 
     // load them
     initalizeButtons();

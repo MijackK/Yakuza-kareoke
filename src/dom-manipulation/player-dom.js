@@ -61,7 +61,48 @@ export function closeMenu() {
   const menu = document.querySelector("#menu-dialog");
   menu.style.display = "none";
 }
-export function openFinalScore() {}
+export function addMapInfo(name, author) {
+  const songName = document.querySelector("#menu-name");
+  const mapAutor = document.querySelector("#map-author");
+  songName.textContent = name;
+  mapAutor.textContent = `Mapped by ${author}`;
+}
+export function openFinalScore(score, rank = "A") {
+  const scoreMenu = document.querySelector("#calculate-score");
+  scoreMenu.style.display = "flex";
+  // add the score
+  const finalScore = document.querySelector("#final-score");
+  finalScore.textContent = `Scored: ${score}`;
+  // add the score letter
+  const scoreLetter = document.querySelector("#score-letter");
+  scoreLetter.textContent = rank;
+}
+export function updateScore(score, combo) {
+  const comboContainer = document.querySelector(".combo-container");
+  const scoreText = document.querySelector("#score");
+  const comboText = document.querySelector("#combo-score");
+  scoreText.textContent = score;
+  comboText.textContent = combo;
+
+  if (combo === 0) {
+    comboContainer.style.opacity = "0";
+    document.body.className = "cold-mode";
+    return;
+  }
+  if (combo === 1) {
+    comboContainer.style.opacity = 1;
+  }
+  if (combo === 20) {
+    document.body.className = "heat-mode";
+  }
+
+  comboContainer.classList.toggle("jump-animation");
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      comboContainer.classList.toggle("jump-animation");
+    });
+  });
+}
 export function closeFinalScore() {}
 
 export function initialize() {}
