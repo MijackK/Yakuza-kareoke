@@ -119,4 +119,21 @@ export async function deleteMap(id) {
 
   return data;
 }
-export async function saveMedia(id) {}
+export async function saveHighScore(score) {
+  const options = {
+    method: "put",
+    body: JSON.stringify(score),
+  };
+  const headers = { "Content-Type": "application/json" };
+  const response = await apiRequest({
+    url: `kareoke/highscore`,
+    options,
+    headers,
+  });
+  if (response.ok === false) {
+    throw new Error("Problem deleting beat map");
+  }
+  const data = await response.text();
+
+  return data;
+}
