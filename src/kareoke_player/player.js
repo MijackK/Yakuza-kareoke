@@ -1,6 +1,11 @@
 import "./player.css";
 import "../general.css";
 import clickSound from "../audio/bass1drum-43078.mp3";
+import sScore from "../images/s-score.png";
+import aScore from "../images/a-score.png";
+import bScore from "../images/b-score.png";
+import cScore from "../images/c-score.png";
+import dScore from "../images/d-score.png";
 
 import { click, hold, rapid } from "../player-parts/input-parts";
 import { feedBackVisualiserFactory } from "../player-parts/display-parts";
@@ -22,6 +27,8 @@ import {
   updateScore,
 } from "../dom-manipulation/player-dom";
 
+import { saveHighScore } from "../api/kareoke";
+
 initialize();
 init();
 const mapManager = beatMapManager();
@@ -36,6 +43,8 @@ let previousTime = 0;
 let startTime = Date.now();
 let gameLoop;
 const scoreSummary = { great: 0, good: 0, bad: 0, miss: 0 };
+const incrementValue = { great: 100, good: 60, bad: 0, miss: 0 };
+
 let score = 0;
 let combo = 0;
 
@@ -48,21 +57,42 @@ let clickInput;
 let holdInput;
 
 let rapidInput;
-
+let highScore;
+let mapID;
+const scoreMultiplier = 1.5;
 // const finalScoreCalculator = () => {};
+
+const calculateRank = (promtsLength, userScore) => {
+  const multiplier = promtsLength > 20 ? 1.5 : 1;
+  // the score removed from the total, since the user wont have heatmode till combo 20
+  const first20 =
+    promtsLength > 20 ? 20 * multiplier * incrementValue.great : 0;
+  const totalScore = promtsLength * incrementValue.great * multiplier - first20;
+
+  const accuracy = userScore / totalScore;
+
+  if (accuracy > 0.9)
+    return { rank: "S", color: "#ffd700", shadow: "#ffd700ab", image: sScore };
+  if (accuracy > 0.8)
+    return { rank: "A", color: "#0ed145", shadow: "#0ed145ab", image: aScore };
+  if (accuracy > 0.7)
+    return { rank: "B", color: "#00a8f3", shadow: "#00a8f3ab", image: bScore };
+  if (accuracy > 0.6)
+    return { rank: "C", color: "#ff6c00", shadow: "#ff6c00ab", image: cScore };
+  return { rank: "D", color: "#ffffff", shadow: "#ffffffab", image: dScore };
+};
 const incrementScore = (info) => {
   if (!info.Success) return;
-  scoreSummary[info.Performance] += 1;
-  console.log(scoreSummary);
+  scoreSummary[info.performance] += 1;
 
-  const multiplier = combo >= 20 ? 1.5 : 1;
-  if (["bad", "miss"].includes(info.Performance)) {
+  if (["bad", "miss"].includes(info.performance)) {
     combo = 0;
     updateScore(score, combo);
     return;
   }
 
-  score += info.incrementScore * multiplier;
+  score +=
+    incrementValue[info.performance] * (combo >= 20 ? scoreMultiplier : 1);
   combo += 1;
 
   updateScore(score, combo);
@@ -105,7 +135,7 @@ const stopMap = () => {
   clearInterval(gameLoop);
   cancelAnimationFrame(animationID);
   play = false;
-  pauseMap();
+
   validPrompts(
     timeElapsed,
     [...clickInput.inputList, ...rapidInput.inputList, ...holdInput.inputList],
@@ -131,7 +161,14 @@ const timeController = () => {
     rapidInput.inputList.length === 0
   ) {
     stopMap();
-    openFinalScore(score);
+    const rank = calculateRank(buttons.length, score);
+    openFinalScore(score, scoreSummary, score > highScore, rank);
+    if (score > highScore) {
+      highScore = score;
+      saveHighScore(score, mapID).then((res) => {
+        alert(res);
+      });
+    }
     return;
   }
   // check the number of clicks for a rapid prompt
@@ -189,6 +226,7 @@ const initalizeButtons = () => {
 };
 const pause = () => {
   stopMap();
+  pauseMap();
   openMenu();
 };
 const restart = () => {
@@ -196,6 +234,10 @@ const restart = () => {
   previousTime = 0;
   score = 0;
   combo = 0;
+  scoreSummary.great = 0;
+  scoreSummary.good = 0;
+  scoreSummary.bad = 0;
+  scoreSummary.miss = 0;
   resetMap();
   // reload them
   initalizeButtons();
@@ -251,10 +293,14 @@ document.querySelector("#home-btn").addEventListener("click", () => {
   window.location.href = "http://localhost:8080/index.html";
   // change this to be dynamic instead of static
 });
+
 document
   .querySelector("#restart-btn")
   .addEventListener("click", () => restart());
 document.querySelector("#pause-btn").addEventListener("click", () => pause());
+document
+  .querySelector("#play-again")
+  .addEventListener("click", () => restart());
 const songID = document.location.search.split("?song=")[1];
 startLoading();
 
@@ -262,6 +308,9 @@ mapManager
   .loadMap(songID)
   .then(({ mapInfo, audioUrl, backgroundUrl, extension }) => {
     buttons = JSON.parse(mapInfo.beatMap);
+    highScore = mapInfo.highScore || 0;
+    mapID = mapInfo.id;
+
     addMapInfo(mapInfo.name, mapInfo.author);
 
     // load them
