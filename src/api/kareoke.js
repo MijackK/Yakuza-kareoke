@@ -119,10 +119,10 @@ export async function deleteMap(id) {
 
   return data;
 }
-export async function saveHighScore(score) {
+export async function saveHighScore(score, beatMapID) {
   const options = {
     method: "put",
-    body: JSON.stringify(score),
+    body: JSON.stringify({ score, beatMapID }),
   };
   const headers = { "Content-Type": "application/json" };
   const response = await apiRequest({
