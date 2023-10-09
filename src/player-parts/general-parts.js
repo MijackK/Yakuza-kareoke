@@ -32,7 +32,7 @@ const kareokeFactory = () => {
     );
 
     if (lengthBefore - inputObject.inputList.length !== 0) {
-      return { Success: true, Performance: "miss", incrementScore: 0 };
+      return { Success: true, performance: "miss", incrementScore: 0 };
     }
 
     return { Success: false };
