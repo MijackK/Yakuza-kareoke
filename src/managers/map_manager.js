@@ -37,7 +37,9 @@ export default function beatMapManager() {
 
   const clearSelectedMap = () => {
     localStorage.removeItem("selectedMap");
+    selectedMap = null;
   };
+
   const abortSelection = () => {
     controller.abort();
     controller = new AbortController();
@@ -72,8 +74,14 @@ export default function beatMapManager() {
     const response = uploadBeatmap(formData);
     return response;
   };
-  const deleteBeatMap = (id) => {
-    const response = deleteMap(id);
+  const deleteBeatMap = async (id) => {
+    const response = await deleteMap(id);
+    URL.revokeObjectURL(backgroundUrl);
+    URL.revokeObjectURL(audioUrl);
+    if (id === selectedMap.id) {
+      clearSelectedMap();
+    }
+
     return response;
   };
   const directUrl = (path) => `http://${config.objectServer}/${path}`;
