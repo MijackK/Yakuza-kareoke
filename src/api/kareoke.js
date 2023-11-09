@@ -29,10 +29,6 @@ export async function getBeatMaps() {
     headers,
   });
 
-  if (response.ok === false) {
-    throw new Error("Problem getting user beat maps, please try again");
-  }
-
   const data = await response.json();
 
   return data;
@@ -62,9 +58,7 @@ export async function getBeatMap(id, signal) {
     options,
     headers,
   });
-  if (response.ok === false) {
-    throw new Error("Problem getting user beat map, please try again");
-  }
+
   const data = await response.json();
 
   return data;
@@ -75,9 +69,6 @@ export async function getMedia(url, signal) {
     signal,
   });
 
-  if (response.ok === false) {
-    throw new Error("media doesnt exist");
-  }
   const data = await response.blob();
 
   return data;
@@ -94,9 +85,7 @@ export async function saveBeatMap(mapData) {
     options,
     headers,
   });
-  if (response.ok === false) {
-    throw new Error("Could not update Beat Map");
-  }
+
   const data = await response.text();
 
   return data;
@@ -112,9 +101,7 @@ export async function deleteMap(id) {
     options,
     headers,
   });
-  if (response.ok === false) {
-    throw new Error("Problem deleting beat map");
-  }
+
   const data = await response.text();
 
   return data;
@@ -130,9 +117,7 @@ export async function saveHighScore(score, beatMapID) {
     options,
     headers,
   });
-  if (response.ok === false) {
-    throw new Error("Problem deleting beat map");
-  }
+
   const data = await response.text();
 
   return data;

@@ -165,9 +165,14 @@ const timeController = () => {
     openFinalScore(score, scoreSummary, score > highScore, rank);
     if (score > highScore) {
       highScore = score;
-      saveHighScore(score, mapID).then((res) => {
-        alert(res);
-      });
+      saveHighScore(score, mapID)
+        .then((res) => {
+          alert(res);
+        })
+        .error((err) => {
+          console.log(err);
+          console.log("Could not update highscore");
+        });
     }
     return;
   }

@@ -6,11 +6,8 @@ export default function userFactory() {
   const getUserData = () => userData;
   const handleLogin = async (authData) => {
     const loginResponse = await login(authData);
-    if (loginResponse.success) {
-      userData = { ...loginResponse, isLogin: true };
-      saveUserInfo(userData);
-    }
-    return loginResponse;
+    userData = { ...loginResponse, isLogin: true };
+    saveUserInfo(userData);
   };
   const handleRegister = async (data) => {
     const registerResponse = await register(data);

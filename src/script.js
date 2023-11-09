@@ -29,14 +29,20 @@ userManager.isLogin().then(() => {
     authenticatedView();
   }
 });
-mapManager.handleGetBeatMaps().then((songs) => {
-  songs.forEach((song) => {
-    const listItem = generateSong(song);
-    listItem.addEventListener("click", () => {
-      selectSong(song, listItem);
+mapManager
+  .handleGetBeatMaps()
+  .then((songs) => {
+    songs.forEach((song) => {
+      const listItem = generateSong(song);
+      listItem.addEventListener("click", () => {
+        selectSong(song, listItem);
+      });
     });
+  })
+  .catch((err) => {
+    console.log(err);
+    console.log("Problem getting user beat maps");
   });
-});
 
 // event lsiteners
 document.querySelector("#auth-dialog").addEventListener("click", (e) => {
