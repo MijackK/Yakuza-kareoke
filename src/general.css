@@ -9,12 +9,12 @@
   min-height: 400px;
   flex-direction: column;
   padding: 13px;
-}
-.general-form > label {
-  font-size: 1.3rem;
   color: var(--primary-color);
 }
-.general-form > input[type="text"],
+.general-form label {
+  font-size: 1.3rem;
+}
+.general-form input[type="text"],
 input[type="email"],
 input[type="password"] {
   background-color: transparent;
@@ -28,14 +28,14 @@ input[type="password"] {
   outline: none;
   margin-bottom: 20px;
 }
-.general-form > input[type="text"]:focus,
+.general-form input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus {
   border: solid grey;
   border-width: thin;
   color: var(--primary-color);
 }
-.general-form > select {
+.general-form select {
   margin-top: 20px;
   margin-bottom: 20px;
   font-family: var(--primary-font);
@@ -45,11 +45,11 @@ input[type="password"]:focus {
   border: none;
   padding: 5px;
 }
-.general-form > input[type="file"] {
+.general-form input[type="file"] {
   margin-top: 20px;
   margin-bottom: 20px;
 }
-.general-form > button {
+.general-form button {
   border: none;
   background-color: var(--secondary-bg-color);
   color: var(--primary-color);
@@ -59,10 +59,10 @@ input[type="password"]:focus {
   border-radius: 10px;
   cursor: pointer;
 }
-.general-form > button:hover {
+.general-form button:hover {
   filter: brightness(1.2);
 }
-.general-form > button:disabled {
+.general-form button:disabled {
   filter: grayscale(1);
   cursor: wait;
 }

@@ -3,6 +3,7 @@ import hoverSound from "../audio/buttonpress-94482.mp3";
 import selectSound from "../audio/interface-124464.mp3";
 import stray from "../video/particles-27669.mp4";
 import homeSong from "../audio/reflected-light-147979.mp3";
+import textEdit from "../components/textEdit";
 
 export function initialize() {
   // add the  audio elements
@@ -25,7 +26,7 @@ export function initialize() {
   const homeAudio = document.querySelector("#home-audio");
   homeAudio.src = homeSong;
   homeAudio.volume = 0.2;
-  homeAudio.play();
+  // homeAudio.play();
   backgroundImage.src = stray;
   backgroundImage.play();
 
@@ -82,18 +83,22 @@ export function selectSong(song, listItem) {
 export function authenticatedView() {
   const authBtn = document.querySelector(".auth");
   const accountBtn = document.querySelector(".account");
+  const logout = document.querySelector("#logout-btn");
   const loginDialog = document.querySelector("#auth-dialog");
   authBtn.style.display = "none";
   accountBtn.style.display = "block";
   loginDialog.style.display = "none";
+  logout.style.display = "block";
 }
 export function notAuthenticatedView() {
   const authBtn = document.querySelector(".auth");
   const accountBtn = document.querySelector(".account");
+  const logout = document.querySelector("#logout-btn");
   const accountPage = document.querySelector("#account-dialog");
   accountBtn.style.display = "none";
   authBtn.style.display = "block";
   accountPage.style.display = "none";
+  logout.style.display = "none";
 }
 // switches between login and signup form
 export function authSwitch(button) {
@@ -127,7 +132,7 @@ export function handleLoginDialog(open) {
 }
 export function handleAccountPage(open) {
   const accountPage = document.querySelector("#account-dialog");
-  accountPage.style.display = open ? "grid" : "none";
+  accountPage.style.display = open ? "flex" : "none";
 }
 export function handleSongModal(open) {
   const songModal = document.querySelector("#song_wrapper");
@@ -137,9 +142,17 @@ export function handleSongModal(open) {
   startSongBtn.parentNode.href = "javascript:void(0)";
 }
 export function populateAccountForm(userName, email) {
-  const accountForm = document.querySelector("#account");
-  accountForm.elements.username.value = userName;
-  accountForm.elements.email.value = email;
+  const userNameValue = document.querySelector("#username-value");
+  userNameValue.textContent = userName;
+  const emailValue = document.querySelector("#email-value");
+  emailValue.textContent = email;
+}
+export function accountEdit(formID, view, edit) {
+  const form = document.querySelector(`#${formID}`);
+  const valueView = form.querySelector(".value-view");
+  valueView.style.display = view;
+  const editView = form.querySelector(".edit-view");
+  editView.style.display = edit;
 }
 
 export function playHoverSound() {

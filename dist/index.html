@@ -44,6 +44,7 @@
       </div>
     </div>
   </div>
+
   <div id="auth-dialog" class="dialog">
     <div class="auth-wrapper">
       <div class="button-group">
@@ -56,6 +57,7 @@
         <input type="email" id="email" name="email">
         <label for="password">PASSWORD</label>
         <input type="password" id="password" name="password">
+        <a style="cursor:pointer"><p>Forgot Password?</p></a>
         <button type="submit">SUBMIT</button>
       </form>
       <form action="" class="general-form" id="register">
@@ -71,29 +73,68 @@
       </form>
     </div>
   </div>
-  <div id="account-dialog" >
-  
-    <div class="account-header">
-      <h1>Account</h1>
-      <button id="close-account">close</span>
-    </div>
-    <div>
-      <button id="logout-btn">logout</button>
-      <h2>Account Details</h2>
-    <form action="" class="general-form" id="account">
-      <label for="username">USERNAME</label>
-      <input type="text" id="username" name="username">
-      <label for="email">EMAIL</label>
-      <input type="email" id="email" name="email">
+  <div id="account-dialog"  class="dialog" >
 
-    </form>
-    <a href="#">Verify account</a>
+    <div id="account"  >
+        <form class="general-form" id="username-form" style="min-height:0px;" >
+          <label >USERNAME</label>
+          <div class="value-view">
+            <span id="username-value" style="font-size:1.4rem">
+            
+            </span>
+            <button type="button" id="username-edit">&#9998</button>
+          </div>
+         <div class="edit-view" style="display:none">
+          <input name="currentPassword" placeholder="current password" type="password" autocomplete="new-password">
+          <input name="username" placeholder="new username" name="value"  type="text" >
+          <div>
+            <button >change</button>
+            <button type="button" id="username-close" >cancel</button>
+          </div>
+         </div>
+        </form>
+        <form class="general-form" id="email-form" style="min-height:0px" >
+          <label >EMAIL</label>
+          <div class="value-view">
+            <span id="email-value" style="font-size:1.4rem">
+            
+            </span>
+            <button type="button" id="email-edit">&#9998</button>
+          </div>
+         <div class="edit-view" style="display:none">
+          <input name="currentPassword" placeholder="current password" type="password" autocomplete="new-password">
+          <input name="email" placeholder="new email" name="value"  type="text" >
+          <div>
+            <button >change</button>
+            <button type="button" id="email-close" >cancel</button>
+          </div>
+         </div>
+        </form>
+        
+        <form class="general-form" id="password-form" style="min-height:0px" >
+          <label >Password</label>
+          <div class="value-view">
+            <span id="password-value" style="font-size:1.4rem">
+            *********
+            </span>
+            <button type="button" id="password-edit">&#9998</button>
+          </div>
+         <div class="edit-view" style="display:none">
+          <input name="currentPassword" placeholder="current password" type="password" autocomplete="new-password">
+          <input name="password" placeholder="new password" name="value"  type="password" >
+          <input name="confirmPassword" placeholder="new password" name="value"  type="password" >
+          <div>
+            <button >change</button>
+            <button type="button" id="password-close" >cancel</button>
+          </div>
+         </div>
+        </form>
+     
+
+  </div>
   
-  </div>
-  <div>
-    <h2>Highscores</h2>
-  </div>
- 
+
+
   </div>
   <video class="background_image" loop></video>
   <div class="background-overlay"></div>
@@ -105,6 +146,7 @@
     <div class="about">ABOUT</div>
     <div class="auth">LOG IN</div>
     <div class="account">ACCOUNT</div>
+    <div id="logout-btn">LOGOUT</div>
   </div>
 </div>
 </body>

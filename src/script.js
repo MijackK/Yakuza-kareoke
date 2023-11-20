@@ -15,6 +15,7 @@ import {
   pauseHoverSound,
   playClickSound,
   generateSong,
+  accountEdit,
 } from "./dom-manipulation/home-dom";
 import user from "./managers/user-manager";
 import map from "./managers/map_manager";
@@ -28,6 +29,8 @@ userManager.isLogin().then(() => {
   if (userManager.getUserData()?.isLogin) {
     authenticatedView();
   }
+  const { userName, email } = userManager.getUserData();
+  populateAccountForm(userName, email);
 });
 mapManager
   .handleGetBeatMaps()
@@ -66,12 +69,6 @@ document.querySelector("#auth-dialog").addEventListener("click", (e) => {
   }
 });
 
-document.querySelector("#auth-dialog").addEventListener("click", (e) => {
-  if (e.target.id === "auth-dialog") {
-    handleLoginDialog(false);
-  }
-});
-
 document.querySelector(".play").addEventListener("click", () => {
   handleSongModal(true);
 });
@@ -83,8 +80,6 @@ document.querySelector(".auth").addEventListener("click", () => {
 const accountBtn = document.querySelector(".account");
 accountBtn.addEventListener("click", () => {
   handleAccountPage(true);
-  const { userName, email } = userManager.getUserData();
-  populateAccountForm(userName, email);
 });
 
 const loginForm = document.querySelector("#login");
@@ -98,11 +93,8 @@ loginForm.addEventListener("submit", (e) => {
       password: loginData.get("password"),
     })
     .then((res) => {
-      if (res.success) {
-        authenticatedView();
-      } else {
-        console.log(res.message);
-      }
+      authenticatedView();
+      console.log(res);
     })
     .catch((err) => {
       console.log(err);
@@ -120,19 +112,18 @@ registerForm.addEventListener("submit", (e) => {
       userName: registerData.get("username"),
     })
     .then((res) => {
-      if (res.success) {
-        handleLoginDialog(false);
-        return;
-      }
-      console.log(res.message);
+      handleLoginDialog(false);
+
+      console.log(res);
     })
     .catch((err) => {
       console.log(err);
     });
 });
 
-const accountPageClose = document.querySelector("#close-account");
-accountPageClose.addEventListener("click", () => {
+const accountPageClose = document.querySelector("#account-dialog");
+accountPageClose.addEventListener("click", (e) => {
+  if (e.target.id !== "account-dialog") return;
   handleAccountPage(false);
 });
 
@@ -147,6 +138,48 @@ document.querySelector("#logout-btn").addEventListener("click", () => {
       console.log(err);
     });
 });
+
+// account details edit
+document.querySelector("#password-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  console.log(e.target);
+});
+document
+  .querySelector("#password-edit")
+  .addEventListener("click", () =>
+    accountEdit("password-form", "none", "block")
+  );
+document
+  .querySelector("#password-close")
+  .addEventListener("click", () =>
+    accountEdit("password-form", "block", "none")
+  );
+
+document.querySelector("#username-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  console.log(e.target);
+});
+document
+  .querySelector("#username-edit")
+  .addEventListener("click", () =>
+    accountEdit("username-form", "none", "block")
+  );
+document
+  .querySelector("#username-close")
+  .addEventListener("click", () =>
+    accountEdit("username-form", "block", "none")
+  );
+
+document.querySelector("#email-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  console.log(e.target);
+});
+document
+  .querySelector("#email-edit")
+  .addEventListener("click", () => accountEdit("email-form", "none", "block"));
+document
+  .querySelector("#email-close")
+  .addEventListener("click", () => accountEdit("email-form", "block", "none"));
 
 // authentication button group
 const buttonGroupMember = document.querySelector(".button-group").children;
