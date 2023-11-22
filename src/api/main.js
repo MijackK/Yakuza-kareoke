@@ -3,12 +3,12 @@ import responseText from "../utility.js/responseText";
 
 const { domain } = config;
 
-export default async function apiRequest({ url, options, headers, token }) {
+export default async function apiRequest({ url, options, headers }) {
   const response = await fetch(`http://${domain}/${url}`, {
     mode: "cors",
     credentials: "include",
     headers: {
-      CSRF_TOKEN: token,
+      CSRF_TOKEN: sessionStorage.getItem("csrfToken"),
       ...headers,
     },
     ...options,
