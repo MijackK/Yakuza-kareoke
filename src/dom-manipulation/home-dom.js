@@ -3,9 +3,9 @@ import hoverSound from "../audio/buttonpress-94482.mp3";
 import selectSound from "../audio/interface-124464.mp3";
 import stray from "../video/particles-27669.mp4";
 import homeSong from "../audio/reflected-light-147979.mp3";
-import textEdit from "../components/textEdit";
 
-export function initialize() {
+export function initialize(verified) {
+  console.log(verified);
   // add the  audio elements
   const audioHover = document.createElement("audio");
   audioHover.id = "hover-sound";
@@ -141,11 +141,15 @@ export function handleSongModal(open) {
   // eslint-disable-next-line no-script-url
   startSongBtn.parentNode.href = "javascript:void(0)";
 }
-export function populateAccountForm(userName, email) {
+export function populateAccountForm(userName, email, verified) {
   const userNameValue = document.querySelector("#username-value");
   userNameValue.textContent = userName;
   const emailValue = document.querySelector("#email-value");
   emailValue.textContent = email;
+  if (verified === false) {
+    const verifyBtn = document.querySelector("#verify-button");
+    verifyBtn.style.display = "inline-block";
+  }
 }
 export function accountEdit(formID, view, edit) {
   const form = document.querySelector(`#${formID}`);

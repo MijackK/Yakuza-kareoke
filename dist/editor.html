@@ -73,7 +73,6 @@
   
       <div class="tool-bar">
         <div id="play">&#9654</div>
-    
         <div  id ="click" >
           <img id="click-image" class="active-prompt"  alt="Click"/>
         </div>
@@ -99,11 +98,17 @@
  <video id="background-video" src="" class="background"></video>
  
 <div id="modal">
+  <p style="text-align: center; position:absolute;bottom:0;width:100%">
+    <button id="exit" >EDIT</button>
+  </p>
+
   <div class="editor-header">
     <h1>Editor</h1>
 <div>
-  <button id="exit" >Close Menu</button>
-  <Button>Go Home</Button>
+  <div  class="menu-button">
+    <Button id="home" style="font-size: 2.5rem;"><a href="http://localhost:8080/">&#x2302;</a> </Button>
+  </div>
+ 
 </div>
  
 
@@ -132,7 +137,7 @@
   
       <div class="not-selected">
       
-        <span id="selected-status">Loading..</span>
+        <p id="selected-status">Loading..</p>
       </div>
       
       

@@ -23,14 +23,15 @@ import map from "./managers/map_manager";
 const userManager = user();
 const mapManager = map();
 let hoverDebounce = null;
+
 initialize();
 
 userManager.isLogin().then(() => {
   if (userManager.getUserData()?.isLogin) {
     authenticatedView();
   }
-  const { userName, email } = userManager.getUserData();
-  populateAccountForm(userName, email);
+  const { userName, email, verified } = userManager.getUserData();
+  populateAccountForm(userName, email, verified);
 });
 mapManager
   .handleGetBeatMaps()
@@ -95,6 +96,8 @@ loginForm.addEventListener("submit", (e) => {
     .then((res) => {
       authenticatedView();
       console.log(res);
+      const { userName, email, verified } = userManager.getUserData();
+      populateAccountForm(userName, email, verified);
     })
     .catch((err) => {
       console.log(err);
@@ -142,7 +145,15 @@ document.querySelector("#logout-btn").addEventListener("click", () => {
 // account details edit
 document.querySelector("#password-form").addEventListener("submit", (e) => {
   e.preventDefault();
-  console.log(e.target);
+  const data = new FormData(e.target);
+  userManager
+    .handlePasswordChange(data.get("currentPassword"), data.get("newPassword"))
+    .then((res) => {
+      console.log(res);
+      e.target.reset();
+      accountEdit("password-form", "block", "none");
+    })
+    .catch((err) => console.log(err));
 });
 document
   .querySelector("#password-edit")
@@ -157,7 +168,23 @@ document
 
 document.querySelector("#username-form").addEventListener("submit", (e) => {
   e.preventDefault();
-  console.log(e.target);
+  const data = new FormData(e.target);
+  userManager
+    .handleEditAccount(
+      data.get("currentPassword"),
+      "username",
+      data.get("username")
+    )
+    .then(() => {
+      userManager.setUserData("userName", data.get("username"));
+      accountEdit("username-form", "block", "none");
+      const { userName, email } = userManager.getUserData();
+      populateAccountForm(userName, email);
+      e.target.reset();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 document
   .querySelector("#username-edit")
@@ -172,7 +199,19 @@ document
 
 document.querySelector("#email-form").addEventListener("submit", (e) => {
   e.preventDefault();
-  console.log(e.target);
+  const data = new FormData(e.target);
+  userManager
+    .handleEditAccount(data.get("currentPassword"), "email", data.get("email"))
+    .then(() => {
+      userManager.setUserData("email", data.get("email"));
+      accountEdit("email-form", "block", "none");
+      const { userName, email } = userManager.getUserData();
+      populateAccountForm(userName, email);
+      e.target.reset();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 document
   .querySelector("#email-edit")
@@ -180,6 +219,18 @@ document
 document
   .querySelector("#email-close")
   .addEventListener("click", () => accountEdit("email-form", "block", "none"));
+
+document.querySelector("#verify-button").addEventListener("click", (e) => {
+  userManager
+    .handleEmailVerifyGeneration()
+    .then((res) => {
+      console.log(res);
+      e.target.style.display = "none";
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
 // authentication button group
 const buttonGroupMember = document.querySelector(".button-group").children;

@@ -54,9 +54,8 @@ export const feedBackVisualiserFactory = () => {
   };
   const showIndicator = (showInfo) => {
     if (showInfo.Success) {
-      console.log(showInfo);
       performanceIndicator.style.backgroundImage = `url(${
-        performanceImage[showInfo.Performance]
+        performanceImage[showInfo.performance]
       })`;
       clearAnimation([performanceIndicator], "performance-visualiser");
       requestAnimationFrame(() => {

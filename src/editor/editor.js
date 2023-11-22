@@ -31,6 +31,7 @@ import {
   displaySelectedStatus,
   showHideOption,
   addPromptSrc,
+  showEdit,
 } from "../dom-manipulation/editor-dom";
 import beatMapManager from "../managers/map_manager";
 import userFactory from "../managers/user-manager";
@@ -58,6 +59,7 @@ const loadMedia = (audio, background, extension) => {
         mapManager.getAudioUrl(),
         mapManager.getBackgroundUrl()
       );
+      showEdit(true);
     });
 };
 const setSelectedMap = (beatMap, extension) => {
@@ -76,6 +78,7 @@ const addMapToList = (beatMap) => {
     if (selectedMap?.id === beatMap.id) {
       return;
     }
+    showEdit(false);
     loadingMap();
     mapManager.abortSelection();
     setSelectedMap(beatMap, mediaExtension);
@@ -101,7 +104,12 @@ const addMapToList = (beatMap) => {
     if (!acceptDelete) return;
     mapManager.deleteBeatMap(beatMap.id).then((res) => {
       listItem.remove();
+      if (mapManager.getSelectedMap() === null) {
+        displaySelectedStatus("No map selected");
+      }
+
       alert(res);
+      // set selected view to not selected
     });
   });
 };
@@ -114,8 +122,12 @@ const stopEditor = () => {
 const updateGraphics = () => {
   validPrompts(editor.getElapsedTime(), editor.getBeatMap());
   drawMap(editor.getBeatMap(), editor.getElapsedTime());
-  updateMediaTime(editor.getElapsedTime());
+
   updateDomTime(editor.getElapsedTime());
+  mapProgressPrompts(
+    editor.getBeatMap(), // replace with beatMap
+    editor.getAudioDuration()
+  );
 };
 const timeController = () => {
   const elapsedTime = editor.getElapsedTime();
@@ -183,6 +195,7 @@ const checkSelectedSong = () => {
         const extension = mapManager.getExtension(beatMap.background);
         loadMedia(beatMap.audio, beatMap.background, extension);
         editor.setBeatMap(mapManager.getSelectedMap().beatMap);
+        showEdit(true);
         return;
       }
       displaySelectedStatus("No map selected");
@@ -318,6 +331,7 @@ progressBar.addEventListener("mousedown", (e) => {
   const timePosition = moveProgressThumb(e);
   editor.progressBarTimeUpdate(timePosition);
   updateGraphics();
+  updateMediaTime(editor.getElapsedTime());
 });
 
 progressBar.addEventListener("mouseup", () => {
@@ -329,6 +343,7 @@ progressBar.addEventListener("mousemove", (e) => {
     const timePosition = moveProgressThumb(e);
     editor.progressBarTimeUpdate(timePosition);
     updateGraphics();
+    updateMediaTime(editor.getElapsedTime());
   }
 });
 
@@ -344,6 +359,7 @@ document.querySelector("body").addEventListener("keydown", (e) => {
   editor.timeStep(direction);
   autoThumbMovement(currentAudioTime() / editor.getAudioDuration());
   updateGraphics();
+  updateMediaTime(editor.getElapsedTime());
 });
 
 document.querySelector("body").addEventListener("keydown", (e) => {
@@ -369,17 +385,15 @@ document.querySelector("#login").addEventListener("submit", (e) => {
       password: loginData.get("password"),
     })
     .then(async (res) => {
-      if (res.success) {
-        authenicatedView();
-        checkSelectedSong();
-        const beatMaps = await mapManager.handleGetUserBeatMaps();
-        // get user songs and display them on my map.
-        beatMaps.forEach((beatMap) => {
-          addMapToList(beatMap);
-        });
-      } else {
-        console.log(res.message);
-      }
+      authenicatedView();
+      checkSelectedSong();
+      const beatMaps = await mapManager.handleGetUserBeatMaps();
+      // get user songs and display them on my map.
+      beatMaps.forEach((beatMap) => {
+        addMapToList(beatMap);
+      });
+
+      console.log(res);
     })
     .catch((err) => {
       console.log(err);
@@ -392,18 +406,12 @@ document
   .querySelector("#editor-audio")
   .addEventListener("loadedmetadata", (e) => {
     editor.setAudioDuration(e.target.duration);
-    mapProgressPrompts(
-      editor.getBeatMap(), // replace with beatMap
-      e.target.duration
-    );
+
     updateGraphics();
   });
 userManager
   .isLogin()
   .then(async () => {
-    if (userManager.getUserData().isLogin === false) {
-      notAuthenticatedView();
-    }
     if (userManager.getUserData().isLogin) {
       authenicatedView();
       checkSelectedSong();
@@ -416,4 +424,5 @@ userManager
   })
   .catch((e) => {
     console.log(e);
+    notAuthenticatedView();
   });

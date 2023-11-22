@@ -2,6 +2,16 @@ import rapidText from "../images/rapid.png";
 import holdText from "../images/hold.png";
 import clickText from "../images/click.png";
 
+export function showEdit(show) {
+  const editBtn = document.querySelector("#exit");
+
+  if (show) {
+    editBtn.style.display = "inline-block";
+    return;
+  }
+  editBtn.style.display = "none";
+}
+
 export function focusBtn(element) {
   const clickBtn = document.querySelector("#click-image");
   const holdBtn = document.querySelector("#hold-image");
@@ -165,15 +175,17 @@ export function showSelectedSong(
     backgroundImage.style.display = "block";
   }
 }
-export function removeSelectedSong() {
-  // clean up the blob url
-  // switch selected map screen to no map selected.
-}
+
 export function displaySelectedStatus(text) {
+  const notSelected = document.querySelector(".not-selected");
+  notSelected.style.display = "block";
+  const selectSummary = document.querySelector("#selected-summary");
+  selectSummary.style.display = "none";
+
   const selectedStatus = document.querySelector("#selected-status");
   selectedStatus.textContent = text;
+  showEdit(false);
 }
-
 export function listBeatMap(beatMap, extension, source) {
   const mapList = document.querySelector("#map-list");
   const listItem = document.createElement("li");

@@ -73,7 +73,7 @@ a {
   width: 30vw;
   min-width: 300px;
   border-left: solid grey thin;
-  background-color: var(--primary-bg-color);
+
   padding: 15px;
 }
 #account label {

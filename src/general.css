@@ -64,7 +64,7 @@ input[type="password"]:focus {
 }
 .general-form button:disabled {
   filter: grayscale(1);
-  cursor: wait;
+  cursor: not-allowed;
 }
 
 .dark_mode {

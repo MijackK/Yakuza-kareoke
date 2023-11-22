@@ -165,11 +165,12 @@ const timeController = () => {
     openFinalScore(score, scoreSummary, score > highScore, rank);
     if (score > highScore) {
       highScore = score;
+
       saveHighScore(score, mapID)
         .then((res) => {
-          alert(res);
+          console.log(res);
         })
-        .error((err) => {
+        .catch((err) => {
           console.log(err);
           console.log("Could not update highscore");
         });
@@ -223,11 +224,12 @@ const startMap = () => {
   closeMenu();
 };
 const initalizeButtons = () => {
-  clickInput = click(buttons.filter((element) => element.type === "click"));
+  const buttonsCopy = buttons.map((button) => ({ ...button }));
+  clickInput = click(buttonsCopy.filter((element) => element.type === "click"));
 
-  holdInput = hold(buttons.filter((element) => element.type === "hold"));
+  holdInput = hold(buttonsCopy.filter((element) => element.type === "hold"));
 
-  rapidInput = rapid(buttons.filter((element) => element.type === "rapid"));
+  rapidInput = rapid(buttonsCopy.filter((element) => element.type === "rapid"));
 };
 const pause = () => {
   stopMap();
@@ -295,7 +297,7 @@ document.querySelector("#resume-btn").addEventListener("click", () => {
   startMap();
 });
 document.querySelector("#home-btn").addEventListener("click", () => {
-  window.location.href = "http://localhost:8080/index.html";
+  window.location.pathname = "";
   // change this to be dynamic instead of static
 });
 
@@ -306,6 +308,7 @@ document.querySelector("#pause-btn").addEventListener("click", () => pause());
 document
   .querySelector("#play-again")
   .addEventListener("click", () => restart());
+
 const songID = document.location.search.split("?song=")[1];
 startLoading();
 

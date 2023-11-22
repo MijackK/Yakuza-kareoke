@@ -17,6 +17,17 @@ body {
   border-color: var(--secondary-bg-color);
   width: 70%;
 }
+#exit {
+  cursor: pointer;
+  border: none;
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.815);
+  width: 150px;
+  font-family: var(--primary-font);
+  background-color: rgb(12, 80, 128);
+  border-radius: 6px;
+  display: none;
+}
 
 .player {
   align-self: end;
@@ -274,6 +285,7 @@ a {
   display: none;
   flex-direction: column;
   justify-content: space-around;
+  width: 100%;
 }
 #select-name {
   font-size: 2rem;
@@ -282,6 +294,7 @@ a {
 #map-video {
   width: 100%;
   height: auto;
+  max-height: 313px;
 }
 #map-image {
   width: 100%;
@@ -289,7 +302,6 @@ a {
 }
 #summary-wrapper {
   display: flex;
-  justify-content: center;
 }
 #map-section {
   padding: 20px;
@@ -297,6 +309,10 @@ a {
 }
 .not-selected {
   align-self: center;
+  width: 100%;
+}
+#selected-status {
+  text-align: center;
 }
 .beat-map {
   display: flex;
