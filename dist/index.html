@@ -57,7 +57,7 @@
         <input type="email" id="email" name="email">
         <label for="password">PASSWORD</label>
         <input type="password" id="password" name="password">
-        <a style="cursor:pointer"><p>Forgot Password?</p></a>
+        <a style="cursor:pointer" href="passwordresest.html"><p>Forgot Password?</p></a>
         <button type="submit">SUBMIT</button>
       </form>
       <form action="" class="general-form" id="register">
@@ -112,7 +112,7 @@
         </form>
         
         <form class="general-form" id="password-form" style="min-height:0px" >
-          <label >Password</label>
+          <label >PASSWORD</label>
           <div class="value-view">
             <span id="password-value" style="font-size:1.4rem">
             *********
@@ -121,14 +121,17 @@
           </div>
          <div class="edit-view" style="display:none">
           <input name="currentPassword" placeholder="current password" type="password" autocomplete="new-password">
-          <input name="password" placeholder="new password" name="value"  type="password" >
-          <input name="confirmPassword" placeholder="new password" name="value"  type="password" >
-          <div>
-            <button >change</button>
+          <input name="newPassword" placeholder="new password" name="value"  type="password" >
+          <input name="confirmPassword" placeholder="confirm password" name="value"  type="password" >
+       
+          <div >
+        
+            <button  >change</button>
             <button type="button" id="password-close" >cancel</button>
           </div>
          </div>
         </form>
+        <button id="verify-button" style="display:none">Verify email</button>
      
 
   </div>

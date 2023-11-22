@@ -46,15 +46,109 @@ export async function register({ email, password, userName }) {
 
   const response = await apiRequest({ url: "auth/register", options, headers });
 
-  const data = await response.json();
+  const data = await response.text();
+
+  return data;
+}
+export async function editAccountInfo(password, email, column, value) {
+  const options = {
+    body: JSON.stringify({ email, password, column, value }),
+    method: "post",
+  };
+  const headers = {
+    "Content-Type": "application/json",
+  };
+
+  const response = await apiRequest({
+    url: "auth/change_acount_info",
+    options,
+    headers,
+  });
+
+  const data = await response.text();
 
   return data;
 }
 
-export async function verifyEmail() {}
+export async function generateEmailVerifyToken() {
+  const options = {
+    method: "post",
+  };
 
-export async function forgotPassword() {}
+  const response = await apiRequest({
+    url: "auth/generate_verify_url",
+    options,
+  });
 
-export async function resetPassword() {}
+  const data = await response.text();
 
-export async function startEmailVerification() {}
+  return data;
+}
+export async function verifyEmail(token) {
+  const options = {
+    body: JSON.stringify({ token }),
+    method: "post",
+  };
+  const headers = {
+    "Content-Type": "application/json",
+  };
+
+  const response = await apiRequest({
+    url: "auth/verify_email",
+    options,
+    headers,
+  });
+
+  const data = await response.text();
+
+  return data;
+}
+
+export async function forgotPassword(form) {
+  const options = {
+    body: form,
+    method: "post",
+  };
+
+  const response = await apiRequest({
+    url: "auth/generate_reset_url",
+    options,
+  });
+
+  const data = await response.text();
+  return data;
+}
+
+export async function recoverPassword(form) {
+  const options = {
+    body: form,
+    method: "post",
+  };
+
+  const response = await apiRequest({
+    url: "auth/recover_password",
+    options,
+  });
+
+  const data = await response.text();
+  return data;
+}
+export async function changePassword(email, currentPassword, newPassword) {
+  const options = {
+    body: JSON.stringify({ email, currentPassword, newPassword }),
+    method: "post",
+  };
+  const headers = {
+    "Content-Type": "application/json",
+  };
+
+  const response = await apiRequest({
+    url: "auth/change_password",
+    options,
+    headers,
+  });
+
+  const data = await response.text();
+
+  return data;
+}

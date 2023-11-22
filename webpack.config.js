@@ -6,6 +6,8 @@ module.exports = {
     script: "./src/script.js",
     editor: "./src/editor/editor.js",
     player: "./src/kareoke_player/player.js",
+    verify: "./src/verify/verify-email.js",
+    reset: "./src/verify/password-reset.js",
   },
 
   output: {
