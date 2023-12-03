@@ -7,8 +7,6 @@ import rightImg from "../images/right.png";
 
 const entryOffset = 3.0; // determines the speed of prompt
 const widthPerSecond = Number(((1897.5 - 400) / entryOffset).toFixed(3));
-const lineArr = [1.3, 2.6, 3.9];
-const increase = 1.3;
 
 const symbols = {
   ArrowUp: document.createElement("img"),
@@ -44,16 +42,9 @@ export const init = () => {
   } else console.log("canvas not supported");
 };
 
-const verticleLines = (elapsedTime, lines, play) => {
-  const time = elapsedTime + entryOffset;
-
-  for (let i = 0; i < lines; i += 1) {
-    if (lineArr[i] + entryOffset < time) {
-      lineArr[i] += increase * 3;
-    }
-    const xCoords =
-      lineArr[i] * widthPerSecond - (time - entryOffset) * widthPerSecond;
-    if (play === false) return;
+const verticleLines = (elapsedTime) => {
+  for (let i = 0; i < 3; i += 1) {
+    const xCoords = 633 * (i + 1) - widthPerSecond * (elapsedTime % 1.27);
     ctx.beginPath();
     ctx.strokeStyle = "white";
     ctx.fillStyle = "white";
@@ -111,9 +102,9 @@ const spanwLongPrompts = (time, duration, type, symbol, held, clicks) => {
   );
   ctx.stroke();
 };
-export const validPrompts = (time, buttons, play) => {
+export const validPrompts = (time, buttons) => {
   ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
-  verticleLines(time, lineArr.length, play);
+  verticleLines(time);
   for (let i = 0; i < buttons.length; i += 1) {
     const prompt = buttons[i];
     const valid =
