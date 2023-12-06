@@ -8,7 +8,11 @@ import {
   deleteMap,
 } from "../api/kareoke";
 import config from "../config";
-import { getLocalMap, saveLocalMap } from "../utility.js/storage";
+import {
+  getLocalMap,
+  saveLocalMap,
+  deleteLocalMap,
+} from "../utility.js/storage";
 
 export default function beatMapManager() {
   let audioUrl;
@@ -81,6 +85,7 @@ export default function beatMapManager() {
     if (id === selectedMap.id) {
       clearSelectedMap();
     }
+    deleteLocalMap(id);
 
     return response;
   };

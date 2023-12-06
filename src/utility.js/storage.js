@@ -31,3 +31,8 @@ export function saveLocalMap({ id, beatMap }) {
   }
   localStorage.setItem("maps", JSON.stringify(maps));
 }
+export function deleteLocalMap(id) {
+  const maps = getMaps();
+  const filtered = maps.filter((map) => map.id !== id);
+  localStorage.setItem("maps", JSON.stringify(filtered));
+}
