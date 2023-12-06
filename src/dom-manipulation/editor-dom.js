@@ -208,6 +208,9 @@ export function listBeatMap(beatMap, extension, source) {
   const deleteMap = document.createElement("li");
   deleteMap.textContent = "delete";
   optionsList.append(deleteMap);
+  const clearLocal = document.createElement("li");
+  clearLocal.textContent = " clear local";
+  optionsList.append(clearLocal);
 
   const backgroundType = extension;
   let mapBackground;
@@ -245,6 +248,7 @@ export function listBeatMap(beatMap, extension, source) {
     deleteMap,
     saveMap,
     publishMap,
+    clearLocal,
   };
 }
 

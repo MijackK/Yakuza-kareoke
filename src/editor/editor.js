@@ -4,6 +4,7 @@ import "../general.css";
 // import gamePlayerLogic from "../player-parts/map-visualizer";
 import { validPrompts, init } from "../canvas/canvas";
 import { initMap, drawMap } from "../canvas/time-map";
+import { deleteLocalMap } from "../utility.js/storage";
 
 import {
   autoThumbMovement,
@@ -71,8 +72,14 @@ const setSelectedMap = (beatMap, extension) => {
 const addMapToList = (beatMap) => {
   const mediaExtension = mapManager.getExtension(beatMap.background);
   const mediaSource = mapManager.directUrl(beatMap.background);
-  const { listItem, optionButton, optionsList, saveMap, deleteMap } =
-    listBeatMap(beatMap, mediaExtension, mediaSource);
+  const {
+    listItem,
+    optionButton,
+    optionsList,
+    saveMap,
+    deleteMap,
+    clearLocal,
+  } = listBeatMap(beatMap, mediaExtension, mediaSource);
   listItem.addEventListener("click", () => {
     const selectedMap = mapManager.getSelectedMap();
     if (selectedMap?.id === beatMap.id) {
@@ -100,17 +107,23 @@ const addMapToList = (beatMap) => {
   });
   deleteMap.addEventListener("click", () => {
     // eslint-disable-next-line no-restricted-globals
-    const acceptDelete = confirm("Are you sure");
+    const acceptDelete = confirm("All map data will be deleted");
     if (!acceptDelete) return;
     mapManager.deleteBeatMap(beatMap.id).then((res) => {
       listItem.remove();
       if (mapManager.getSelectedMap() === null) {
         displaySelectedStatus("No map selected");
       }
-
       alert(res);
-      // set selected view to not selected
     });
+  });
+  clearLocal.addEventListener("click", () => {
+    // eslint-disable-next-line no-restricted-globals
+    const acceptDelete = confirm("Local data will be deleted");
+    if (!acceptDelete) return;
+    deleteLocalMap(beatMap.id);
+    editor.setBeatMap(JSON.parse(beatMap.beatMap));
+    alert("local data deleted");
   });
 };
 const stopEditor = () => {
