@@ -87,6 +87,9 @@ const loginForm = document.querySelector("#login");
 loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const loginData = new FormData(loginForm);
+  const submitButton = loginForm.querySelector("button");
+  submitButton.disabled = true;
+  const loginError = loginForm.querySelector("#login-error");
 
   userManager
     .handleLogin({
@@ -94,6 +97,7 @@ loginForm.addEventListener("submit", (e) => {
       password: loginData.get("password"),
     })
     .then((res) => {
+      loginError.style.display = "none";
       authenticatedView();
       console.log(res);
       const { userName, email, verified } = userManager.getUserData();
@@ -101,6 +105,10 @@ loginForm.addEventListener("submit", (e) => {
     })
     .catch((err) => {
       console.log(err);
+      loginError.style.display = "block";
+    })
+    .finally(() => {
+      submitButton.disabled = false;
     });
 });
 
