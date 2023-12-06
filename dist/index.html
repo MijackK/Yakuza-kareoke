@@ -6,9 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="script.bundle.js" defer></script>
   <title>Home</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&family=Titillium+Web:wght@900&display=swap" rel="stylesheet">
   
   
 </head>
@@ -57,7 +54,8 @@
         <input type="email" id="email" name="email">
         <label for="password">PASSWORD</label>
         <input type="password" id="password" name="password">
-        <a style="cursor:pointer" href="passwordresest.html"><p>Forgot Password?</p></a>
+        <p id="login-error"style="color:red;display: none; "> password or email is incorrect</p>
+        <a style="cursor:pointer" href="passwordreset.html"><p>Forgot Password?</p></a>
         <button type="submit">SUBMIT</button>
       </form>
       <form action="" class="general-form" id="register">
@@ -85,8 +83,8 @@
             <button type="button" id="username-edit">&#9998</button>
           </div>
          <div class="edit-view" style="display:none">
-          <input name="currentPassword" placeholder="current password" type="password" autocomplete="new-password">
-          <input name="username" placeholder="new username" name="value"  type="text" >
+          <input name="currentPassword" placeholder="current password" type="password" autocomplete="new-password" required>
+          <input name="username" placeholder="new username" name="value"  type="text" required >
           <div>
             <button >change</button>
             <button type="button" id="username-close" >cancel</button>
@@ -102,8 +100,8 @@
             <button type="button" id="email-edit">&#9998</button>
           </div>
          <div class="edit-view" style="display:none">
-          <input name="currentPassword" placeholder="current password" type="password" autocomplete="new-password">
-          <input name="email" placeholder="new email" name="value"  type="text" >
+          <input name="currentPassword" placeholder="current password" type="password" autocomplete="new-password" required>
+          <input name="email" placeholder="new email" name="value"  type="text" required>
           <div>
             <button >change</button>
             <button type="button" id="email-close" >cancel</button>
@@ -120,9 +118,9 @@
             <button type="button" id="password-edit">&#9998</button>
           </div>
          <div class="edit-view" style="display:none">
-          <input name="currentPassword" placeholder="current password" type="password" autocomplete="new-password">
-          <input name="newPassword" placeholder="new password" name="value"  type="password" >
-          <input name="confirmPassword" placeholder="confirm password" name="value"  type="password" >
+          <input name="currentPassword" placeholder="current password" type="password" autocomplete="new-password" required>
+          <input name="newPassword" placeholder="new password" name="value"  type="password" required >
+          <input name="confirmPassword" placeholder="confirm password" name="value"  type="password" required >
        
           <div >
         

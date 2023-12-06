@@ -416,11 +416,14 @@ userManager
       authenicatedView();
       checkSelectedSong();
       const beatMaps = await mapManager.handleGetUserBeatMaps();
+      console.log(beatMaps);
       // get user songs and display them on my map.
       beatMaps.forEach((beatMap) => {
         addMapToList(beatMap);
       });
+      return;
     }
+    notAuthenticatedView();
   })
   .catch((e) => {
     console.log(e);

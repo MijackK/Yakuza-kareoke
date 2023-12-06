@@ -246,6 +246,7 @@ const restart = () => {
   scoreSummary.bad = 0;
   scoreSummary.miss = 0;
   resetMap();
+  updateScore(0, 0);
   // reload them
   initalizeButtons();
 
