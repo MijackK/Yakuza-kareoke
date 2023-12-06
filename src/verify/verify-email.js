@@ -16,6 +16,7 @@ if (token) {
       }, 1000);
     })
     .catch((err) => {
-      message.textContent = err;
+      console.log(err);
+      message.textContent = err.message;
     });
 }
