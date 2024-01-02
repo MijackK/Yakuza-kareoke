@@ -46,7 +46,7 @@ export function initMap(id) {
 function drawClickPrompt(arrowDirection, xPosition) {
   ctx.fillStyle = "blue";
   ctx.beginPath();
-  // ctx.arc(xPosition, yPosition, 22.5, 0, 2 * Math.PI);
+  // ctx.arc(xPosition, 120, 22.5, 0, 2 * Math.PI);
   ctx.drawImage(symbols[arrowDirection], xPosition - 20.5, 10, 40, 40);
   ctx.fill();
 }
@@ -97,33 +97,30 @@ function drawTimeIndicators(seconds) {
     ctx.stroke();
   }
 }
-function drawPrompts(prompts, time) {
-  // determines how many seconds before click time should the prompt appear
-  const halfWayTime = numberOfIndicators / 2 / 10;
-  const lastIndicatorTime = time - halfWayTime;
+
+function test(seconds, prompts) {
+  // how many seconds before time the prompt should appear
+  const offSet = numberOfIndicators / 2 / 10;
+
   for (let i = 0; i < prompts.length; i += 1) {
     const prompt = prompts[i];
     const valid =
-      prompt.time + prompt.duration + halfWayTime >= time &&
-      time >= prompt.time - halfWayTime;
+      prompt.time + prompt.duration + offSet >= seconds &&
+      seconds >= prompt.time - offSet;
     if (valid) {
-      const xCoords = Math.floor(
-        (((prompt.time - lastIndicatorTime) * 10) / numberOfIndicators) *
-          myCanvas.width
-      );
-      if (prompt.time === 3) {
-        // console.log(xCoords);
-      }
+      const travelDistance =
+        (prompt.time - seconds - offSet) * pixelsPerIndicator * 10;
 
+      const xCoords = Math.floor(myCanvas.width + travelDistance);
       if (prompt.type === "click") {
         drawClickPrompt(prompt.key, xCoords);
       } else {
-        const endArc = Math.floor(
-          (((prompt.time + prompt.duration - lastIndicatorTime) * 10) /
-            numberOfIndicators) *
-            myCanvas.width
-        );
-        drawLongPrompt(prompt.key, xCoords, endArc, prompt.type);
+        const endDistance =
+          (prompt.time + prompt.duration - seconds - offSet) *
+          pixelsPerIndicator *
+          10;
+        const endCoords = Math.floor(myCanvas.width + endDistance);
+        drawLongPrompt(prompt.key, xCoords, endCoords, prompt.type);
       }
     }
   }
@@ -131,11 +128,15 @@ function drawPrompts(prompts, time) {
 export function drawMap(prompts = [], seconds = 0) {
   ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
   const halfWayTime = numberOfIndicators / 2 / 10;
-  drawTimeIndicators(Number(seconds - halfWayTime));
-  drawPrompts(prompts, seconds);
-  const center = myCanvas.width / 2;
+  // drawTimeIndicators(Number(seconds - halfWayTime));
+  // drawPrompts(prompts, seconds);
 
-  // draw triangle
+  test(seconds, prompts);
+
+  // draw triangleww
+
+  const center = myCanvas.width / 2;
+  ctx.beginPath();
   ctx.moveTo(center, 30);
   ctx.lineTo(center - 15, 0);
   ctx.lineTo(center + 15, 0);
