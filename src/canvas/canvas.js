@@ -7,6 +7,7 @@ import rightImg from "../images/right.png";
 
 const entryOffset = 3.0; // determines the speed of prompt
 const widthPerSecond = Number(((1897.5 - 400) / entryOffset).toFixed(3));
+console.log("yo", widthPerSecond);
 
 const symbols = {
   ArrowUp: document.createElement("img"),
@@ -44,18 +45,20 @@ export const init = () => {
 
 const verticleLines = (elapsedTime) => {
   for (let i = 0; i < 3; i += 1) {
-    const xCoords = 633 * (i + 1) - widthPerSecond * (elapsedTime % 1.27);
+    const xCoords = Math.floor(
+      633 * (i + 1) - widthPerSecond * (elapsedTime % 1.27)
+    );
     ctx.beginPath();
     ctx.strokeStyle = "white";
     ctx.fillStyle = "white";
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 0.5;
     ctx.moveTo(xCoords, 15);
     ctx.lineTo(xCoords, 195);
     ctx.stroke();
   }
 };
 const spawnPrompts = (time, symbol) => {
-  const xPosition = 1897.5 - time * widthPerSecond;
+  const xPosition = Math.floor(1897.5 - time * widthPerSecond);
   ctx.fillStyle = "blue";
   ctx.beginPath();
   // ctx.arc(xPosition, yPosition, 22.5, 0, 2 * Math.PI);
@@ -71,9 +74,9 @@ const spawnPrompts = (time, symbol) => {
 };
 const spanwLongPrompts = (time, duration, type, symbol, held, clicks) => {
   textImage.src = longPromptText[type];
-  const startArc = 1897.5 - time * widthPerSecond;
-  const endArc = startArc + duration * widthPerSecond;
-  const textP = startArc + (duration * widthPerSecond) / 2 - 25;
+  const startArc = Math.floor(1897.5 - time * widthPerSecond);
+  const endArc = Math.floor(startArc + duration * widthPerSecond);
+  const textP = Math.floor(startArc + (duration * widthPerSecond) / 2 - 25);
   let size;
   if (type === "hold") size = held ? 45 : 55;
   if (type === "rapid") size = clicks % 2 === 0 ? 50 : 55;
