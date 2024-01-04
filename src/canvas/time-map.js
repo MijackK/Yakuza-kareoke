@@ -69,29 +69,30 @@ function drawLongPrompt(arrowDirection, startArc, endArc, type) {
   ctx.drawImage(symbols[arrowDirection], endArc - 22.5, 10, size, size);
 }
 
-function drawIndicators(seconds, offSet) {
+function drawIndicators(seconds, offSet, totalIndicators) {
   // total seconds to the center of the map.
-  const fractionalPart = seconds * 10 - Math.floor(seconds * 10);
 
-  for (let i = 0; i < numberOfIndicators; i += 1) {
-    const time = numberOfIndicators - i + (seconds - offSet) * 10;
+  for (let i = 0; i < totalIndicators; i += 1) {
+    const indicatorTime = i / 10;
 
-    const xCoords = Math.floor(
-      myCanvas.width -
-        ((i + fractionalPart) / numberOfIndicators) * myCanvas.width
-    );
+    const valid =
+      indicatorTime + offSet >= seconds && seconds >= indicatorTime - offSet;
 
-    const isInteger = Number(time.toFixed(0)) % 10 === 0 || true;
-
-    ctx.beginPath();
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = "white";
-    ctx.fillStyle = "rgba(38, 199, 151, 0.741)";
-    ctx.font = "12px serif";
-    ctx.moveTo(xCoords, 0);
-    ctx.lineTo(xCoords, isInteger ? 100 : 60);
-    ctx.fillText(Number(time.toFixed(0)), xCoords - 3, isInteger ? 112 : 72);
-    ctx.stroke();
+    if (valid) {
+      const timePassed = Number(seconds + offSet - indicatorTime);
+      const travelDistance = timePassed * pixelsPerIndicator * 10;
+      const xCoords = Math.floor(canvaswidth - travelDistance);
+      const isInteger = indicatorTime - Math.floor(indicatorTime) === 0;
+      ctx.beginPath();
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "white";
+      ctx.fillStyle = "rgba(38, 199, 151, 0.741)";
+      ctx.font = "12px serif";
+      ctx.moveTo(xCoords, 0);
+      ctx.lineTo(xCoords, isInteger ? 100 : 60);
+      ctx.fillText(indicatorTime, xCoords - 3, isInteger ? 112 : 72);
+      ctx.stroke();
+    }
   }
 }
 function drawPrompts(seconds, prompts, offSet) {
@@ -123,18 +124,20 @@ function drawPrompts(seconds, prompts, offSet) {
   }
 }
 
-export function drawMap(prompts = [], seconds = 0) {
+export function drawMap(prompts = [], seconds = 0, duration = 0) {
   ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
   const offSet = numberOfIndicators / 2 / 10;
-  drawIndicators(seconds, offSet);
+  const totalIndicators = Number((duration * 10).toFixed(0));
+  drawIndicators(seconds, offSet, totalIndicators);
   drawPrompts(seconds, prompts, offSet);
 
   // draw triangle
-  const center = myCanvas.width / 2;
+  const centerDistance = offSet * pixelsPerIndicator * 10;
+  const centerCoords = Math.floor(canvaswidth - centerDistance);
   ctx.beginPath();
-  ctx.moveTo(center, 30);
-  ctx.lineTo(center - 15, 0);
-  ctx.lineTo(center + 15, 0);
+  ctx.moveTo(centerCoords, 30);
+  ctx.lineTo(centerCoords - 15, 0);
+  ctx.lineTo(centerCoords + 15, 0);
   ctx.fillStyle = "rgba(38, 199, 151, 0.741)";
   ctx.fill();
 }
