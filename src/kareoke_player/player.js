@@ -40,8 +40,7 @@ let play = false;
 
 let timeElapsed = 0;
 let previousTime = 0;
-let startTime = Date.now();
-let gameLoop;
+let startTime;
 const scoreSummary = { great: 0, good: 0, bad: 0, miss: 0 };
 const incrementValue = { great: 100, good: 60, bad: 0, miss: 0 };
 
@@ -132,10 +131,8 @@ const removeGameInputs = (duration, inputObject, elapsedTime) => {
   incrementScore(info);
 };
 const stopMap = () => {
-  clearInterval(gameLoop);
   cancelAnimationFrame(animationID);
   play = false;
-
   validPrompts(
     timeElapsed,
     [...clickInput.inputList, ...rapidInput.inputList, ...holdInput.inputList],
@@ -145,13 +142,7 @@ const stopMap = () => {
 
 const timeController = () => {
   if (play === false) return;
-  let timeNow = Number((Date.now() - startTime) / 1000);
-
-  if (Math.abs(timeElapsed - timeNow) > 0.1) {
-    const startIncrease = timeNow - previousTime;
-    startTime += startIncrease * 1000;
-    timeNow = Number((Date.now() - startTime) / 1000);
-  }
+  const timeNow = Number((Date.now() - startTime) / 1000);
 
   timeElapsed += timeNow - previousTime;
 
@@ -218,7 +209,7 @@ const AnimatePrompts = () => {
 };
 const startMap = () => {
   animationID = requestAnimationFrame(AnimatePrompts);
-  gameLoop = setInterval(timeController, 0);
+  startTime = Date.now() - timeElapsed * 1000;
   play = true;
   playMap();
   closeMenu();
