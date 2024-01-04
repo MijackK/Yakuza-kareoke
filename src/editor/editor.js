@@ -146,12 +146,15 @@ const stopEditor = () => {
   // clearInterval(intervalID);
   cancelAnimationFrame(animationID);
   editor.setPlay(false);
-  editor.setStartTime(null);
   editorPause();
 };
 const updateGraphics = () => {
   validPrompts(editor.getElapsedTime(), editor.getBeatMap());
-  drawMap(editor.getBeatMap(), editor.getElapsedTime());
+  drawMap(
+    editor.getBeatMap(),
+    editor.getElapsedTime(),
+    editor.getAudioDuration()
+  );
 
   updateDomTime(editor.getElapsedTime());
   mapProgressPrompts(
@@ -171,7 +174,6 @@ const timeController = () => {
     stopEditor();
     return;
   }
-
   const currentTime = Number((Date.now() - editor.getStartTime()) / 1000);
 
   editor.setPreviousTime(currentTime);
@@ -190,9 +192,8 @@ const AnimatePrompts = () => {
   // gamePlayerLogic(elapsedTime);
   autoThumbMovement(elapsedTime / audioDuration);
   updateDomTime(elapsedTime);
-
   validPrompts(elapsedTime, editor.getBeatMap());
-  drawMap(editor.getBeatMap(), elapsedTime);
+  drawMap(editor.getBeatMap(), elapsedTime, audioDuration);
   timeController();
   animationID = requestAnimationFrame(AnimatePrompts);
 };
