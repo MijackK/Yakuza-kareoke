@@ -57,12 +57,12 @@ export function updateMediaTime(elapsedTime) {
 }
 export function updateDomTime(elapsedTime) {
   const Audio = document.querySelector("#editor-audio");
-  document.querySelector("#ptime").textContent = ` ${Audio.currentTime.toFixed(
+  document.querySelector("#ptime").textContent = ` ${elapsedTime.toFixed(
     3
   )} / ${Audio.duration}`;
 
   const Score = document.querySelector("#score");
-  Score.textContent = elapsedTime.toFixed(1);
+  Score.textContent = `${elapsedTime.toFixed(1)} `;
 }
 
 export function editorPlay(time) {
