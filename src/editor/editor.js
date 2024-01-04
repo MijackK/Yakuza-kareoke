@@ -44,7 +44,6 @@ init();
 initMap("#time-map");
 addPromptSrc();
 
-let intervalID;
 let animationID;
 
 const loadMedia = (audio, background, extension) => {
@@ -79,6 +78,7 @@ const addMapToList = (beatMap) => {
     saveMap,
     deleteMap,
     clearLocal,
+    publishMap,
   } = listBeatMap(beatMap, mediaExtension, mediaSource);
   listItem.addEventListener("click", () => {
     const selectedMap = mapManager.getSelectedMap();
@@ -119,17 +119,34 @@ const addMapToList = (beatMap) => {
   });
   clearLocal.addEventListener("click", () => {
     // eslint-disable-next-line no-restricted-globals
-    const acceptDelete = confirm("Local data will be deleted");
+    const acceptDelete = confirm(
+      "Local data will be deleted (will revert to remote data)"
+    );
     if (!acceptDelete) return;
     deleteLocalMap(beatMap.id);
     editor.setBeatMap(JSON.parse(beatMap.beatMap));
     alert("local data deleted");
   });
+  publishMap.addEventListener("click", () => {
+    if (beatMap.status !== "draft") {
+      alert("publish request already made");
+      return;
+    }
+    // eslint-disable-next-line no-restricted-globals
+    const acceptPublish = confirm(
+      "Map will be put up for review and you wont be able to edit it during this period"
+    );
+    if (acceptPublish) {
+      mapManager.publishMap(beatMap.id).then((res) => alert(res));
+    }
+  });
 };
+
 const stopEditor = () => {
-  clearInterval(intervalID);
+  // clearInterval(intervalID);
   cancelAnimationFrame(animationID);
   editor.setPlay(false);
+  editor.setStartTime(null);
   editorPause();
 };
 const updateGraphics = () => {
@@ -144,58 +161,44 @@ const updateGraphics = () => {
 };
 const timeController = () => {
   const elapsedTime = editor.getElapsedTime();
-  const Play = editor.getPlay();
+
   const audioDuration = editor.getAudioDuration();
 
   const previousTime = editor.getPreviousTime();
   const playRate = editor.getPlayRate();
-  const AudioCurrentTime = currentAudioTime();
 
-  if (elapsedTime > audioDuration) {
-    if (Play === true) {
-      stopEditor();
-    }
+  if (elapsedTime >= audioDuration) {
+    stopEditor();
     return;
   }
-  if (Play === false) {
-    return;
-  }
-  if (!editor.getStartTime()) {
-    editor.setStartTime(Date.now());
-  }
 
-  let currentTime = Number((Date.now() - editor.getStartTime()) / 1000);
+  const currentTime = Number((Date.now() - editor.getStartTime()) / 1000);
 
-  if (Math.abs(elapsedTime - currentTime * playRate) > 0.1) {
-    const startIncrease = currentTime - previousTime;
-
-    editor.setStartTime(editor.getStartTime() + startIncrease * 1000);
-    currentTime = Number((Date.now() - editor.getStartTime()) / 1000);
-  }
-
-  // elapsedTime += currentTime - previousTime;
-  editor.setElapsedTime(previousTime * playRate);
   editor.setPreviousTime(currentTime);
-  autoThumbMovement(AudioCurrentTime / audioDuration);
-
-  updateDomTime(elapsedTime);
-  drawMap(editor.getBeatMap(), elapsedTime);
+  editor.setElapsedTime(previousTime * playRate);
 };
 const AnimatePrompts = () => {
-  timeController();
+  const elapsedTime = editor.getElapsedTime();
+
+  const audioDuration = editor.getAudioDuration();
+
+  if (elapsedTime >= audioDuration) {
+    stopEditor();
+    return;
+  }
   // enable this when computer player is working is working
   // gamePlayerLogic(elapsedTime);
-  // drawMap(editor.getBeatMap(), editor.getElapsedTime());
-  validPrompts(
-    editor.getPreviousTime() * editor.getPlayRate(),
-    editor.getBeatMap(), // repl;ace with beatmap
-    editor.getPlay()
-  );
+  autoThumbMovement(elapsedTime / audioDuration);
+  updateDomTime(elapsedTime);
+
+  validPrompts(elapsedTime, editor.getBeatMap());
+  drawMap(editor.getBeatMap(), elapsedTime);
+  timeController();
   animationID = requestAnimationFrame(AnimatePrompts);
 };
 const startEditor = () => {
   animationID = requestAnimationFrame(AnimatePrompts);
-  intervalID = setInterval(timeController, 0);
+  editor.setStartTime(Date.now() - editor.getElapsedTime() * 1000);
   editor.setPlay(true);
   editorPlay(editor.getElapsedTime());
 };
@@ -263,6 +266,7 @@ document.querySelector("#time_guage").addEventListener("change", (e) => {
 });
 
 document.querySelector("#play").addEventListener("click", () => {
+  if (editor.getElapsedTime() >= editor.getAudioDuration()) return;
   if (editor.getPlay() === false) {
     startEditor();
     return;
@@ -376,6 +380,7 @@ document.querySelector("body").addEventListener("keydown", (e) => {
 });
 
 document.querySelector("body").addEventListener("keydown", (e) => {
+  if (editor.getElapsedTime() >= editor.getAudioDuration()) return;
   if (e.key !== " ") return; // if the key pressed is not spacebar
   // prevents play when the timepicker modal is opened
   if (editor.getPlay() === false) {
