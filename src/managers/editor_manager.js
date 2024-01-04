@@ -192,6 +192,7 @@ export default function editorFactory() {
     playbackRate = speed;
     previousTime = elapsedTime / playbackRate;
     elapsedTime = previousTime * playbackRate;
+    startTime = Date.now() - previousTime * 1000;
   };
   const progressBarTimeUpdate = (timePosition) => {
     if (timePosition === undefined) {
@@ -200,6 +201,7 @@ export default function editorFactory() {
     }
     previousTime = (audioDuration * timePosition) / playbackRate;
     elapsedTime = previousTime * playbackRate;
+    startTime = Date.now() - previousTime * 1000;
   };
 
   return {
