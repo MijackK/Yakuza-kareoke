@@ -122,3 +122,20 @@ export async function saveHighScore(score, beatMapID) {
 
   return data;
 }
+
+export async function publishRequest(beatMapID) {
+  const options = {
+    method: "post",
+    body: JSON.stringify({ beatMapID }),
+  };
+  const headers = { "Content-Type": "application/json" };
+  const response = await apiRequest({
+    url: `kareoke/publish_request`,
+    options,
+    headers,
+  });
+
+  const data = await response.text();
+
+  return data;
+}
