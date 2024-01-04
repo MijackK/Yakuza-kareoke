@@ -6,6 +6,7 @@ import {
   getUserBeatMaps,
   saveBeatMap,
   deleteMap,
+  publishRequest,
 } from "../api/kareoke";
 import config from "../config";
 import {
@@ -89,6 +90,10 @@ export default function beatMapManager() {
 
     return response;
   };
+  const publishMap = async (mapID) => {
+    const response = await publishRequest(mapID);
+    return response;
+  };
   const directUrl = (path) => `http://${config.objectServer}/${path}`;
 
   const saveMapRemote = async (column, id) => {
@@ -136,5 +141,6 @@ export default function beatMapManager() {
     clearSelectedMap,
     loadMap,
     deleteBeatMap,
+    publishMap,
   };
 }
