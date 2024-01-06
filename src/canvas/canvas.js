@@ -7,6 +7,7 @@ import rightImg from "../images/right.png";
 
 const entryOffset = 3.0; // determines the speed of prompt
 const widthPerSecond = Number(((1897.5 - 400) / entryOffset).toFixed(3));
+let key;
 console.log("yo", widthPerSecond);
 
 const symbols = {
@@ -72,14 +73,23 @@ const spawnPrompts = (time, symbol) => {
   ctx.fill();
   ctx.stroke();
 };
-const spanwLongPrompts = (time, duration, type, symbol, held, clicks) => {
+const spanwLongPrompts = (
+  elapsedTime,
+  promptTime,
+  travelTime,
+  duration,
+  type,
+  symbol
+) => {
   textImage.src = longPromptText[type];
-  const startArc = Math.floor(1897.5 - time * widthPerSecond);
+  const startArc = Math.floor(1897.5 - travelTime * widthPerSecond);
   const endArc = Math.floor(startArc + duration * widthPerSecond);
   const textP = Math.floor(startArc + (duration * widthPerSecond) / 2 - 25);
   let size;
-  if (type === "hold") size = held ? 45 : 55;
-  if (type === "rapid") size = clicks % 2 === 0 ? 50 : 55;
+  const clicked = symbol === key && elapsedTime >= promptTime - 0.2;
+
+  if (type === "hold") size = clicked ? 48 : 52;
+  if (type === "rapid") size = clicked ? 50 : 54;
   ctx.font = "40px serif";
   ctx.strokeStyle = type === "rapid" ? "blue" : "#add8e6";
   ctx.lineWidth = 10;
@@ -120,12 +130,12 @@ export const validPrompts = (time, buttons) => {
           break;
         default:
           spanwLongPrompts(
+            time,
+            prompt.time,
             time + entryOffset - prompt.time,
             prompt.duration,
             prompt.type,
-            prompt.key,
-            prompt.held,
-            prompt.click
+            prompt.key
           );
       }
     }
@@ -134,4 +144,11 @@ export const validPrompts = (time, buttons) => {
 
 window.addEventListener("resize", () => {
   myCanvas.width = window.innerWidth;
+});
+
+window.addEventListener("keydown", (e) => {
+  key = e.key;
+});
+window.addEventListener("keyup", () => {
+  key = null;
 });
