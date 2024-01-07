@@ -1,3 +1,8 @@
+import greatImg from "../images/great.png";
+import missImg from "../images/miss.png";
+import badImg from "../images/bad.png";
+import goodImg from "../images/good.png";
+
 export function addAudio(songSrc, backgroundSRC, clickSrc, extension) {
   const song = document.querySelector("#song");
   const click = document.querySelector("#click-audio");
@@ -97,24 +102,40 @@ export function openFinalScore(score, scoreSummary, highscore, rankInfo) {
   scoreLetter.alt = rankInfo.rank;
   scoreLetter.style.color = rankInfo.color;
   scoreLetter.style.textShadow = `5px 3px 1px ${rankInfo.shadow}`;
-
+  // clean this up later
   // update great
   const great = document.querySelector("#great-hits");
-  great.innerHTML = `<span>Great: ${scoreSummary.great}</span> 
+  great.innerHTML = `
+  <div style="display:flex; align-items:center" >
+    <img style="width:117px; height:35px"  src=${greatImg} alt="Great" > 
+    <span>: ${scoreSummary.great}</span> 
+  </div>
   <span>${((scoreSummary.great / total) * 100).toFixed(1) || "0"}%</span>`;
   // update good
   const good = document.querySelector("#good-hits");
-  good.innerHTML = `<span>Good: ${scoreSummary.good}</span> 
+  good.innerHTML = `
+  <div align-items:center>
+
+    <img style="width:117px; height:35px" src=${goodImg} alt="Good" /> 
+    <span>: ${scoreSummary.good}</span> 
+  </div>
   <span>${((scoreSummary.good / total) * 100).toFixed(1) || "0"}%</span>`;
 
   // update bad
   const bad = document.querySelector("#bad-hits");
-  bad.innerHTML = `<span>Bad: ${scoreSummary.bad}</span> 
+  bad.innerHTML = `
+  <div  style="display:flex;align-items:center" >
+    <img style="width:117px; height:35px"  src=${badImg} alt="Bad" /> 
+    <span>: ${scoreSummary.bad}</span> 
+  </div>
   <span>${((scoreSummary.bad / total) * 100).toFixed(1) || "0"}%</span>`;
-
   // update miss
   const miss = document.querySelector("#miss-hits");
-  miss.innerHTML = `<span>Miss: ${scoreSummary.miss}</span> 
+  miss.innerHTML = `
+  <div style="display:flex;align-items:center" >
+    <img style="width:117px; height:35px"  src=${missImg} alt="Miss" /> 
+    <span>: ${scoreSummary.miss}</span> 
+  </div>
   <span>${((scoreSummary.miss / total) * 100).toFixed(1) || "0"}%</span>`;
 }
 export function updateScore(score, combo) {
