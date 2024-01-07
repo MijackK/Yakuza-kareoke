@@ -24,7 +24,7 @@ export async function getBeatMaps() {
   };
   const headers = {};
   const response = await apiRequest({
-    url: `kareoke/get_maps`,
+    url: `kareoke/get_published`,
     options,
     headers,
   });
@@ -106,6 +106,23 @@ export async function deleteMap(id) {
 
   return data;
 }
+
+export async function deleteMapAdmin(id) {
+  const options = {
+    method: "delete",
+    body: JSON.stringify({ id }),
+  };
+  const headers = { "Content-Type": "application/json" };
+  const response = await apiRequest({
+    url: `kareoke/delete_map_admin`,
+    options,
+    headers,
+  });
+
+  const data = await response.text();
+
+  return data;
+}
 export async function saveHighScore(score, beatMapID) {
   const options = {
     method: "put",
@@ -136,6 +153,39 @@ export async function publishRequest(beatMapID) {
   });
 
   const data = await response.text();
+
+  return data;
+}
+export async function publishMap(beatMapID, resolution) {
+  const options = {
+    method: "post",
+    body: JSON.stringify({ beatMapID, resolution }),
+  };
+  const headers = { "Content-Type": "application/json" };
+  const response = await apiRequest({
+    url: `kareoke/publish_map`,
+    options,
+    headers,
+  });
+
+  const data = await response.text();
+
+  return data;
+}
+
+export async function getMaps() {
+  const options = {
+    method: "get",
+  };
+  const headers = { "Content-Type": "application/json" };
+
+  const response = await apiRequest({
+    url: `kareoke/get_maps`,
+    options,
+    headers,
+  });
+
+  const data = await response.json();
 
   return data;
 }
