@@ -42,7 +42,6 @@ export const hold = (inputList) => {
     if (validRange) {
       if (key === inputs[0].key) {
         // eslint-disable-next-line no-param-reassign
-        inputs[0].held = true;
         clickTime = inputTime;
       } else {
         inputs.shift();
