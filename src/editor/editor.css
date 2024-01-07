@@ -89,6 +89,7 @@ h1 {
   border-radius: 10px;
   left: 0;
   right: 0;
+  z-index: 20;
 }
 .tool-bar > div {
   cursor: pointer;

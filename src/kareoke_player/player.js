@@ -50,12 +50,12 @@ let combo = 0;
 let keydown = false;
 let animationID;
 
-let buttons;
-let clickInput;
+let buttons = [];
+let clickInput = [];
 
-let holdInput;
+let holdInput = [];
 
-let rapidInput;
+let rapidInput = [];
 let highScore;
 let mapID;
 const scoreMultiplier = 1.5;

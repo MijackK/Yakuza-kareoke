@@ -88,8 +88,8 @@ const spanwLongPrompts = (
   let size;
   const clicked = symbol === key && elapsedTime >= promptTime - 0.2;
 
-  if (type === "hold") size = clicked ? 48 : 52;
-  if (type === "rapid") size = clicked ? 50 : 54;
+  if (type === "hold") size = clicked ? 50 : 55;
+  if (type === "rapid") size = clicked ? 50 : 55;
   ctx.font = "40px serif";
   ctx.strokeStyle = type === "rapid" ? "blue" : "#add8e6";
   ctx.lineWidth = 10;

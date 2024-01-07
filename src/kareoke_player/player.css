@@ -15,7 +15,7 @@ body {
   font-size: 1.7rem;
   color: rgb(84, 83, 83);
 }
-#score {
+.score {
   font-size: 2.5rem;
   letter-spacing: 3px;
   color: var(--score-color);
