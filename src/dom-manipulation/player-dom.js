@@ -95,7 +95,8 @@ export function openFinalScore(score, scoreSummary, highscore, rankInfo) {
   scoreMenu.style.display = "flex";
   // add the score
   const finalScore = document.querySelector("#final-score");
-  finalScore.textContent = `Scored: ${score}`;
+  finalScore.innerHTML = `Scored: <span class="score"> ${score}</span>`;
+
   // add the score letter
   const scoreLetter = document.querySelector("#score-letter");
   scoreLetter.src = rankInfo.image;
@@ -106,7 +107,7 @@ export function openFinalScore(score, scoreSummary, highscore, rankInfo) {
   // update great
   const great = document.querySelector("#great-hits");
   great.innerHTML = `
-  <div style="display:flex; align-items:center" >
+  <div style="display:flex; align-items:center;" >
     <img style="width:117px; height:35px"  src=${greatImg} alt="Great" > 
     <span>: ${scoreSummary.great}</span> 
   </div>

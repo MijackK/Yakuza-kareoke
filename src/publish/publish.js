@@ -15,7 +15,7 @@ const createListItem = (request) => {
   listItem.append(userName);
   return listItem;
 };
-const handlePublishRequest = async (id, resolution, button, item, list) => {
+const handlePublishRequest = async (id, resolution, button, item) => {
   if (resolving) return;
   resolving = false;
   // eslint-disable-next-line no-param-reassign
@@ -23,7 +23,7 @@ const handlePublishRequest = async (id, resolution, button, item, list) => {
   publishMap(id, resolution)
     .then((res) => {
       console.log(res);
-      list.remove(item);
+      item.remove();
     })
     .catch((err) => {
       console.log(err);
@@ -33,18 +33,16 @@ const handlePublishRequest = async (id, resolution, button, item, list) => {
     });
 };
 
-const deleteMap = (id, button, item, list) => {
+const deleteMap = (id, button, item) => {
   // eslint-disable-next-line no-restricted-globals
-  const acceptDelete = confirm(
-    "Local data will be deleted (will revert to remote data)"
-  );
+  const acceptDelete = confirm("are you sure you want to delete this map?");
   if (!acceptDelete) return;
   // eslint-disable-next-line no-param-reassign
   button.disabled = true;
   deleteMapAdmin(id)
     .then((res) => {
       console.log(res);
-      list.remove(item);
+      item.remove();
     })
     .catch((err) => {
       // eslint-disable-next-line no-param-reassign
@@ -81,7 +79,7 @@ getMaps()
       rejectButton.addEventListener("click", () => {
         handlePublishRequest(
           map.id,
-          "pending",
+          "draft",
           rejectButton,
           listItem,
           requestList

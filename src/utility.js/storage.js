@@ -1,5 +1,4 @@
 export function saveUserInfo(info) {
-  console.log(info);
   localStorage.setItem("info", JSON.stringify(info));
 }
 export function getUserInfo() {
