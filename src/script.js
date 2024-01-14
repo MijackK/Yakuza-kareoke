@@ -16,6 +16,10 @@ import {
   playClickSound,
   generateSong,
   accountEdit,
+  showPassword,
+  addErrorMessage,
+  clearList,
+  showLoading,
 } from "./dom-manipulation/home-dom";
 import user from "./managers/user-manager";
 import map from "./managers/map_manager";
@@ -23,6 +27,51 @@ import map from "./managers/map_manager";
 const userManager = user();
 const mapManager = map();
 let hoverDebounce = null;
+let page = 1;
+let end = false;
+let searchKey = "";
+let searching = false;
+
+const infiniteLoad = () => {
+  if (searching || end) return;
+
+  showLoading("search-indicator", "block");
+
+  mapManager
+    .handleGetBeatMaps(page, searchKey)
+    .then((songs) => {
+      if (songs.length === 0) {
+        end = true;
+        return;
+      }
+      page += 1;
+
+      songs.forEach((song) => {
+        for (let i = 0; i < 10; i += 1) {
+          const listItem = generateSong(song);
+          listItem.addEventListener("click", () => {
+            selectSong(song, listItem);
+          });
+        }
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      console.log("Problem getting user beat maps");
+    })
+    .finally(() => {
+      searching = false;
+      showLoading("search-indicator", "none");
+    });
+};
+const searchSong = (newKey) => {
+  page = 1;
+  end = false;
+  searching = false;
+  searchKey = newKey;
+  clearList("song_list");
+  infiniteLoad(true);
+};
 
 initialize();
 
@@ -33,21 +82,12 @@ userManager.isLogin().then(() => {
   const { userName, email, verified } = userManager.getUserData();
   populateAccountForm(userName, email, verified);
 });
-mapManager
-  .handleGetBeatMaps()
-  .then((songs) => {
-    songs.forEach((song) => {
-      const listItem = generateSong(song);
-      listItem.addEventListener("click", () => {
-        selectSong(song, listItem);
-      });
-    });
-  })
-  .catch((err) => {
-    console.log(err);
-    console.log("Problem getting user beat maps");
-  });
-
+infiniteLoad();
+document.querySelector("#song-search").addEventListener("keyup", (e) => {
+  console.log(e.key);
+  if (e.key !== "Enter") return;
+  searchSong(e.target.value);
+});
 // event lsiteners
 document.querySelector("#auth-dialog").addEventListener("click", (e) => {
   if (e.target.id === "auth-dialog") {
@@ -83,13 +123,22 @@ accountBtn.addEventListener("click", () => {
   handleAccountPage(true);
 });
 
+const mapList = document.querySelector("#song_list");
+mapList.addEventListener("scroll", () => {
+  if (searching || end) return;
+  if (
+    Math.abs(mapList.scrollHeight - mapList.clientHeight - mapList.scrollTop) <
+    1
+  ) {
+    infiniteLoad();
+  }
+});
 const loginForm = document.querySelector("#login");
 loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const loginData = new FormData(loginForm);
   const submitButton = loginForm.querySelector("button");
   submitButton.disabled = true;
-  const loginError = loginForm.querySelector("#login-error");
 
   userManager
     .handleLogin({
@@ -97,15 +146,15 @@ loginForm.addEventListener("submit", (e) => {
       password: loginData.get("password"),
     })
     .then((res) => {
-      loginError.style.display = "none";
       authenticatedView();
       console.log(res);
       const { userName, email, verified } = userManager.getUserData();
       populateAccountForm(userName, email, verified);
+      addErrorMessage("", "login-error");
     })
     .catch((err) => {
       console.log(err);
-      loginError.style.display = "block";
+      addErrorMessage(err, "login-error");
     })
     .finally(() => {
       submitButton.disabled = false;
@@ -116,6 +165,8 @@ const registerForm = document.querySelector("#register");
 registerForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const registerData = new FormData(registerForm);
+  const submitButton = registerForm.querySelector("button");
+  submitButton.disabled = true;
   userManager
     .handleRegister({
       email: registerData.get("email"),
@@ -124,11 +175,15 @@ registerForm.addEventListener("submit", (e) => {
     })
     .then((res) => {
       handleLoginDialog(false);
-
       console.log(res);
+      addErrorMessage("", "register-error");
     })
     .catch((err) => {
       console.log(err);
+      addErrorMessage(err, "register-error");
+    })
+    .finally(() => {
+      submitButton.disabled = false;
     });
 });
 
@@ -240,6 +295,16 @@ document.querySelector("#verify-button").addEventListener("click", (e) => {
     });
 });
 
+document
+  .querySelector("#show-password-register")
+  .addEventListener("click", (e) => {
+    showPassword(e.target.checked, "password-register");
+  });
+document
+  .querySelector("#show-password-login")
+  .addEventListener("click", (e) => {
+    showPassword(e.target.checked, "password-login");
+  });
 // authentication button group
 const buttonGroupMember = document.querySelector(".button-group").children;
 Object.keys(buttonGroupMember).forEach((button) => {

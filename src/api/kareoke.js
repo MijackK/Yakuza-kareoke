@@ -18,13 +18,14 @@ export async function uploadBeatmap(formData) {
   return data;
 }
 
-export async function getBeatMaps() {
+export async function getBeatMaps(page, search, signal) {
   const options = {
     method: "get",
+    signal,
   };
   const headers = {};
   const response = await apiRequest({
-    url: `kareoke/get_published`,
+    url: `kareoke/get_published?page=${page}&search=${search}`,
     options,
     headers,
   });
