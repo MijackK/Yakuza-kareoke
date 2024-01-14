@@ -189,6 +189,7 @@ export function displaySelectedStatus(text) {
 export function listBeatMap(beatMap, extension, source) {
   const mapList = document.querySelector("#map-list");
   const listItem = document.createElement("li");
+
   listItem.id = beatMap.id;
   listItem.classList.add("beat-map");
   const optionButton = document.createElement("span");
@@ -196,15 +197,20 @@ export function listBeatMap(beatMap, extension, source) {
   optionButton.classList.add("map-option");
   const optionsList = document.createElement("ul");
   optionsList.classList.add("option-list");
-  listItem.append(optionsList);
-  // create the options
 
+  listItem.append(optionsList);
+
+  // create the options
   const saveMap = document.createElement("li");
   saveMap.textContent = "save";
-  optionsList.append(saveMap);
+  if (beatMap.status === "draft") {
+    optionsList.append(saveMap);
+  }
+
   const publishMap = document.createElement("li");
-  publishMap.textContent = "publish";
+  publishMap.textContent = beatMap.status !== "draft" ? "unpublish" : "publish";
   optionsList.append(publishMap);
+
   const deleteMap = document.createElement("li");
   deleteMap.textContent = "delete";
   optionsList.append(deleteMap);
@@ -235,8 +241,14 @@ export function listBeatMap(beatMap, extension, source) {
   listItem.appendChild(mapInfo);
   const mapName = document.createElement("span");
   mapName.textContent = beatMap.name;
+  const mapStatus = document.createElement("span");
+  mapStatus.className = `${beatMap.status}-status`;
+  if (beatMap.status !== "draft") {
+    mapStatus.textContent = beatMap.status;
+  }
+  mapName.append(mapStatus);
   const mapUpdateDate = document.createElement("span");
-  mapUpdateDate.textContent = `last updated: 1/1/2001`;
+  mapUpdateDate.textContent = `last updated: ${beatMap.dateUpdated}`;
   mapInfo.append(mapName, mapUpdateDate);
 
   listItem.append(optionButton);
@@ -249,6 +261,8 @@ export function listBeatMap(beatMap, extension, source) {
     saveMap,
     publishMap,
     clearLocal,
+    mapName,
+    mapStatus,
   };
 }
 
@@ -257,6 +271,7 @@ export function showHideOption(optionList) {
   const { display } = getComputedStyle(element);
   element.style.display = display === "none" ? "block" : "none";
 }
+export function loadingAction(overlay) {}
 
 export function authenicatedView() {
   const loginForm = document.querySelector("#login");
@@ -286,4 +301,9 @@ export function addPromptSrc() {
   holdButton.src = holdText;
   const clickButton = document.querySelector("#click-image");
   clickButton.src = clickText;
+}
+
+export function addErrorMessage(message, id) {
+  const error = document.querySelector(`#${id}`);
+  error.textContent = message;
 }

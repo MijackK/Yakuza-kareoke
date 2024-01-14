@@ -33,6 +33,7 @@ import {
   showHideOption,
   addPromptSrc,
   showEdit,
+  addErrorMessage,
 } from "../dom-manipulation/editor-dom";
 import beatMapManager from "../managers/map_manager";
 import userFactory from "../managers/user-manager";
@@ -71,6 +72,9 @@ const setSelectedMap = (beatMap, extension) => {
 const addMapToList = (beatMap) => {
   const mediaExtension = mapManager.getExtension(beatMap.background);
   const mediaSource = mapManager.directUrl(beatMap.background);
+  let loadingDelete = false;
+  let loadingPublish = false;
+  let loadingSave = false;
   const {
     listItem,
     optionButton,
@@ -79,6 +83,7 @@ const addMapToList = (beatMap) => {
     deleteMap,
     clearLocal,
     publishMap,
+    mapStatus,
   } = listBeatMap(beatMap, mediaExtension, mediaSource);
   listItem.addEventListener("click", () => {
     const selectedMap = mapManager.getSelectedMap();
@@ -89,6 +94,8 @@ const addMapToList = (beatMap) => {
     loadingMap();
     mapManager.abortSelection();
     setSelectedMap(beatMap, mediaExtension);
+    editor.setElapsedTime(0);
+    editor.setPreviousTime(0);
   });
   optionButton.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -97,25 +104,46 @@ const addMapToList = (beatMap) => {
   optionsList.addEventListener("click", (e) => {
     e.stopPropagation();
   });
-  saveMap.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const column = "beatMap";
-    const { id } = beatMap;
-    mapManager.saveMapRemote(column, id).then((res) => {
-      alert(res);
+  if (beatMap.status === "draft") {
+    saveMap.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (loadingSave) return;
+      saveMap.textContent = "Saving...";
+      loadingSave = true;
+
+      const { id } = beatMap;
+      mapManager
+        .saveMapRemote(id)
+        .then((res) => {
+          alert(res);
+        })
+        .finally(() => {
+          saveMap.textContent = "Save";
+          loadingSave = false;
+        });
     });
-  });
+  }
+
   deleteMap.addEventListener("click", () => {
+    if (loadingDelete) return;
     // eslint-disable-next-line no-restricted-globals
     const acceptDelete = confirm("All map data will be deleted");
     if (!acceptDelete) return;
-    mapManager.deleteBeatMap(beatMap.id).then((res) => {
-      listItem.remove();
-      if (mapManager.getSelectedMap() === null) {
-        displaySelectedStatus("No map selected");
-      }
-      alert(res);
-    });
+    loadingDelete = true;
+    deleteMap.textContent = "Deleting...";
+    mapManager
+      .deleteBeatMap(beatMap.id)
+      .then((res) => {
+        listItem.remove();
+        if (mapManager.getSelectedMap() === null) {
+          displaySelectedStatus("No map selected");
+        }
+        alert(res);
+      })
+      .finally(() => {
+        loadingDelete = false;
+        deleteMap.textContent = "delete";
+      });
   });
   clearLocal.addEventListener("click", () => {
     // eslint-disable-next-line no-restricted-globals
@@ -123,21 +151,39 @@ const addMapToList = (beatMap) => {
       "Local data will be deleted (will revert to remote data)"
     );
     if (!acceptDelete) return;
+
     deleteLocalMap(beatMap.id);
     editor.setBeatMap(JSON.parse(beatMap.beatMap));
     alert("local data deleted");
   });
   publishMap.addEventListener("click", () => {
-    if (beatMap.status !== "draft") {
-      alert("publish request already made");
-      return;
-    }
+    if (loadingPublish) return;
+    const message = {
+      draft:
+        "Map will be put up for review and you wont be able to edit it during this period",
+      pending: "Map will be removed from publish queue",
+      published: "Map will no longer be publicly available",
+    };
+
     // eslint-disable-next-line no-restricted-globals
-    const acceptPublish = confirm(
-      "Map will be put up for review and you wont be able to edit it during this period"
-    );
-    if (acceptPublish) {
-      mapManager.publishMap(beatMap.id).then((res) => alert(res));
+    const accept = confirm(message[beatMap.status]);
+    if (accept) {
+      loadingPublish = true;
+      publishMap.textContent = "....";
+      mapManager
+        .publishMap(beatMap.id)
+        .then((res) => {
+          // eslint-disable-next-line no-param-reassign
+          beatMap.status = res;
+        })
+        .finally(() => {
+          loadingPublish = false;
+          publishMap.textContent =
+            beatMap.status === "draft" ? "publish" : "unpublish";
+          mapStatus.textContent =
+            beatMap.status === "draft" ? "" : beatMap.status;
+          mapStatus.className = `${beatMap.status}-status`;
+        });
     }
   });
 };
@@ -199,7 +245,7 @@ const AnimatePrompts = () => {
 };
 const startEditor = () => {
   animationID = requestAnimationFrame(AnimatePrompts);
-  editor.setStartTime(Date.now() - editor.getElapsedTime() * 1000);
+  editor.setStartTime(Date.now() - editor.getPreviousTime() * 1000);
   editor.setPlay(true);
   editorPlay(editor.getElapsedTime());
 };
@@ -252,9 +298,11 @@ addMapForm.addEventListener("submit", (e) => {
       setSelectedMap(beatMap, mapManager.getExtension(beatMap.background));
       addMapForm.reset();
       viewSwitch("selected");
+      addErrorMessage("", "addmap-error");
     })
     .catch((error) => {
       console.log(error);
+      addErrorMessage(error, "addmap-error");
     })
     .finally(() => {
       submitButton.disabled = false;
@@ -267,8 +315,9 @@ document.querySelector("#time_guage").addEventListener("change", (e) => {
 });
 
 document.querySelector("#play").addEventListener("click", () => {
-  if (editor.getElapsedTime() >= editor.getAudioDuration()) return;
+  console.log(editor.getPlay());
   if (editor.getPlay() === false) {
+    console.log("hi");
     startEditor();
     return;
   }
@@ -381,7 +430,6 @@ document.querySelector("body").addEventListener("keydown", (e) => {
 });
 
 document.querySelector("body").addEventListener("keydown", (e) => {
-  if (editor.getElapsedTime() >= editor.getAudioDuration()) return;
   if (e.key !== " ") return; // if the key pressed is not spacebar
   // prevents play when the timepicker modal is opened
   if (editor.getPlay() === false) {
@@ -413,9 +461,11 @@ document.querySelector("#login").addEventListener("submit", (e) => {
       });
 
       console.log(res);
+      viewSwitch("selected");
     })
     .catch((err) => {
       console.log(err);
+      addErrorMessage(err, "login-error");
     })
     .finally(() => {
       submitButton.disabled = false;
