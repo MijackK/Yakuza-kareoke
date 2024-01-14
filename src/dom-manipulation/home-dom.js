@@ -54,6 +54,16 @@ export function animateDisk() {
     });
   });
 }
+export function showLoading(id, display) {
+  const loadingIndicator = document.querySelector(`#${id}`);
+  loadingIndicator.style.display = display;
+}
+export function clearList(listID) {
+  const list = document.querySelector(`#${listID}`);
+  while (list.firstChild) {
+    list.firstChild.remove();
+  }
+}
 export function generateSong(song) {
   const songList = document.querySelector("#song_list");
 
@@ -173,4 +183,14 @@ export function playClickSound() {
   const audioSelect = document.querySelector("#select-sound");
   audioSelect.currentTime = 0;
   audioSelect.play();
+}
+
+export function showPassword(show, id) {
+  const password = document.querySelector(`#${id}`);
+  password.type = show ? "text" : "password";
+}
+
+export function addErrorMessage(message, id) {
+  const error = document.querySelector(`#${id}`);
+  error.textContent = message;
 }
