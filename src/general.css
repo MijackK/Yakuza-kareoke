@@ -2,6 +2,7 @@
   --primary-font: "Courier New", Courier, monospace;
   --secondary-bg-color: #091126;
   --primary-color: rgba(255, 255, 255, 0.7);
+  --fancy-font: "Titillium Web", sans-serif;
 }
 
 .general-form {
