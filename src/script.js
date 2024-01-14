@@ -32,7 +32,7 @@ let end = false;
 let searchKey = "";
 let searching = false;
 
-const infiniteLoad = () => {
+const infiniteLoad = (search = false) => {
   if (searching || end) return;
 
   showLoading("search-indicator", "block");
@@ -40,6 +40,8 @@ const infiniteLoad = () => {
   mapManager
     .handleGetBeatMaps(page, searchKey)
     .then((songs) => {
+      if (search) clearList("song_list");
+
       if (songs.length === 0) {
         end = true;
         return;
@@ -69,7 +71,6 @@ const searchSong = (newKey) => {
   end = false;
   searching = false;
   searchKey = newKey;
-  clearList("song_list");
   infiniteLoad(true);
 };
 
