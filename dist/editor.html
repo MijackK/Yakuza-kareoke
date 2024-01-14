@@ -131,6 +131,7 @@
           <input type="file"id="song-select" name="audio" id="song" accept=".mp3" required>
           <label for="background">Background</label>
           <input type="file" name="background" id="background" accept=".mp4,.jpg,.gif,.webp,.WebM" required>
+          <span id="addmap-error" style="color:red"></span>
           <Button>Add map</Button>
         </Form>
         
@@ -158,9 +159,10 @@
      </div>
     <form action="" id="login" class="general-form">
       <label for="email">EMAIL</label>
-      <input type="email" id="email" name="email">
+      <input type="email" id="email" name="email" required>
       <label for="password">PASSWORD</label>
-      <input type="password" id="password" name="password">
+      <input type="password" id="password" name="password" required>
+      <span style="color:red;font-style: italic;" id="login-error"></span>
       <button type="submit">SUBMIT</button>
     </form>
   </div>

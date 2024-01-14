@@ -13,7 +13,7 @@
   <body class="cold-mode">
     <button id="pause-btn">&#x23F8;</button>
     
-    <video id="background-video" class="background"></video>
+    <video id="background-video" class="background" loop></video>
     <div id="background-image"class="background"></div>
     <audio id="click-audio"> </audio>
     <audio id="song"> </audio>
@@ -25,7 +25,7 @@
       <span id="highscore-name" class="song-name" >Judgment shinpan</span>
       <div id="score-number" >
         <div style="display:flex; flex-direction: column;gap:5px">
-          <span  id="final-score"  style=" font-size: 2.5rem"> Scored: 9999</span>
+          <span  id="final-score" class="score" style=" font-size: 2.5rem; color:white"> Scored: 9999</span>
           <span id="high-score" >High Score</span>
         </div>
         <img src="" width ="80px" alt="S" id="score-letter" >
@@ -44,7 +44,7 @@
           <span>Miss:1</span> <span>100%</span>
         </div>
       </div>
-      <div id="end-options" >
+      <div id="end-options"  >
         <div id="play-again">Play Again</div>
     
         <a href="http://localhost:8080/index.html">
@@ -68,7 +68,7 @@
       
       <div class="menu-button">
         <button id="resume-btn">&#9654</button>
-        <span>Resume</span>
+        <span>Play</span>
       </div>
       <div  class="menu-button">
    
