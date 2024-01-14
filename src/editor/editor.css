@@ -208,7 +208,7 @@ img.active-prompt {
   filter: brightness(0.6);
   opacity: 0.7;
   background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-position: center;
 }
 #background-video {
   height: 100vh;
@@ -387,6 +387,18 @@ a {
 }
 .option-list > li:hover {
   color: var(--highlight);
+}
+.published-status {
+  color: white;
+  border: solid green;
+  margin-left: 5px;
+  background-color: green;
+}
+.pending-status {
+  color: white;
+  border: solid rgb(124, 124, 18);
+  margin-left: 5px;
+  background-color: rgb(124, 124, 18);
 }
 @media only screen and (max-width: 914px) {
 }

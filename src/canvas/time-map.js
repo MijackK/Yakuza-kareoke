@@ -37,9 +37,7 @@ export function initMap(id) {
   myCanvas.width = window.innerWidth;
   myCanvas.height = 150;
   canvaswidth = myCanvas.width;
-  numberOfIndicators = Number(
-    (myCanvas.clientWidth / pixelsPerIndicator).toFixed(0)
-  );
+  numberOfIndicators = Math.ceil(myCanvas.clientWidth / pixelsPerIndicator);
 
   if (myCanvas.getContext) {
     ctx = myCanvas.getContext("2d"); // rendering context
@@ -145,8 +143,6 @@ export function drawMap(prompts = [], seconds = 0, duration = 0) {
 window.addEventListener("resize", () => {
   ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
   myCanvas.width = window.innerWidth;
-  numberOfIndicators = Number(
-    (myCanvas.clientWidth / pixelsPerIndicator).toFixed(0)
-  );
+  numberOfIndicators = Math.ceil(myCanvas.clientWidth / pixelsPerIndicator);
   canvaswidth = myCanvas.width;
 });

@@ -20,6 +20,7 @@ export default function beatMapManager() {
   let backgroundUrl;
   let selectedMap;
   let controller = new AbortController();
+  let searchController = new AbortController();
 
   const getBackgroundUrl = () => backgroundUrl;
   const getAudioUrl = () => audioUrl;
@@ -48,6 +49,10 @@ export default function beatMapManager() {
   const abortSelection = () => {
     controller.abort();
     controller = new AbortController();
+  };
+  const abortSearch = () => {
+    searchController.abort();
+    searchController = new AbortController();
   };
 
   const generateBlobUrl = async ({ audio, background }) => {
@@ -96,11 +101,11 @@ export default function beatMapManager() {
   };
   const directUrl = (path) => `http://${config.objectServer}/${path}`;
 
-  const saveMapRemote = async (column, id) => {
+  const saveMapRemote = async (id) => {
     const response = await saveBeatMap({
       id,
-      column,
-      value: selectedMap[column],
+      column: "beatMap",
+      value: getLocalMap(id) || [],
     });
     return response;
   };
@@ -108,8 +113,9 @@ export default function beatMapManager() {
     const beatMaps = await getUserBeatMaps();
     return beatMaps;
   };
-  const handleGetBeatMaps = async () => {
-    const response = await getBeatMaps();
+  const handleGetBeatMaps = async (page, search) => {
+    abortSearch();
+    const response = await getBeatMaps(page, search, searchController.signal);
     return response;
   };
   const loadMap = async (id) => {
