@@ -21,10 +21,15 @@
         <div>Web</div>
       </div>
       <input type="search" id="song-search" placeholder="search"/>
+      <div id="search-indicator" class="loading-indicator">
+        <div ></div>
+      </div>
       <div class="menu_container">
+      
        
-      <div class="list-title">Song Selection</div>  
-        <ol id="song_list">
+      <div class="list-title">Song Selection</div> 
+   
+        <ol id="song_list" class="song-list">
            <!-- <li data-song="judgment"  >
             <span class="list_number">1</span>
             <span class="song-name">Judment-Shinpan</span>
@@ -34,6 +39,7 @@
             <span class="song-name">Judment-Shinpan</span>
           </li>-->
         </ol>
+   
        </div>
     
        <a href="javascript:void(0)"><div id="start-song">Play</div></a>
@@ -51,24 +57,41 @@
   
       <form action="" id="login" class="general-form">
         <label for="email">EMAIL</label>
-        <input type="email" id="email" name="email">
+        <input type="email" id="email" name="email" required>
         <label for="password">PASSWORD</label>
-        <input type="password" id="password" name="password">
-        <p id="login-error"style="color:red;display: none; "> password or email is incorrect</p>
+        <input type="password" id="password-login" name="password" required>
+        <div style="margin-bottom: 5px;"> <input id="show-password-login" type="checkbox" >Show Password </div>
+  
         <a style="cursor:pointer" href="passwordreset.html"><p>Forgot Password?</p></a>
+        <p id="login-error"style="color:red; "></p>
         <button type="submit">SUBMIT</button>
       </form>
       <form action="" class="general-form" id="register">
         <label for="username">USERNAME</label>
-        <input type="text" id="username" name="username">
+        <input type="text" id="username" name="username" required>
         <label for="email">EMAIL</label>
-        <input type="email" id="email" name="email">
+        <input type="email" id="email" name="email" required>
         <label for="password">PASSWORD</label>
-        <input type="password" id="password" name="password">
-        <label for="password">CONFIRM PASSWORD</label>
-        <input type="text" id="c-password" name="c-password">
+        <input type="password" id="password-register" name="password" required>
+        <div style="margin-bottom: 5px;"> <input id="show-password-register" type="checkbox" >Show Password </div>
+        <p id="register-error"style="color:red; "></p>
         <button type="submit">SUBMIT</button>
       </form>
+    </div>
+  </div>
+  <div id="setting-dialog"  class="dialog" style=" ">
+    <div  id="settings" style="border-left: solid grey thin; display:flex;flex-direction: column;">
+      <label>Music Volume</label>
+      <input type="range">
+      <label>Hit sound volume</label>
+      <input type="range">
+      <label>Offset</label>
+      <input type="number">
+      <label>Background Brightness </label>
+      <input type="range">
+      <label>Controls </label>
+      <input type="range">
+      
     </div>
   </div>
   <div id="account-dialog"  class="dialog" >
@@ -120,8 +143,6 @@
          <div class="edit-view" style="display:none">
           <input name="currentPassword" placeholder="current password" type="password" autocomplete="new-password" required>
           <input name="newPassword" placeholder="new password" name="value"  type="password" required >
-          <input name="confirmPassword" placeholder="confirm password" name="value"  type="password" required >
-       
           <div >
         
             <button  >change</button>
