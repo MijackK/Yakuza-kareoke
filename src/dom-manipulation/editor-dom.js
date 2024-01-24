@@ -271,7 +271,6 @@ export function showHideOption(optionList) {
   const { display } = getComputedStyle(element);
   element.style.display = display === "none" ? "block" : "none";
 }
-export function loadingAction(overlay) {}
 
 export function authenicatedView() {
   const loginForm = document.querySelector("#login");

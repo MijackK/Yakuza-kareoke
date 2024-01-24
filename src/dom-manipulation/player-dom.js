@@ -2,14 +2,22 @@ import greatImg from "../images/great.png";
 import missImg from "../images/miss.png";
 import badImg from "../images/bad.png";
 import goodImg from "../images/good.png";
+import { getSettings } from "../utility.js/storage";
 
 export function addAudio(songSrc, backgroundSRC, clickSrc, extension) {
+  const settings = getSettings();
+  console.log(settings);
   const song = document.querySelector("#song");
   const click = document.querySelector("#click-audio");
   const backgroundVideo = document.querySelector("#background-video");
+  backgroundVideo.style.filter = `brightness(${settings.opacity})`;
+
   const backgroundImage = document.querySelector("#background-image");
+  backgroundImage.style.filter = `brightness(${settings.opacity})`;
   song.src = songSrc;
+  song.volume = settings.music;
   click.src = clickSrc;
+  click.volume = settings.hit;
   song.currentTime = 0;
   if (extension === "mp4") {
     backgroundVideo.src = backgroundSRC;
@@ -19,6 +27,8 @@ export function addAudio(songSrc, backgroundSRC, clickSrc, extension) {
   }
   backgroundImage.style.backgroundImage = `url(${backgroundSRC})`;
 }
+export function addSettings() {}
+
 export function resetMap() {
   const song = document.querySelector("#song");
   const backgroundVideo = document.querySelector("#background-video");
@@ -38,11 +48,11 @@ export function pauseMap() {
   backgroundVideo.pause();
 }
 export function playMap() {
+  const settings = getSettings();
   const song = document.querySelector("#song");
+  song.volume = settings.music;
   const backgroundVideo = document.querySelector("#background-video");
   song.play();
-  song.volume = 0.1;
-  song.volume = 1;
   backgroundVideo.play();
 }
 export function playClick() {

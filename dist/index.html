@@ -79,18 +79,23 @@
       </form>
     </div>
   </div>
-  <div id="setting-dialog"  class="dialog" style=" ">
-    <div  id="settings" style="border-left: solid grey thin; display:flex;flex-direction: column;">
+  <div id="setting-dialog"  class="dialog" >
+    <div  id="settings" >
+      
       <label>Music Volume</label>
-      <input type="range">
+      <input id="music-volume" type="range" min="0" max="10" step="1" value="5">
+  
       <label>Hit sound volume</label>
-      <input type="range">
+      <input id="hit-sound" type="range" min="0" max="10" step="1" value="5" >
+  
       <label>Offset</label>
-      <input type="number">
-      <label>Background Brightness </label>
-      <input type="range">
-      <label>Controls </label>
-      <input type="range">
+      
+      <input id="time-offset" type="number" value="0" >
+  
+      <label>Background brightness </label>
+      <input id="background-opacity" type="range" min="0" max="10" step="1" value="10">
+    </div>
+
       
     </div>
   </div>

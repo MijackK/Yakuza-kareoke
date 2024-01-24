@@ -194,3 +194,13 @@ export function addErrorMessage(message, id) {
   const error = document.querySelector(`#${id}`);
   error.textContent = message;
 }
+export function domSettings(settings) {
+  const music = document.querySelector("#music-volume");
+  const hit = document.querySelector("#hit-sound");
+  const offset = document.querySelector("#time-offset");
+  const brightness = document.querySelector("#background-opacity");
+  music.value = settings.music * 10;
+  hit.value = settings.songItem * 10;
+  offset.value = settings.offset;
+  brightness.value = settings.opacity * 10;
+}

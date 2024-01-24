@@ -5,6 +5,7 @@ body {
   margin: 0px;
   padding: 0.1px;
   font-family: var(--primary-font);
+  color: var(--primary-color);
 }
 #song-search {
   padding: 10px;
@@ -69,13 +70,32 @@ a {
   background-color: var(--primary-bg-color);
   border: solid grey thin;
 }
+#settings {
+  border-left: solid grey thin;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  font-size: 1.5rem;
+}
+#settings > label {
+  padding: 5px;
+}
+#settings > input {
+  background-color: transparent;
+  border: none;
+  border-bottom: solid grey;
+  border-width: 1px;
+  font-family: var(--primary-font);
+  color: var(--primary-color);
+  font-size: 1.3rem;
+}
 #account {
   width: 30vw;
   min-width: 300px;
   border-left: solid grey thin;
-
   padding: 15px;
 }
+
 #account label {
   font-size: 1.6rem;
 }
@@ -187,6 +207,7 @@ a {
   justify-content: space-around;
   border: rgba(3, 3, 3, 0.442) solid;
   padding: 15px;
+  color: black;
 }
 .song-name {
   width: 100%;
@@ -271,6 +292,7 @@ a {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: clip;
+  color: black;
 }
 .list-title {
   background-color: black;

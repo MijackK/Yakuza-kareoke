@@ -20,9 +20,11 @@ import {
   addErrorMessage,
   clearList,
   showLoading,
+  domSettings,
 } from "./dom-manipulation/home-dom";
 import user from "./managers/user-manager";
 import map from "./managers/map_manager";
+import { updateSettings, getSettings } from "./utility.js/storage";
 
 const userManager = user();
 const mapManager = map();
@@ -49,12 +51,10 @@ const infiniteLoad = (search = false) => {
       page += 1;
 
       songs.forEach((song) => {
-        for (let i = 0; i < 10; i += 1) {
-          const listItem = generateSong(song);
-          listItem.addEventListener("click", () => {
-            selectSong(song, listItem);
-          });
-        }
+        const listItem = generateSong(song);
+        listItem.addEventListener("click", () => {
+          selectSong(song, listItem);
+        });
       });
     })
     .catch((err) => {
@@ -75,6 +75,7 @@ const searchSong = (newKey) => {
 };
 
 initialize();
+domSettings(getSettings());
 
 userManager.isLogin().then(() => {
   if (userManager.getUserData()?.isLogin) {
@@ -333,6 +334,33 @@ Object.keys(optionElements).forEach((option) => {
   });
 });
 
+document.querySelector("#music-volume").addEventListener("change", (e) => {
+  updateSettings("music", Number(e.target.value) / 10);
+});
+document.querySelector("#hit-sound").addEventListener("change", (e) => {
+  updateSettings("hit", Number(e.target.value) / 10);
+});
+
+document.querySelector("#time-offset").addEventListener("click", (e) => {
+  updateSettings("offset", e.target.value);
+});
+document.querySelector("#time-offset").addEventListener("keyup", (e) => {
+  updateSettings("offset", e.target.value);
+});
+
+document
+  .querySelector("#background-opacity")
+  .addEventListener("change", (e) => {
+    updateSettings("opacity", Number(e.target.value) / 10);
+  });
+
+document.querySelector("#setting-dialog").addEventListener("click", (e) => {
+  if (e.target.id !== "setting-dialog") return;
+  e.target.style.display = "none";
+});
+document.querySelector(".settings").addEventListener("click", () => {
+  document.querySelector("#setting-dialog").style.display = "flex";
+});
 // buttons
 // forms
 // modals

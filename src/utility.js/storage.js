@@ -35,3 +35,32 @@ export function deleteLocalMap(id) {
   const filtered = maps.filter((map) => map.id !== id);
   localStorage.setItem("maps", JSON.stringify(filtered));
 }
+export function updateSettings(property, value) {
+  let settings = JSON.parse(localStorage.getItem("settings"));
+  if (!settings) {
+    localStorage.setItem(
+      "settings",
+      JSON.stringify({
+        music: 0.5,
+        hit: 0.5,
+        offset: 0,
+        opacity: 0.7,
+      })
+    );
+    settings = JSON.parse(localStorage.getItem("settings"));
+  }
+  settings[property] = value;
+  localStorage.setItem("settings", JSON.stringify(settings));
+}
+
+export function getSettings() {
+  const defaultSettings = {
+    music: 0.5,
+    hit: 0.7,
+    offset: 0,
+    opacity: 1,
+  };
+
+  const settings = JSON.parse(localStorage.getItem("settings"));
+  return settings || defaultSettings;
+}
