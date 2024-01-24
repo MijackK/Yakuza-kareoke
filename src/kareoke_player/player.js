@@ -11,6 +11,8 @@ import { click, hold, rapid } from "../player-parts/input-parts";
 import { feedBackVisualiserFactory } from "../player-parts/display-parts";
 import { validPrompts, init } from "../canvas/canvas";
 import beatMapManager from "../managers/map_manager";
+import PlayerManager from "../managers/player_manager";
+
 import {
   addAudio,
   playMap,
@@ -32,15 +34,12 @@ import { saveHighScore } from "../api/kareoke";
 initialize();
 init();
 const mapManager = beatMapManager();
+const player = PlayerManager();
 
 // give song an src
-let play = false;
 
 // give background an src
 
-let timeElapsed = 0;
-let previousTime = 0;
-let startTime;
 const scoreSummary = { great: 0, good: 0, bad: 0, miss: 0 };
 const incrementValue = { great: 100, good: 60, bad: 0, miss: 0 };
 
@@ -105,7 +104,7 @@ const handleKeyDown = (key, inputObject, methodName) => {
     // eslint-disable-next-line dot-notation
     const Info = inputObject[methodName](
       key,
-      timeElapsed,
+      player.getTimeElapsed(),
       inputObject.inputList
     );
     feedBackVisualiser.inputFeedback(Info);
@@ -120,7 +119,7 @@ const rapidInputHandler = (key) => {
     rapidInput.checkInput(
       key,
       rapidInput.inputList,
-      Number(((Date.now() - startTime) / 1000).toFixed(1))
+      player.getTimeElapsed().toFixed(1)
     );
   }
 };
@@ -132,19 +131,22 @@ const removeGameInputs = (duration, inputObject, elapsedTime) => {
 };
 const stopMap = () => {
   cancelAnimationFrame(animationID);
-  play = false;
-  validPrompts(
-    timeElapsed,
-    [...clickInput.inputList, ...rapidInput.inputList, ...holdInput.inputList],
-    play
-  );
+  player.setPlay(false);
+
+  validPrompts(player.getTimeElapsed(), [
+    ...clickInput.inputList,
+    ...rapidInput.inputList,
+    ...holdInput.inputList,
+  ]);
 };
 
 const timeController = () => {
-  if (play === false) return;
-  const timeNow = Number((Date.now() - startTime) / 1000);
+  if (player.getPlay() === false) return;
+  const timeNow = Number((Date.now() - player.getStartTime()) / 1000);
+  const elapsedTime =
+    player.getTimeElapsed() + (timeNow - player.getPreviousTime());
 
-  timeElapsed += timeNow - previousTime;
+  player.setTimeElapsed(elapsedTime);
 
   if (
     clickInput.inputList.length === 0 &&
@@ -172,7 +174,7 @@ const timeController = () => {
   if (rapidInput.inputList.length !== 0) {
     const rapidInfo = rapidInput.countInputs(
       rapidInput.inputList,
-      Number(timeElapsed.toFixed(1))
+      Number(player.getTimeElapsed().toFixed(1))
     );
     feedBackVisualiser.inputFeedback(rapidInfo);
     feedBackVisualiser.showIndicator(rapidInfo);
@@ -180,22 +182,24 @@ const timeController = () => {
   }
   // removing inputs prompts from array.
   if (clickInput.inputList.length !== 0)
-    removeGameInputs(0.2, clickInput, timeElapsed);
+    removeGameInputs(0.2, clickInput, player.getTimeElapsed());
   if (holdInput.inputList.length !== 0)
     removeGameInputs(
       holdInput.inputList[0].duration + 0.2,
       holdInput,
-      timeElapsed
+      player.getTimeElapsed()
     );
   if (rapidInput.inputList.length !== 0)
     removeGameInputs(
       rapidInput.inputList[0].duration + 0.2,
       rapidInput,
-      timeElapsed
+      player.getTimeElapsed()
     );
-  previousTime = timeNow;
+  player.setPreviousTime(timeNow);
 
-  document.querySelector("#time").textContent = timeElapsed.toFixed(3);
+  document.querySelector("#time").textContent = player
+    .getTimeElapsed()
+    .toFixed(3);
 };
 const AnimatePrompts = () => {
   timeController();
@@ -204,13 +208,12 @@ const AnimatePrompts = () => {
     .concat(holdInput.inputList);
 
   // adding prompts to the Canvas
-  validPrompts(timeElapsed, promptArrays, play);
+  validPrompts(player.getTimeElapsed(), promptArrays, player.getPlay());
   animationID = requestAnimationFrame(AnimatePrompts);
 };
 const startMap = () => {
   animationID = requestAnimationFrame(AnimatePrompts);
-  startTime = Date.now() - timeElapsed * 1000;
-  play = true;
+  player.startMap();
   playMap();
   closeMenu();
 };
@@ -228,8 +231,9 @@ const pause = () => {
   openMenu();
 };
 const restart = () => {
-  timeElapsed = 0;
-  previousTime = 0;
+  player.setTimeElapsed(0);
+  player.setPreviousTime(0);
+
   score = 0;
   combo = 0;
   scoreSummary.great = 0;
@@ -264,7 +268,7 @@ document.querySelector("body").addEventListener("keyup", (e) => {
   if (holdInput.inputList.length !== 0) {
     const holdInfo = holdInput.checkUp(
       e.key,
-      Number(((Date.now() - startTime) / 1000).toFixed(1)),
+      player.getTimeElapsed().toFixed(1),
       holdInput.inputList
     );
     feedBackVisualiser.inputFeedback(holdInfo);
@@ -278,7 +282,7 @@ document.querySelector("body").addEventListener("keyup", (e) => {
 });
 document.querySelector("body").addEventListener("keyup", (e) => {
   if (e.key === "Escape") {
-    if (play) {
+    if (player.getPlay()) {
       pause();
       return;
     }
