@@ -538,7 +538,9 @@ document.querySelector("#audio-edit").addEventListener("change", (e) => {
 });
 document.querySelector("body").addEventListener("keydown", (e) => {
   if (e.key !== " ") return; // if the key pressed is not spacebar
-  // prevents play when the timepicker modal is opened
+
+  if (getComputedStyle(document.querySelector("#modal")).display === "flex")
+    return;
   if (editor.getPlay() === false) {
     startEditor();
     return;
