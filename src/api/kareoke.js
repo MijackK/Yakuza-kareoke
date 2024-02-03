@@ -17,6 +17,20 @@ export async function uploadBeatmap(formData) {
 
   return data;
 }
+export async function editMedia(formData) {
+  const options = {
+    method: "put",
+    body: formData,
+  };
+  const headers = {};
+  const response = await apiRequest({
+    url: `kareoke/change_media`,
+    options,
+    headers,
+  });
+  const data = await response.text();
+  return data;
+}
 
 export async function getBeatMaps(page, search, signal) {
   const options = {

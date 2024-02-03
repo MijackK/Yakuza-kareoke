@@ -91,7 +91,7 @@ export function editorPause() {
 const highLightSelected = (id) => {
   const beatMaps = document.querySelectorAll(".beat-map");
   beatMaps.forEach((listItem) => {
-    if (Number(listItem.id) === Number(id)) {
+    if (listItem.id === `map-${id}`) {
       listItem.classList.add("active");
       return;
     }
@@ -144,6 +144,7 @@ export function showSelectedSong(
   const backgroundImage = document.querySelector("#background-image");
   const selectedAudio = document.querySelector("#map-audio");
   const selectName = document.querySelector("#select-name ");
+  const nameEdit = document.querySelector("#name-edit>input[type='text']");
   const selectVideo = document.querySelector("#map-video");
   const selectImage = document.querySelector("#map-image");
   // remove no selected message
@@ -156,6 +157,7 @@ export function showSelectedSong(
   backgroundVideo.style.display = "none";
   backgroundImage.style.display = "none";
   selectName.textContent = beatMap.name;
+  nameEdit.value = beatMap.name;
 
   selectedAudio.src = audioURL;
   const extension = previewExtension;
@@ -186,11 +188,16 @@ export function displaySelectedStatus(text) {
   selectedStatus.textContent = text;
   showEdit(false);
 }
+
+export function changeMapName(id, value) {
+  const mapName = document.querySelector(`#map-${id} .map-name`);
+  mapName.textContent = value;
+}
 export function listBeatMap(beatMap, extension, source) {
   const mapList = document.querySelector("#map-list");
   const listItem = document.createElement("li");
 
-  listItem.id = beatMap.id;
+  listItem.id = `map-${beatMap.id}`;
   listItem.classList.add("beat-map");
   const optionButton = document.createElement("span");
   optionButton.innerHTML = "&#x22EF";
@@ -239,17 +246,20 @@ export function listBeatMap(beatMap, extension, source) {
   const mapInfo = document.createElement("div");
   mapInfo.classList.add("beat-map-text");
   listItem.appendChild(mapInfo);
+  const nameContainer = document.createElement("div");
   const mapName = document.createElement("span");
+  mapName.classList.add("map-name");
   mapName.textContent = beatMap.name;
   const mapStatus = document.createElement("span");
   mapStatus.className = `${beatMap.status}-status`;
   if (beatMap.status !== "draft") {
     mapStatus.textContent = beatMap.status;
   }
-  mapName.append(mapStatus);
+  nameContainer.append(mapName, mapStatus);
+
   const mapUpdateDate = document.createElement("span");
   mapUpdateDate.textContent = `last updated: ${beatMap.dateUpdated}`;
-  mapInfo.append(mapName, mapUpdateDate);
+  mapInfo.append(nameContainer, mapUpdateDate);
 
   listItem.append(optionButton);
   mapList.prepend(listItem);
@@ -305,4 +315,15 @@ export function addPromptSrc() {
 export function addErrorMessage(message, id) {
   const error = document.querySelector(`#${id}`);
   error.textContent = message;
+}
+export function opneNameEditForm(open) {
+  const nameEditOpen = document.querySelector("#name-edit-open");
+  const nameEditForm = document.querySelector("#name-edit");
+  nameEditForm.style.display = open ? "flex" : "none";
+  nameEditOpen.style.display = open ? "none" : "inline";
+}
+
+export function showLoading(id, display) {
+  const loadingIndicator = document.querySelector(`#${id}`);
+  loadingIndicator.style.display = display;
 }

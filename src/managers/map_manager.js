@@ -7,6 +7,7 @@ import {
   saveBeatMap,
   deleteMap,
   publishRequest,
+  editMedia,
 } from "../api/kareoke";
 import config from "../config";
 import {
@@ -84,6 +85,24 @@ export default function beatMapManager() {
     const response = uploadBeatmap(formData);
     return response;
   };
+  const changeMedia = async (type, file) => {
+    // check if changing media will exceed maximum file size
+    if (!selectedMap) {
+      throw new Error("No map selected");
+    }
+    const currentMap = selectedMap;
+    const formData = new FormData();
+    formData.append("type", type);
+    formData.append("media", file);
+    formData.append("mapID", selectedMap.id);
+    const newURL = await editMedia(formData);
+    selectedMap[type] = newURL;
+    return {
+      newURL,
+      reload: selectedMap === currentMap,
+      extension: getExtension(newURL),
+    };
+  };
   const deleteBeatMap = async (id) => {
     const response = await deleteMap(id);
     URL.revokeObjectURL(backgroundUrl);
@@ -107,15 +126,43 @@ export default function beatMapManager() {
       column: "beatMap",
       value: getLocalMap(id) || [],
     });
+
     return response;
+  };
+
+  const saveMapName = async (value) => {
+    if (!selectedMap) {
+      throw new Error("No map selected");
+    }
+    const currentMap = selectedMap;
+    const response = await saveBeatMap({
+      id: selectedMap.id,
+      column: "name",
+      value,
+    });
+    currentMap.name = value;
+    // fix this so that updating the selected map(dom) doesnt need the extension
+    return {
+      response,
+      reload: currentMap === selectedMap,
+      extension: getExtension(currentMap.background),
+    };
   };
   const handleGetUserBeatMaps = async () => {
     const beatMaps = await getUserBeatMaps();
     return beatMaps;
   };
   const handleGetBeatMaps = async (page, search) => {
+    const searchKeys = search
+      .split(" ")
+      .filter((key) => key !== "")
+      .join(",");
     abortSearch();
-    const response = await getBeatMaps(page, search, searchController.signal);
+    const response = await getBeatMaps(
+      page,
+      searchKeys,
+      searchController.signal
+    );
     return response;
   };
   const loadMap = async (id) => {
@@ -148,5 +195,7 @@ export default function beatMapManager() {
     loadMap,
     deleteBeatMap,
     publishMap,
+    saveMapName,
+    changeMedia,
   };
 }

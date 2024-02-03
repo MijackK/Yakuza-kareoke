@@ -319,24 +319,7 @@ a {
 .list_type > div:last-child {
   background-color: #39a6f6;
 }
-.loading-indicator {
-  display: none;
-  width: 100%;
-  height: 5px;
-  background: white;
-  position: relative;
-  overflow: hidden;
-}
-.loading-indicator > div {
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  background-color: #39a6f6;
-  animation-name: load;
-  animation-duration: 2.5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
+
 .dark_mode {
   --primary-color: #eeeeee;
   --primary-bg-color: #091126;
@@ -353,13 +336,5 @@ a {
   }
   to {
     transform: translateX(270px) rotate(40deg);
-  }
-}
-@keyframes load {
-  from {
-    left: -50%;
-  }
-  to {
-    left: 100%;
   }
 }

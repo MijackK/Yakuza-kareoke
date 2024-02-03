@@ -105,3 +105,29 @@ input[type="password"]:focus {
   border: none;
   font-size: 4rem;
 }
+.loading-indicator {
+  display: none;
+  width: 100%;
+  height: 5px;
+  background: white;
+  position: relative;
+  overflow: hidden;
+}
+.loading-indicator > div {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  background-color: #39a6f6;
+  animation-name: load;
+  animation-duration: 2.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes load {
+  from {
+    left: -50%;
+  }
+  to {
+    left: 100%;
+  }
+}

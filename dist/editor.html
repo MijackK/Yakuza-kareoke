@@ -130,7 +130,7 @@
           <label for="song"> Audio</label>
           <input type="file"id="song-select" name="audio" id="song" accept=".mp3" required>
           <label for="background">Background</label>
-          <input type="file" name="background" id="background" accept=".mp4,.jpg,.gif,.webp,.WebM" required>
+          <input type="file" name="background" id="background" accept=".mp4,.jpg,.gif,.webp,.WebM,.ogg" required>
           <span id="addmap-error" style="color:red"></span>
           <Button>Add map</Button>
         </Form>
@@ -142,18 +142,41 @@
       
         <p id="selected-status">Loading..</p>
       </div>
+    
       
       
        <div id="selected-summary">
-     
-      
-        <label>Name</label>
-          <span id="select-name">Judgment</span>
-          <label>Background</label>
+       
+          <span id="name-edit-open" style="cursor:pointer"><span id="select-name">Judgment</span> &#9998</span>
+          <form  id="name-edit" class="general-form" style="min-height: 0px;display:none;"  >
+            
+            <input name="map-name" type="text" minLength="2" required />
+            <span id="editname-error" style="color:red;padding:3px;"></span>
+            <div>
+            <button >change</button>
+            <button type="button" id="name-edit-close" >cancel</button>
+          </div>
+         
+          </form>
+         <div style="display:flex;flex-direction: column;gap:10px">
+          <label for="background-edit"  style="cursor:pointer;">Background  &#9998</label>
+          <div id="background-indicator" class="loading-indicator" style="margin-top:10px;margin-bottom:10px">
+            <div ></div>
+          </div>
+          <span id="editbackground-error" style="color:red;padding:3px;"></span>
           <img src="" alt="image-here" id="map-image">
+          <input type="file" id="background-edit" style="display:none" accept=".mp4,.jpg,.gif,.webp,.WebM,.ogg"/>
           <video src="" id="map-video" controls></video>
-          <label>Audio</label>
+        </div>
+        <div style="display:flex;flex-direction: column;gap:10px">
+          <label for="audio-edit"  style="cursor:pointer;">Audio  &#9998</label>
+          <div id="audio-indicator" class="loading-indicator" style="margin-top:10px;margin-bottom:10px">
+            <div ></div>
+          </div>
+          <span id="editaudio-error" style="color:red;padding:3px;"></span>
           <audio id="map-audio" src="" controls></audio>
+          <input type="file" id="audio-edit"  style="display:none" accept=".mp3"/>
+        </div>
          </div>
         </div>
      </div>

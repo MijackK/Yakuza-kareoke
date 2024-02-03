@@ -34,6 +34,9 @@ import {
   addPromptSrc,
   showEdit,
   addErrorMessage,
+  opneNameEditForm,
+  changeMapName,
+  showLoading,
 } from "../dom-manipulation/editor-dom";
 import beatMapManager from "../managers/map_manager";
 import userFactory from "../managers/user-manager";
@@ -41,10 +44,12 @@ import userFactory from "../managers/user-manager";
 const editor = editorFactory();
 const mapManager = beatMapManager();
 const userManager = userFactory();
+let changingBackground = false;
+let changingAudio = false;
+let changingName = false;
 init();
 initMap("#time-map");
 addPromptSrc();
-
 let animationID;
 
 const loadMedia = (audio, background, extension) => {
@@ -428,7 +433,109 @@ document.querySelector("body").addEventListener("keydown", (e) => {
   updateGraphics();
   updateMediaTime(editor.getElapsedTime());
 });
+document.querySelector("#name-edit-open").addEventListener("click", () => {
+  opneNameEditForm(true);
+});
+document.querySelector("#name-edit-close").addEventListener("click", () => {
+  opneNameEditForm(false);
+});
+document.querySelector("#name-edit").addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (changingName) return;
 
+  changingName = true;
+  const { name, status, id } = mapManager.getSelectedMap();
+  if (status !== "draft") {
+    addErrorMessage("Only draft posts can be edited", "editname-error");
+    return;
+  }
+  const formData = new FormData(e.target);
+  if (formData.get("map-name") === name) return;
+  const submitButton = document.querySelector("#name-edit button");
+  submitButton.disabled = true;
+  console.log(submitButton);
+
+  mapManager
+    .saveMapName(formData.get("map-name"))
+    .then(({ reload, extension }) => {
+      changeMapName(id, formData.get("map-name"));
+      opneNameEditForm(false);
+      addErrorMessage("", "editname-error");
+      if (reload) {
+        // update selectedMap value
+        showSelectedSong(
+          mapManager.getSelectedMap(),
+          extension,
+          mapManager.getAudioUrl(),
+          mapManager.getBackgroundUrl()
+        );
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      addErrorMessage(err, "editname-error");
+    })
+    .finally(() => {
+      changingName = false;
+      submitButton.disabled = false;
+    });
+});
+document.querySelector("#background-edit").addEventListener("change", (e) => {
+  if (changingBackground) return;
+  const file = e.target.files[0];
+  changingBackground = true;
+  // check on frontend if changing the size go over the maximum allowed beatMap size
+  showLoading("background-indicator", "block");
+  mapManager
+    .changeMedia("background", file)
+    .then(({ reload, extension }) => {
+      addErrorMessage("", "editbackground-error");
+      if (reload) {
+        console.log("reloading");
+        loadMedia(
+          mapManager.getSelectedMap().audio,
+          mapManager.getSelectedMap().background,
+          extension
+        );
+      }
+    })
+    .catch((err) => {
+      addErrorMessage(err, "editbackground-error");
+      console.log(err);
+    })
+    .finally(() => {
+      showLoading("background-indicator", "none");
+      changingBackground = false;
+    });
+});
+document.querySelector("#audio-edit").addEventListener("change", (e) => {
+  if (changingAudio) return;
+  const file = e.target.files[0];
+  changingAudio = true;
+  // check on frontend if changing the size go over the maximum allowed beatMap size
+  showLoading("audio-indicator", "block");
+  mapManager
+    .changeMedia("audio", file)
+    .then(({ reload, extension }) => {
+      addErrorMessage("", "editaudio-error");
+      if (reload) {
+        console.log("reloading");
+        loadMedia(
+          mapManager.getSelectedMap().audio,
+          mapManager.getSelectedMap().background,
+          extension
+        );
+      }
+    })
+    .catch((err) => {
+      addErrorMessage(err, "editaudio-error");
+      console.log(err);
+    })
+    .finally(() => {
+      showLoading("audio-indicator", "none");
+      changingAudio = false;
+    });
+});
 document.querySelector("body").addEventListener("keydown", (e) => {
   if (e.key !== " ") return; // if the key pressed is not spacebar
   // prevents play when the timepicker modal is opened
@@ -440,6 +547,7 @@ document.querySelector("body").addEventListener("keydown", (e) => {
     stopEditor();
   }
 });
+
 document.querySelector("#login").addEventListener("submit", (e) => {
   e.preventDefault();
   const submitButton = e.submitter;
@@ -485,7 +593,6 @@ userManager
       authenicatedView();
       checkSelectedSong();
       const beatMaps = await mapManager.handleGetUserBeatMaps();
-      console.log(beatMaps);
       // get user songs and display them on my map.
       beatMaps.forEach((beatMap) => {
         addMapToList(beatMap);
