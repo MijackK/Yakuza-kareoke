@@ -76,7 +76,7 @@ const setSelectedMap = (beatMap, extension) => {
 
 const addMapToList = (beatMap) => {
   const mediaExtension = mapManager.getExtension(beatMap.background);
-  const mediaSource = mapManager.directUrl(beatMap.background);
+  const mediaSource = mapManager.beatMap.background;
   let loadingDelete = false;
   let loadingPublish = false;
   let loadingSave = false;
@@ -296,9 +296,9 @@ addMapForm.addEventListener("submit", (e) => {
     .then(async (res) => {
       console.log(res);
       const beatMap = res.map;
-
-      // put the map on the list of maps
-      addMapToList(beatMap);
+      beatMap
+        // put the map on the list of maps
+        .addMapToList(beatMap);
       // make the selected map the added map
       setSelectedMap(beatMap, mapManager.getExtension(beatMap.background));
       addMapForm.reset();

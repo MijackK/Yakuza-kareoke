@@ -1,10 +1,10 @@
 import config from "../config";
 import responseText from "../utility.js/responseText";
 
-const { domain } = config;
+const { apiDomain } = config;
 
 export default async function apiRequest({ url, options, headers }) {
-  const response = await fetch(`http://${domain}/${url}`, {
+  const response = await fetch(`http://${apiDomain}/${url}`, {
     mode: "cors",
     credentials: "include",
     headers: {

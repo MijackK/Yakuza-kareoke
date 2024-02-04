@@ -9,7 +9,7 @@ import {
   publishRequest,
   editMedia,
 } from "../api/kareoke";
-import config from "../config";
+
 import {
   getLocalMap,
   saveLocalMap,
@@ -60,11 +60,8 @@ export default function beatMapManager() {
     URL.revokeObjectURL(backgroundUrl);
     URL.revokeObjectURL(audioUrl);
     const [audioBlob, backgroundBloB] = await Promise.all([
-      getMedia(`http://${config.objectServer}/${audio}`, controller.signal),
-      getMedia(
-        `http://${config.objectServer}/${background}`,
-        controller.signal
-      ),
+      getMedia(audio, controller.signal),
+      getMedia(background, controller.signal),
     ]);
     audioUrl = URL.createObjectURL(audioBlob);
     backgroundUrl = URL.createObjectURL(backgroundBloB);
@@ -118,7 +115,6 @@ export default function beatMapManager() {
     const response = await publishRequest(mapID);
     return response;
   };
-  const directUrl = (path) => `http://${config.objectServer}/${path}`;
 
   const saveMapRemote = async (id) => {
     const response = await saveBeatMap({
@@ -188,7 +184,6 @@ export default function beatMapManager() {
     setSelectedMap,
     addBeatMap,
     checkSelectedSong,
-    directUrl,
     getExtension,
     abortSelection,
     clearSelectedMap,
