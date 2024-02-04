@@ -5,7 +5,7 @@ const config = {
   pointWidth: 10,
   pointSpacing: 10,
   startTime: 3,
-  apiDomain: "localhost:5000",
+  apiDomain: { development: "localhost:5000", production: "nothing yet" },
   // for fetch requests
 };
 

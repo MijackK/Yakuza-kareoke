@@ -4,7 +4,11 @@ import responseText from "../utility.js/responseText";
 const { apiDomain } = config;
 
 export default async function apiRequest({ url, options, headers }) {
-  const response = await fetch(`http://${apiDomain}/${url}`, {
+  const location =
+    window.location.hostname === "localhost"
+      ? apiDomain.development
+      : apiDomain.production;
+  const response = await fetch(`http://${location}/${url}`, {
     mode: "cors",
     credentials: "include",
     headers: {
