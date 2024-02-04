@@ -293,7 +293,7 @@ document.querySelector("#resume-btn").addEventListener("click", () => {
   startMap();
 });
 document.querySelector("#home-btn").addEventListener("click", () => {
-  window.location.pathname = "";
+  window.location.href = "index.html";
   // change this to be dynamic instead of static
 });
 
