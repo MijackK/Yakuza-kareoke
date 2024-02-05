@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-  mode: "production",
+  mode: "development",
   entry: {
     script: "./src/script.js",
     editor: "./src/editor/editor.js",

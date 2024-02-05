@@ -104,7 +104,7 @@ export default function beatMapManager() {
     const response = await deleteMap(id);
     URL.revokeObjectURL(backgroundUrl);
     URL.revokeObjectURL(audioUrl);
-    if (id === selectedMap.id) {
+    if (id === selectedMap?.id) {
       clearSelectedMap();
     }
     deleteLocalMap(id);
