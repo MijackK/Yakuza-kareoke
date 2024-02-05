@@ -6,8 +6,8 @@ const config = {
   pointSpacing: 10,
   startTime: 3,
   apiDomain: {
-    development: "localhost:5000",
-    production: "shark-app-uuvcm.ondigitalocean.app",
+    development: "http://localhost:5000",
+    production: "https://shark-app-uuvcm.ondigitalocean.app/",
   },
   // for fetch requests
 };

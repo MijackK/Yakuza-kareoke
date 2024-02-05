@@ -7,7 +7,7 @@ export default async function apiRequest({ url, options, headers }) {
   const location = ["localhost", "127.0.0.1"].includes(window.location.hostname)
     ? apiDomain.development
     : apiDomain.production;
-  const response = await fetch(`http://${location}/${url}`, {
+  const response = await fetch(`${location}/${url}`, {
     mode: "cors",
     credentials: "include",
     headers: {
