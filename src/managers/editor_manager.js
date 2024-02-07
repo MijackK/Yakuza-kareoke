@@ -1,8 +1,3 @@
-import up from "../images/up1.png";
-import down from "../images/down1.png";
-import left from "../images/left1.png";
-import right from "../images/right1.png";
-
 import { saveLocalMap } from "../utility.js/storage";
 
 export default function editorFactory() {
@@ -27,12 +22,6 @@ export default function editorFactory() {
     four: "ArrowDown",
   };
 
-  const image = {
-    ArrowUp: up,
-    ArrowLeft: left,
-    ArrowRight: right,
-    ArrowDown: down,
-  };
   // getters
   const getBeatMap = () => beatMap;
   const getPlayRate = () => playbackRate;
@@ -43,7 +32,7 @@ export default function editorFactory() {
   const getPromptDuration = () => promptDuration;
   const getPromptType = () => promptType;
   const getMoveThumb = () => moveThumb;
-  const getImages = () => image;
+
   const getPreviousTime = () => previousTime;
   const getAudioDuration = () => audioDuration;
   const getPlay = () => Play;
@@ -230,7 +219,6 @@ export default function editorFactory() {
     setHoldDuration,
     setMoveThump,
     getMoveThumb,
-    getImages,
     getPreviousTime,
     setPreviousTime,
     getAudioDuration,
