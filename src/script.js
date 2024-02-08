@@ -153,6 +153,7 @@ loginForm.addEventListener("submit", (e) => {
       const { userName, email, verified } = userManager.getUserData();
       populateAccountForm(userName, email, verified);
       addErrorMessage("", "login-error");
+      loginForm.reset();
     })
     .catch((err) => {
       console.log(err);
@@ -177,6 +178,7 @@ registerForm.addEventListener("submit", (e) => {
     })
     .then((res) => {
       handleLoginDialog(false);
+      registerForm.reset();
       console.log(res);
       addErrorMessage("", "register-error");
     })
@@ -286,6 +288,7 @@ document
   .addEventListener("click", () => accountEdit("email-form", "block", "none"));
 
 document.querySelector("#verify-button").addEventListener("click", (e) => {
+  e.target.disabled = true;
   userManager
     .handleEmailVerifyGeneration()
     .then((res) => {
@@ -294,6 +297,9 @@ document.querySelector("#verify-button").addEventListener("click", (e) => {
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      e.target.disabled = true;
     });
 });
 

@@ -388,6 +388,9 @@ a {
 .option-list > li:hover {
   color: var(--highlight);
 }
+.option-list > a:hover {
+  color: var(--highlight);
+}
 .published-status {
   color: white;
   border: solid green;

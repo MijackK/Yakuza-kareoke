@@ -208,8 +208,14 @@ export function listBeatMap(beatMap, extension, source) {
   listItem.append(optionsList);
 
   // create the options
+  const play = document.createElement("a");
+  play.textContent = "Play";
+  play.href = `player.html?song=${beatMap.id}`;
+  play.target = "_blank” attribute";
+  optionsList.append(play);
+
   const saveMap = document.createElement("li");
-  saveMap.textContent = "save";
+  saveMap.textContent = "Save";
   if (beatMap.status === "draft") {
     optionsList.append(saveMap);
   }
@@ -219,10 +225,10 @@ export function listBeatMap(beatMap, extension, source) {
   optionsList.append(publishMap);
 
   const deleteMap = document.createElement("li");
-  deleteMap.textContent = "delete";
+  deleteMap.textContent = "Delete";
   optionsList.append(deleteMap);
   const clearLocal = document.createElement("li");
-  clearLocal.textContent = " clear local";
+  clearLocal.textContent = " Clear local";
   optionsList.append(clearLocal);
 
   const backgroundType = extension;

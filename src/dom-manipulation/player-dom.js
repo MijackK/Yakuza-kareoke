@@ -6,7 +6,6 @@ import { getSettings } from "../utility.js/storage";
 
 export function addAudio(songSrc, backgroundSRC, clickSrc, extension) {
   const settings = getSettings();
-  console.log(settings);
   const song = document.querySelector("#song");
   const click = document.querySelector("#click-audio");
   const backgroundVideo = document.querySelector("#background-video");

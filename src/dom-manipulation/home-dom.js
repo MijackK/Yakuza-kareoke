@@ -4,8 +4,7 @@ import selectSound from "../audio/interface-124464.mp3";
 import stray from "../video/particles-27669.mp4";
 import homeSong from "../audio/reflected-light-147979.mp3";
 
-export function initialize(verified) {
-  console.log(verified);
+export function initialize() {
   // add the  audio elements
   const audioHover = document.createElement("audio");
   audioHover.id = "hover-sound";
@@ -17,6 +16,7 @@ export function initialize(verified) {
     "Sound Effect by Universfield from Pixabay"
   );
   audioHover.src = hoverSound;
+  audioHover.volume = 0.5;
   audioSelect.src = selectSound;
   audioSelect.playbackRate = 1;
   document.querySelector("body").prepend(audioHover, audioSelect);
@@ -171,7 +171,6 @@ export function accountEdit(formID, view, edit) {
 
 export function playHoverSound() {
   const audioHover = document.querySelector("#hover-sound");
-
   audioHover.currentTime = 0;
   audioHover.play();
 }
