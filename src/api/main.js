@@ -3,7 +3,7 @@ import responseText from "../utility.js/responseText";
 
 const { apiDomain } = config;
 
-export default async function apiRequest({ url, options, headers }) {
+export default async function apiRequest({ url, options, headers = {} }) {
   const location = ["localhost", "127.0.0.1"].includes(window.location.hostname)
     ? apiDomain.development
     : apiDomain.production;

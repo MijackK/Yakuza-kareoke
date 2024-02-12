@@ -10,7 +10,8 @@ module.exports = {
     player: "./src/kareoke_player/player.js",
     verify: "./src/verify/verify-email.js",
     reset: "./src/verify/password-reset.js",
-    publish: "./src/publish/publish.js",
+    publish: "./src/admin/publish.js",
+    user: "./src/admin/users.js",
   },
 
   output: {

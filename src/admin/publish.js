@@ -1,4 +1,5 @@
-import { getMaps, publishMap, deleteMapAdmin } from "../api/kareoke";
+import { getMaps } from "../api/kareoke";
+import { publishMap, deleteMapAdmin } from "../api/admin";
 
 let resolving = false;
 
