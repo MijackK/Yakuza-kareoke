@@ -73,7 +73,7 @@ getUsers().then((res) => {
   });
   banned.forEach((user) => {
     const { listItem, button } = generateListItem(user);
-    button.textContent = "unbaban";
+    button.textContent = "unban";
     button.addEventListener("click", () =>
       unbanUser(user.id, listItem, button)
     );

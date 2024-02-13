@@ -328,7 +328,7 @@ Object.keys(optionElements).forEach((option) => {
   optionElements[option].addEventListener("mouseover", () => {
     hoverDebounce = setTimeout(() => {
       playHoverSound();
-    }, 50);
+    }, 100);
   });
   optionElements[option].addEventListener("mouseout", () => {
     pauseHoverSound();

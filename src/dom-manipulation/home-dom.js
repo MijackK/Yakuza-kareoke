@@ -1,8 +1,7 @@
 import diskImage from "../images/disk.png";
-import hoverSound from "../audio/buttonpress-94482.mp3";
-import selectSound from "../audio/interface-124464.mp3";
-import stray from "../video/particles-27669.mp4";
-import homeSong from "../audio/reflected-light-147979.mp3";
+import hoverSound from "../audio/menu-selection-102220.mp3";
+import selectSound from "../audio/click-menu-app-147357.mp3";
+import stray from "../video/Particles-27669.mp4";
 
 export function initialize() {
   // add the  audio elements
@@ -16,17 +15,12 @@ export function initialize() {
     "Sound Effect by Universfield from Pixabay"
   );
   audioHover.src = hoverSound;
-  audioHover.volume = 0.5;
+
   audioSelect.src = selectSound;
-  audioSelect.playbackRate = 1;
   document.querySelector("body").prepend(audioHover, audioSelect);
 
   // add background image & audio
   const backgroundImage = document.querySelector(".background_image");
-  const homeAudio = document.querySelector("#home-audio");
-  homeAudio.src = homeSong;
-  homeAudio.volume = 0.2;
-  // homeAudio.play();
   backgroundImage.src = stray;
   backgroundImage.play();
 
