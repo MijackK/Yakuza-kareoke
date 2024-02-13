@@ -7,7 +7,7 @@ const config = {
   startTime: 3,
   apiDomain: {
     development: "http://localhost:5000",
-    production: "https://shark-app-uuvcm.ondigitalocean.app/",
+    production: "https://kareokeapi.onrender.com/",
   },
   // for fetch requests
 };
