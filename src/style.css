@@ -17,6 +17,17 @@ a {
   color: inherit;
   text-decoration: none;
 }
+#entry-screen {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--primary-bg-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
 #start-song {
   cursor: pointer;
   background-color: #a2e6ff;
@@ -133,12 +144,11 @@ a {
 
 .background_image {
   position: fixed;
-
-  min-width: 100%;
-  min-height: 100%;
+  width: 100%;
+  height: 100vh;
   z-index: -2;
   filter: brightness(0.6);
-  background-size: cover;
+  object-fit: cover;
 }
 
 .logo {
@@ -199,7 +209,7 @@ a {
 }
 .song_select {
   background-color: #9b9b99;
-  width: 500px;
+  width: clamp(150px, 84vw, 500px);
   height: 500px;
   position: relative;
   z-index: 2;
@@ -337,5 +347,11 @@ a {
   }
   to {
     transform: translateX(270px) rotate(40deg);
+  }
+}
+
+@media only screen and (max-width: 914px) {
+  .disk {
+    display: none;
   }
 }

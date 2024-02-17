@@ -21,6 +21,7 @@ import {
   clearList,
   showLoading,
   domSettings,
+  playBackground,
 } from "./dom-manipulation/home-dom";
 import user from "./managers/user-manager";
 import map from "./managers/map_manager";
@@ -81,8 +82,8 @@ userManager.isLogin().then(() => {
   if (userManager.getUserData()?.isLogin) {
     authenticatedView();
   }
-  const { userName, email, verified } = userManager.getUserData();
-  populateAccountForm(userName, email, verified);
+  const { userName, email, verified, used } = userManager.getUserData();
+  populateAccountForm(userName, email, verified, used);
 });
 infiniteLoad();
 document.querySelector("#song-search").addEventListener("keyup", (e) => {
@@ -177,10 +178,10 @@ registerForm.addEventListener("submit", (e) => {
       userName: registerData.get("username"),
     })
     .then((res) => {
-      handleLoginDialog(false);
       registerForm.reset();
       console.log(res);
       addErrorMessage("", "register-error");
+      authSwitch(document.querySelector(".button-group").children[0]);
     })
     .catch((err) => {
       console.log(err);
@@ -294,6 +295,8 @@ document.querySelector("#verify-button").addEventListener("click", (e) => {
     .then((res) => {
       console.log(res);
       e.target.style.display = "none";
+      const pendingMessage = document.querySelector("#pending-verify");
+      pendingMessage.style.display = "inline-block";
     })
     .catch((err) => {
       console.log(err);
@@ -370,3 +373,7 @@ document.querySelector(".settings").addEventListener("click", () => {
 // buttons
 // forms
 // modals
+
+document.querySelector("#entry-screen").addEventListener("click", () => {
+  playBackground();
+});

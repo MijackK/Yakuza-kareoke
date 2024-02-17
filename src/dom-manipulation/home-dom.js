@@ -2,11 +2,13 @@ import diskImage from "../images/disk.png";
 import hoverSound from "../audio/menu-selection-102220.mp3";
 import selectSound from "../audio/click-menu-app-147357.mp3";
 import stray from "../video/Particles-27669.mp4";
+import startSound from "../audio/interface-124464.mp3";
 
 export function initialize() {
   // add the  audio elements
   const audioHover = document.createElement("audio");
   audioHover.id = "hover-sound";
+  audioHover.muted = true;
   const audioSelect = document.createElement("audio");
   audioSelect.id = "select-sound";
 
@@ -17,16 +19,27 @@ export function initialize() {
   audioHover.src = hoverSound;
 
   audioSelect.src = selectSound;
+  const startAudio = document.querySelector("#start-audio");
+  startAudio.src = startSound;
   document.querySelector("body").prepend(audioHover, audioSelect);
 
   // add background image & audio
   const backgroundImage = document.querySelector(".background_image");
   backgroundImage.src = stray;
-  backgroundImage.play();
 
   // add disk image
   const Disk = document.querySelector(".disk");
   Disk.style.backgroundImage = `url(${diskImage})`;
+}
+export function playBackground() {
+  const backgroundImage = document.querySelector(".background_image");
+  const audioHover = document.querySelector("#hover-sound");
+  const entryScreen = document.querySelector("#entry-screen");
+  const startAudio = document.querySelector("#start-audio");
+  audioHover.muted = false;
+  backgroundImage.play();
+  startAudio.play();
+  entryScreen.style.display = "none";
 }
 
 export function removeSongFocus() {
@@ -145,16 +158,21 @@ export function handleSongModal(open) {
   // eslint-disable-next-line no-script-url
   startSongBtn.parentNode.href = "javascript:void(0)";
 }
-export function populateAccountForm(userName, email, verified) {
+export function populateAccountForm(userName, email, verified, used) {
   const userNameValue = document.querySelector("#username-value");
   userNameValue.textContent = userName;
   const emailValue = document.querySelector("#email-value");
   emailValue.textContent = email;
-  if (verified === false) {
+  if (verified === false && used === true) {
     const verifyBtn = document.querySelector("#verify-button");
     verifyBtn.style.display = "inline-block";
   }
+  if (used === false) {
+    const pendingMessage = document.querySelector("#pending-verify");
+    pendingMessage.style.display = "inline-block";
+  }
 }
+
 export function accountEdit(formID, view, edit) {
   const form = document.querySelector(`#${formID}`);
   const valueView = form.querySelector(".value-view");

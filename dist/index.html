@@ -13,7 +13,14 @@
 
 </head>
 <body class="dark_mode">
-  <audio id="home-audio"> </audio>
+  <div id="entry-screen" >
+  <h2 style="text-align: center;">Real kareoke players use arrow keys</h2>
+  <img src="./arrow-keys.png"/>
+ 
+ 
+  <p style="cursor: pointer;">Click to start</p>
+  </div>
+  <audio id="start-audio"> </audio>
   <div id="song_wrapper">
     <div class="disk disk_slide">
       <div id="tag"><span>Empty disk</span></div>
@@ -158,8 +165,10 @@
           </div>
          </div>
         </form>
-        <button id="verify-button" style="display:none">Verify email</button>
-     
+        <form class="general-form" style="min-height: 0; width:fit-content">
+        <button id="verify-button" style="display:none;">Verify email</button>
+        <p id="pending-verify" style="display:none;font-style: italic;">Email verification link sent </p>
+      </form>
 
   </div>
   
