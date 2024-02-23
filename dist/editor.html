@@ -78,15 +78,22 @@
           <img id="click-image" class="active-prompt"  alt="Click"/>
         </div>
         <div id="rapid"  >
-          <img id="rapid-image"  alt="Rapid"/>
+          <div class="expand">
+            <img id="rapid-image"  alt="Rapid"/>
+            <button id="open-rapid" data-expand="">&#8593</button>
+
+          </div>
           <form id ="r-form" class="duration-form">
           <label >Duration</label>
           <input type="number" name="duration"  step="0.1" value="1" min="0.1" >
           <button>set</button>
           </form> 
         </div>
-        <div id="hold">
-          <img id="hold-image" alt="Hold"/>
+        <div id="hold" >
+          <div class="expand">
+            <img id="hold-image" alt="Hold"/>
+            <button id="open-hold" data-expand="">&#8593</button>
+          </div>
           <form  id ="h-form" class="duration-form">
             <label >Duration</label>
           <input type="number" name="duration"  step="0.1" value="1" min="0.1" >
@@ -99,7 +106,7 @@
  <video id="background-video" src="" class="background"></video>
  
 <div id="modal">
-  <p style="text-align: center; position:absolute;bottom:0;width:100%">
+  <p style="text-align: center; position:fixed;bottom:0;width:100%">
     <button id="exit" >EDIT</button>
   </p>
 

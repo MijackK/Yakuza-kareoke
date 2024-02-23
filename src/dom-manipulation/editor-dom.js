@@ -333,3 +333,11 @@ export function showLoading(id, display) {
   const loadingIndicator = document.querySelector(`#${id}`);
   loadingIndicator.style.display = display;
 }
+
+export function handleDurationForm(id, button, expand) {
+  const section = document.querySelector(`#${id}`);
+  const form = section.querySelector("form");
+  form.style.display = expand ? "flex" : "none";
+  // eslint-disable-next-line no-param-reassign
+  button.innerHTML = expand ? "&#8595" : "&#8593";
+}

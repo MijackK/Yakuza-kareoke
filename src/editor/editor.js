@@ -37,6 +37,7 @@ import {
   opneNameEditForm,
   changeMapName,
   showLoading,
+  handleDurationForm,
 } from "../dom-manipulation/editor-dom";
 import beatMapManager from "../managers/map_manager";
 import userFactory from "../managers/user-manager";
@@ -535,6 +536,28 @@ document.querySelector("#audio-edit").addEventListener("change", (e) => {
       showLoading("audio-indicator", "none");
       changingAudio = false;
     });
+});
+document.querySelector("#open-rapid").addEventListener("click", (e) => {
+  if (e.target.dataset.expand === "") {
+    handleDurationForm("rapid", e.target, true);
+    e.target.dataset.expand = "true";
+    return;
+  }
+  if (e.target.dataset.expand !== "") {
+    handleDurationForm("rapid", e.target, false);
+    e.target.dataset.expand = "";
+  }
+});
+document.querySelector("#open-hold").addEventListener("click", (e) => {
+  if (e.target.dataset.expand === "") {
+    handleDurationForm("hold", e.target, true);
+    e.target.dataset.expand = "true";
+    return;
+  }
+  if (e.target.dataset.expand !== "") {
+    handleDurationForm("hold", e.target, false);
+    e.target.dataset.expand = "";
+  }
 });
 document.querySelector("body").addEventListener("keydown", (e) => {
   if (e.key !== " ") return; // if the key pressed is not spacebar
