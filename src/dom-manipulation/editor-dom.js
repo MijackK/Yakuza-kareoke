@@ -75,7 +75,7 @@ export function editorPlay(time) {
   Audio.play();
   backgroundVideo.play();
 
-  playBtn.textContent = "⏸";
+  playBtn.innerHTML = "<span><span>&#10074</span><span>&#10074</span></span>";
 }
 export function editorPause() {
   const Audio = document.querySelector("#editor-audio");
