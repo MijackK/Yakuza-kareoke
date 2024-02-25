@@ -3,5 +3,4 @@
 node_modules/
 .eslintignore
 dist/bundle.js
-src/video/
-src/audio/
+
