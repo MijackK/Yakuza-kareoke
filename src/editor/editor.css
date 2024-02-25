@@ -226,7 +226,7 @@ img.active-prompt {
   background-position: center;
 }
 #background-video {
-  height: 100vh;
+  height: 100dvh;
   filter: brightness(0.6);
 }
 
@@ -235,7 +235,7 @@ img.active-prompt {
   flex-direction: column;
   position: absolute;
   width: 100vw;
-  min-height: 100vh;
+  min-height: 100dvh;
   z-index: 100;
   background-color: var(--primary-bg-color);
   overflow-x: auto;
