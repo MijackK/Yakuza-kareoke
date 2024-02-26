@@ -35,7 +35,7 @@ const longPromptText = {
 
 export const init = () => {
   myCanvas = document.querySelector(".cplayer");
-  myCanvas.width = window.innerWidth;
+  myCanvas.width = myCanvas.scrollWidth;
   myCanvas.height = 215;
 
   if (myCanvas.getContext) {
@@ -140,7 +140,7 @@ export const validPrompts = (time, buttons) => {
 };
 
 window.addEventListener("resize", () => {
-  myCanvas.width = window.innerWidth;
+  myCanvas.width = myCanvas.scrollWidth;
 });
 
 window.addEventListener("keydown", (e) => {

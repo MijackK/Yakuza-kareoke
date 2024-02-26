@@ -23,7 +23,7 @@ body {
 }
 .score-summary {
   display: flex;
-  width: clamp(300px, 70%, 100%);
+  width: clamp(300px, 70%, 800px);
   justify-content: space-between;
   font-size: 2rem;
   padding: 3px;
@@ -54,19 +54,33 @@ body {
     rgba(255, 0, 0, 0) 100%
   );
 }
+#bottom-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+#touch-controls {
+  display: none;
+  gap: 10px;
+  width: 100vw;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+#touch-controls > img {
+  background: var(--secondary-bg-color);
+}
 #calculate-score {
   z-index: 100;
   justify-content: flex-start;
-  padding: 10px;
 }
 #score-wrapper {
-  width: clamp(360px, 50vw, 1450px);
+  width: clamp(360px, 90vw, 1450px);
   margin-top: 25px;
 }
 #score-number {
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 15px;
   margin-bottom: 10px;
   margin-top: 35px;
   color: white;
@@ -101,7 +115,7 @@ body {
   position: relative;
 }
 .finger_board {
-  width: 100vw;
+  width: 100%;
   height: 180px;
   background-color: rgba(0, 0, 0, 0.7);
   display: flex;
@@ -112,7 +126,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 180px;
-  width: 99vw;
+  width: 99%;
   left: 10px;
 }
 .horizontal-lines > div {
@@ -249,7 +263,7 @@ body {
 
 .cplayer {
   margin-top: 10px;
-  width: 100vw;
+  width: 100%;
   height: 215px;
   transform: translateY(22.5px);
   position: absolute;
@@ -378,5 +392,13 @@ body {
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .player {
+    left: -300px;
+    width: calc(100vw + 300px);
+    align-self: self-start;
   }
 }

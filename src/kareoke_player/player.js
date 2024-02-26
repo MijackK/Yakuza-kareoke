@@ -27,12 +27,14 @@ import {
   addMapInfo,
   openFinalScore,
   updateScore,
+  addTouchControls,
 } from "../dom-manipulation/player-dom";
 
 import { saveHighScore } from "../api/kareoke";
 
 initialize();
 init();
+addTouchControls();
 const mapManager = beatMapManager();
 const player = PlayerManager();
 
@@ -248,26 +250,24 @@ const restart = () => {
   startMap();
 };
 
-// Eventlistners and logic for getting
-document.querySelector("body").addEventListener("keydown", (e) => {
+const checkDownInput = (key) => {
   if (!keydown) {
-    if (handleKeyDown(e.key, clickInput, "checkInput") !== true) {
+    if (handleKeyDown(key, clickInput, "checkInput") !== true) {
       // sometimes hold and click inputs can be valid in the same time frame,
       // this will make sure that they dont trigger at the same time.
-      handleKeyDown(e.key, holdInput, "checkDown");
+      handleKeyDown(key, holdInput, "checkDown");
     }
-    rapidInputHandler(e.key);
+    rapidInputHandler(key);
     playClick();
     keydown = true;
   }
-});
-
-document.querySelector("body").addEventListener("keyup", (e) => {
+};
+const checkUpInput = (key) => {
   keydown = false;
 
   if (holdInput.inputList.length !== 0) {
     const holdInfo = holdInput.checkUp(
-      e.key,
+      key,
       player.getTimeElapsed().toFixed(1),
       holdInput.inputList
     );
@@ -279,6 +279,25 @@ document.querySelector("body").addEventListener("keyup", (e) => {
     }
     incrementScore(holdInfo);
   }
+};
+// Eventlistners and logic for getting
+document.querySelector("body").addEventListener("keydown", (e) => {
+  checkDownInput(e.key);
+});
+
+document.querySelector("body").addEventListener("keyup", (e) => {
+  checkUpInput(e.key);
+});
+
+// touc controls
+document
+  .querySelector("#touch-controls")
+  .addEventListener("touchstart", (e) => {
+    if (e.target.id === "touch-controls") return;
+    checkDownInput(e.target.dataset.key);
+  });
+document.querySelector("#touch-controls").addEventListener("touchend", (e) => {
+  checkUpInput(e.target.dataset.key);
 });
 document.querySelector("body").addEventListener("keyup", (e) => {
   if (e.key === "Escape") {

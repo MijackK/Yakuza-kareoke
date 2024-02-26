@@ -2,7 +2,12 @@ import greatImg from "../images/great.png";
 import missImg from "../images/miss.png";
 import badImg from "../images/bad.png";
 import goodImg from "../images/good.png";
+import upArrow from "../images/up.png";
+import leftArrow from "../images/left.png";
+import downArrow from "../images/down.png";
+import rightArrow from "../images/right.png";
 import { getSettings } from "../utility.js/storage";
+import isMobile from "../utility.js/isMobile";
 
 export function addAudio(songSrc, backgroundSRC, clickSrc, extension) {
   const settings = getSettings();
@@ -174,5 +179,17 @@ export function updateScore(score, combo) {
     });
   });
 }
-
+export function addTouchControls() {
+  if (!isMobile()) return;
+  const touchControls = document.querySelector("#touch-controls");
+  touchControls.style.display = "flex";
+  const up = document.querySelector("#up-touch");
+  up.src = upArrow;
+  const left = document.querySelector("#left-touch");
+  left.src = leftArrow;
+  const down = document.querySelector("#down-touch");
+  down.src = downArrow;
+  const right = document.querySelector("#right-touch");
+  right.src = rightArrow;
+}
 export function initialize() {}
