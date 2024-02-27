@@ -65,10 +65,13 @@ body {
   gap: 10px;
   width: 100vw;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 #touch-controls > img {
   background: var(--secondary-bg-color);
+  width: 20%;
+  height: auto;
+  max-width: 100px;
 }
 #calculate-score {
   z-index: 100;
