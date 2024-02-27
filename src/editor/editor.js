@@ -5,6 +5,7 @@ import "../general.css";
 import { validPrompts, init } from "../canvas/canvas";
 import { initMap, drawMap } from "../canvas/time-map";
 import { deleteLocalMap } from "../utility.js/storage";
+import isMobile from "../utility.js/isMobile";
 
 import {
   autoThumbMovement,
@@ -51,6 +52,7 @@ let changingName = false;
 init();
 initMap("#time-map");
 addPromptSrc();
+
 let animationID;
 
 const loadMedia = (audio, background, extension) => {
@@ -630,3 +632,10 @@ userManager
     console.log(e);
     notAuthenticatedView();
   });
+console.log(isMobile());
+if (isMobile()) {
+  const getPrompts = document.querySelector(".get-prompt");
+  getPrompts.style.color = "var(--primary-color)";
+  getPrompts.style.textAlign = "start";
+  getPrompts.style.paddingLeft = "15px";
+}
