@@ -58,6 +58,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  width: 100vw;
 }
 #touch-controls {
   display: none;
@@ -228,6 +229,7 @@ body {
 .info-container {
   display: grid;
   grid-template-columns: 1fr 1fr /1fr;
+  width: 100vw;
 }
 .input-visualiser {
   border: solid rgb(123, 120, 120);
@@ -397,7 +399,7 @@ body {
 
 @media only screen and (max-width: 900px) {
   .player {
-    left: -300px;
+    transform: translateX(-300px);
     width: calc(100vw + 300px);
     align-self: self-start;
   }

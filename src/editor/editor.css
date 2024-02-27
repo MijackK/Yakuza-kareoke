@@ -152,10 +152,10 @@ img.active-prompt {
   background-color: rgba(0, 0, 0, 0.6);
   padding: 5px;
   bottom: 60px;
-  transform: translateX(-30px);
+  transform: translateX(-65px);
 }
 #h-form {
-  transform: translateX(5px);
+  transform: translateX(-40px);
 }
 .duration-form > button {
   background-color: black;
