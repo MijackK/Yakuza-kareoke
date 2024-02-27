@@ -425,10 +425,11 @@ a {
     align-items: center;
   }
   #map-section {
-    width: 90%;
+    width: 95%;
+    padding: 0px;
   }
   #map-list-container {
-    width: 90%;
+    width: 95%;
     overflow: visible;
   }
   .beat-map {

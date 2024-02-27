@@ -1,10 +1,3 @@
-export function saveUserInfo(info) {
-  localStorage.setItem("info", JSON.stringify(info));
-}
-export function getUserInfo() {
-  const info = localStorage.getItem("info");
-  return JSON.parse(info);
-}
 const getMaps = () => {
   let maps = JSON.parse(localStorage.getItem("maps"));
   if (!maps) {
@@ -19,14 +12,16 @@ export function getLocalMap(id) {
   return found?.beatMap;
 }
 
-export function saveLocalMap({ id, beatMap }) {
+export function saveLocalMap({ id, beatMap, name }) {
   const maps = getMaps();
   // find the map
+
   const target = maps.find((map) => map.id === id);
   if (target) {
     target.beatMap = beatMap;
+    target.name = name;
   } else {
-    maps.push({ id, beatMap });
+    maps.push({ id, beatMap, name });
   }
   localStorage.setItem("maps", JSON.stringify(maps));
 }

@@ -23,7 +23,7 @@ body {
 }
 .score-summary {
   display: flex;
-  width: clamp(300px, 70%, 800px);
+  width: clamp(350px, 70%, 800px);
   justify-content: space-between;
   font-size: 2rem;
   padding: 3px;

@@ -363,7 +363,7 @@ promptPosition.addEventListener("click", (e) => {
   }
   console.log(`${e.target.id}  time: ${editor.getElapsedTime().toFixed(1)}`);
 
-  editor.addPrompt(Number(time), e.target.id, mapManager.getSelectedMap().id);
+  editor.addPrompt(Number(time), e.target.id, mapManager.getSelectedMap());
 
   updateGraphics();
 });

@@ -15,20 +15,17 @@ export async function login({ email, password }) {
 
   return data;
 }
-export async function check({ csrfToken }) {
+export async function check() {
   const options = { method: "get" };
   const headers = {
     "Content-Type": "application/json",
-    CSRF_TOKEN: csrfToken,
   };
   const response = await apiRequest({ url: "auth/check", options, headers });
   return response;
 }
-export async function logout({ csrfToken }) {
+export async function logout() {
   const options = { method: "post" };
-  const headers = {
-    CSRF_TOKEN: csrfToken,
-  };
+  const headers = {};
   const response = await apiRequest({ url: "auth/logout", options, headers });
   const data = await response.text();
 

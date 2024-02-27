@@ -128,18 +128,18 @@ export default function editorFactory() {
 
     return occupied;
   };
-  const removePrompt = (identifier, mapID) => {
+  const removePrompt = (identifier, map) => {
     beatMap = beatMap.filter((prompt) => prompt.time !== identifier);
-    saveLocalMap({ id: mapID, beatMap });
+    saveLocalMap({ id: map.id, beatMap, name: map.name });
 
     // eslint-disable-next-line no-param-reassign
   };
-  const addPrompt = (time, place, mapID) => {
+  const addPrompt = (time, place, map) => {
     // check if prompt is there
     const check = beatMap.find((beat) => beat.time === time);
 
     if (check) {
-      removePrompt(time, mapID);
+      removePrompt(time, map);
       if (check.key === input[place]) {
         return;
       }
@@ -154,7 +154,7 @@ export default function editorFactory() {
 
     beatMap.push(promptObject);
     beatMap.sort((a, b) => a.time - b.time);
-    saveLocalMap({ id: mapID, beatMap });
+    saveLocalMap({ id: map.id, beatMap, name: map.name });
   };
 
   const timeStep = (direction) => {

@@ -7,7 +7,6 @@ import {
   editAccountInfo,
   generateEmailVerifyToken,
 } from "../api/authentication";
-import { getUserInfo, saveUserInfo } from "../utility.js/storage";
 
 export default function userFactory() {
   let userData = { isLogin: false };
@@ -19,7 +18,6 @@ export default function userFactory() {
     const loginResponse = await login(authData);
     userData = { ...loginResponse, isLogin: true };
     sessionStorage.setItem("csrfToken", userData.csrfToken);
-    saveUserInfo(userData);
   };
   const handleRegister = async (data) => {
     const registerResponse = await register(data);
@@ -27,20 +25,19 @@ export default function userFactory() {
     return registerResponse;
   };
   const isLogin = async () => {
-    const userInfo = getUserInfo();
-    if (!userInfo) {
+    // check session
+    if (!sessionStorage.getItem("csrfToken")) {
       return;
     }
 
-    const response = await check(userInfo);
+    const response = await check();
     const responseData = await response.json();
     userData = { ...responseData, isLogin: true };
     sessionStorage.setItem("csrfToken", userData.csrfToken);
-    saveUserInfo(responseData);
   };
   const handleLogout = async () => {
-    const userInfo = getUserInfo();
-    const logoutResponse = await logout(userInfo);
+    const logoutResponse = await logout();
+    sessionStorage.removeItem("csrfToken");
     return logoutResponse;
   };
   const handlePasswordChange = async (currentPassword, newPassword) => {

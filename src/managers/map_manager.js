@@ -29,7 +29,7 @@ export default function beatMapManager() {
 
   const setSelectedMap = (map) => {
     selectedMap = map;
-    localStorage.setItem("selectedMap", JSON.stringify(map));
+    localStorage.setItem("selectedMap", map.id);
     const localMap = getLocalMap(selectedMap.id);
 
     if (localMap) {
@@ -38,7 +38,11 @@ export default function beatMapManager() {
     if (!localMap) {
       const remoteMap = JSON.parse(selectedMap.beatMap);
       selectedMap.beatMap = remoteMap;
-      saveLocalMap({ id: selectedMap.id, beatMap: remoteMap });
+      saveLocalMap({
+        id: selectedMap.id,
+        beatMap: remoteMap,
+        name: selectedMap.name,
+      });
     }
   };
 
@@ -69,9 +73,9 @@ export default function beatMapManager() {
   const getExtension = (name) => name.split(".").pop();
 
   const checkSelectedSong = async () => {
-    const map = JSON.parse(localStorage.getItem("selectedMap"));
-    if (map) {
-      const getMap = await getBeatMap(map.id, controller.signal);
+    const mapID = localStorage.getItem("selectedMap");
+    if (mapID) {
+      const getMap = await getBeatMap(mapID, controller.signal);
       setSelectedMap(getMap);
       await generateBlobUrl(selectedMap);
       return true;
