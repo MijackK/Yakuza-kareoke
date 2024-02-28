@@ -3,6 +3,7 @@ import hoverSound from "../audio/menu-selection-102220.mp3";
 import selectSound from "../audio/click-menu-app-147357.mp3";
 import stray from "../video/Particles-27669.mp4";
 import startSound from "../audio/interface-124464.mp3";
+import isMobile from "../utility.js/isMobile";
 
 export function initialize() {
   // add the  audio elements
@@ -36,7 +37,9 @@ export function playBackground() {
   const audioHover = document.querySelector("#hover-sound");
   const entryScreen = document.querySelector("#entry-screen");
   const startAudio = document.querySelector("#start-audio");
-  audioHover.muted = false;
+  if (!isMobile()) {
+    audioHover.muted = false;
+  }
   backgroundImage.play();
   startAudio.play();
   entryScreen.style.display = "none";
