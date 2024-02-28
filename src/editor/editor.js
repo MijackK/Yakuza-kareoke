@@ -360,17 +360,11 @@ promptPosition.addEventListener("click", (e) => {
   if (e.target === promptPosition) return;
   const time = editor.getElapsedTime().toFixed(1);
 
-  if (editor.checkOccupation(Number(time), mapManager.getSelectedMap().id)) {
+  if (editor.checkOccupation(Number(time))) {
     console.log("space is occupied by a long prompt");
     return;
   }
-  if (
-    editor.canPlace(
-      Number(time),
-      editor.getPromptDuration(),
-      mapManager.getSelectedMap().id
-    )
-  ) {
+  if (editor.canPlace(Number(time))) {
     console.log("cant place that prompt here");
     return;
   }
@@ -386,31 +380,24 @@ document.querySelector("#click-image").addEventListener("click", (e) => {
   focusBtn(e.target);
 });
 document.querySelector("#hold-image").addEventListener("click", (e) => {
-  editor.switchPrompt("hold", editor.getHoldDuration());
+  editor.switchPrompt("hold");
   focusBtn(e.target);
 });
 document.querySelector("#rapid-image").addEventListener("click", (e) => {
-  editor.switchPrompt("rapid", editor.getRapidDuration());
+  editor.switchPrompt("rapid");
   focusBtn(e.target);
 });
 
 document.querySelector("#r-form").addEventListener("submit", (e) => {
   e.preventDefault();
   const rapidForm = new FormData(e.target);
-  editor.setRapidDuration(Number(rapidForm.get("duration")));
-  const promptType = editor.getPromptType();
-  if (promptType === "rapid") {
-    editor.setPromptDuration(editor.getRapidDuration());
-  }
+  editor.setDurations("rapid", Number(rapidForm.get("duration")));
 });
 
 document.querySelector("#h-form").addEventListener("submit", (e) => {
   e.preventDefault();
   const holdForm = new FormData(e.target);
-  editor.setHoldDuration(Number(holdForm.get("duration")));
-  if (editor.getPromptType === "hold") {
-    editor.setPromptDuration(editor.getHoldDuration());
-  }
+  editor.setDurations("hold", Number(holdForm.get("duration")));
 });
 
 const progressBar = document.querySelector(".progress_section");

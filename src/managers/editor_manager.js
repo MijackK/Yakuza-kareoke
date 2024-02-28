@@ -11,9 +11,11 @@ export default function editorFactory() {
   let beatMap = [];
 
   let promptType = "click";
-  let promptDuration = 0;
-  let holdDuration = 1;
-  let rapidDuration = 1;
+  const durations = {
+    hold: 1,
+    rapid: 1,
+    click: 0,
+  };
 
   const input = {
     one: "ArrowUp",
@@ -27,9 +29,8 @@ export default function editorFactory() {
   const getPlayRate = () => playbackRate;
   const getElapsedTime = () => elapsedTime;
   const getStartTime = () => startTime;
-  const getHoldDuration = () => holdDuration;
-  const getRapidDuration = () => rapidDuration;
-  const getPromptDuration = () => promptDuration;
+  const getDurations = (property) => durations[property];
+
   const getPromptType = () => promptType;
   const getMoveThumb = () => moveThumb;
 
@@ -43,15 +44,7 @@ export default function editorFactory() {
   const setBeatMap = (map) => {
     beatMap = map;
   };
-  const setRapidDuration = (value) => {
-    rapidDuration = value;
-  };
-  const setPromptDuration = (value) => {
-    promptDuration = value;
-  };
-  const setHoldDuration = (value) => {
-    holdDuration = value;
-  };
+
   const setMoveThump = (value) => {
     moveThumb = value;
   };
@@ -72,6 +65,9 @@ export default function editorFactory() {
   };
   const setMoveThumb = (value) => {
     moveThumb = value;
+  };
+  const setDurations = (property, value) => {
+    durations[property] = value;
   };
 
   const translateToKey = (position) => {
@@ -101,9 +97,8 @@ export default function editorFactory() {
     return blobURL;
   };
 
-  const switchPrompt = (type, duration) => {
+  const switchPrompt = (type) => {
     promptType = type;
-    promptDuration = duration;
   };
 
   const contructPrompt = (time, type, duration, place) => {
@@ -112,10 +107,11 @@ export default function editorFactory() {
     return { time, type, duration, key };
   };
 
-  const canPlace = (time, duration) => {
+  const canPlace = (time) => {
     // here we're  checking if adding a long prompt will overlap any other prompts in the beatMap
     const check = beatMap.find(
-      (prompt) => prompt.time > time && prompt.time <= time + duration
+      (prompt) =>
+        prompt.time > time && prompt.time <= time + durations[promptType]
     );
     return check;
   };
@@ -148,7 +144,7 @@ export default function editorFactory() {
     const promptObject = contructPrompt(
       time,
       promptType,
-      promptDuration,
+      durations[promptType],
       place
     );
 
@@ -209,14 +205,8 @@ export default function editorFactory() {
     translateToKey,
     getPlayRate,
     getStartTime,
-    getHoldDuration,
-    getRapidDuration,
     getPromptType,
     beatMapDownload,
-    getPromptDuration,
-    setRapidDuration,
-    setPromptDuration,
-    setHoldDuration,
     setMoveThump,
     getMoveThumb,
     getPreviousTime,
@@ -229,5 +219,7 @@ export default function editorFactory() {
     getPlayBackRate,
     setStartTime,
     setMoveThumb,
+    getDurations,
+    setDurations,
   };
 }
