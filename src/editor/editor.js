@@ -123,10 +123,18 @@ const addMapToList = (beatMap) => {
       mapManager
         .saveMapRemote(id)
         .then((res) => {
-          alert(res);
+          console.log(res);
+          saveMap.textContent = "Saved";
+        })
+        .catch((err) => {
+          console.log(err);
+          saveMap.textContent = "Error";
         })
         .finally(() => {
-          saveMap.textContent = "Save";
+          setTimeout(() => {
+            saveMap.textContent = "Save";
+          }, 1000);
+
           loadingSave = false;
         });
     });
@@ -146,11 +154,17 @@ const addMapToList = (beatMap) => {
         if (mapManager.getSelectedMap() === null) {
           displaySelectedStatus("No map selected");
         }
-        alert(res);
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+        deleteMap.textContent = "Error";
       })
       .finally(() => {
         loadingDelete = false;
-        deleteMap.textContent = "delete";
+        setTimeout(() => {
+          deleteMap.textContent = "delete";
+        }, 1000);
       });
   });
   clearLocal.addEventListener("click", () => {
@@ -162,7 +176,6 @@ const addMapToList = (beatMap) => {
 
     deleteLocalMap(beatMap.id);
     editor.setBeatMap(JSON.parse(beatMap.beatMap));
-    alert("local data deleted");
   });
   publishMap.addEventListener("click", () => {
     if (loadingPublish) return;

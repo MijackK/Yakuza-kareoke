@@ -29,8 +29,13 @@ const handlePublishRequest = async (id, resolution, button, item) => {
     .catch((err) => {
       console.log(err);
       // eslint-disable-next-line no-param-reassign
-      button.textContent = "accept";
-      alert("unable to publish map");
+      button.textContent = "Error publishing";
+    })
+    .finally(() => {
+      setTimeout(() => {
+        // eslint-disable-next-line no-param-reassign
+        button.textContent = "accept";
+      }, 1000);
     });
 };
 
