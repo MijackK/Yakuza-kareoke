@@ -12,6 +12,7 @@
    
 
     <audio id="editor-audio"> </audio>
+    <audio id="hit-audio"></audio>
  
       <div class="map-container">
     
@@ -34,6 +35,10 @@
           <option value="0.25" >x0.25</option>
         </select>
         <span> songTime:<span id="ptime"></span></span>
+        <div style="background-color: black; width: fit-content;padding:5px; margin-left:auto">
+          <input type="checkbox" id="mute-hit" name="mute-hit"  />
+          <label for="mute-hit">Mute hit sound</label>
+        </div>
       </div>
 
       <div class="player">

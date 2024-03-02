@@ -117,6 +117,7 @@ body {
   width: 100vw;
   overflow: hidden;
   position: relative;
+  height: 270px;
 }
 .finger_board {
   width: 100%;

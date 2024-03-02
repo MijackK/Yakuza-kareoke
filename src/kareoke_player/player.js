@@ -332,7 +332,6 @@ mapManager
   .then(({ mapInfo, audioUrl, backgroundUrl, extension }) => {
     buttons = JSON.parse(mapInfo.beatMap);
     highScore = mapInfo.highscore || 0;
-    console.log(highScore);
     mapID = mapInfo.id;
 
     addMapInfo(mapInfo.name, mapInfo.author);

@@ -1,6 +1,7 @@
 import rapidText from "../images/rapid.png";
 import holdText from "../images/hold.png";
 import clickText from "../images/click.png";
+import hitSound from "../audio/bass1drum-43078.mp3";
 
 export function showEdit(show) {
   const editBtn = document.querySelector("#exit");
@@ -316,6 +317,11 @@ export function addPromptSrc() {
   holdButton.src = holdText;
   const clickButton = document.querySelector("#click-image");
   clickButton.src = clickText;
+  // add hit audio
+  const click = document.querySelector("#hit-audio");
+  click.src = hitSound;
+  const isMuted = document.querySelector("#mute-hit").checked;
+  click.muted = isMuted;
 }
 
 export function addErrorMessage(message, id) {
@@ -340,4 +346,14 @@ export function handleDurationForm(id, button, expand) {
   form.style.display = expand ? "flex" : "none";
   // eslint-disable-next-line no-param-reassign
   button.innerHTML = expand ? "&#8595" : "&#8593";
+}
+export function playClick() {
+  const click = document.querySelector("#hit-audio");
+  click.currentTime = 0;
+  click.play();
+}
+
+export function muteHitSound(mute) {
+  const hit = document.querySelector("#hit-audio");
+  hit.muted = mute;
 }

@@ -11,9 +11,11 @@ import {
   autoThumbMovement,
   mapProgressPrompts,
   moveProgressThumb,
+  feedBackVisualiserFactory,
 } from "../player-parts/display-parts";
 
 import editorFactory from "../managers/editor_manager";
+import artificialPlayer from "../player-parts/ai-player";
 import {
   authenicatedView,
   notAuthenticatedView,
@@ -39,6 +41,8 @@ import {
   changeMapName,
   showLoading,
   handleDurationForm,
+  playClick,
+  muteHitSound,
 } from "../dom-manipulation/editor-dom";
 import beatMapManager from "../managers/map_manager";
 import userFactory from "../managers/user-manager";
@@ -46,6 +50,8 @@ import userFactory from "../managers/user-manager";
 const editor = editorFactory();
 const mapManager = beatMapManager();
 const userManager = userFactory();
+const computer = artificialPlayer();
+const feedBackVisualiser = feedBackVisualiserFactory();
 let changingBackground = false;
 let changingAudio = false;
 let changingName = false;
@@ -56,6 +62,7 @@ addPromptSrc();
 let animationID;
 
 const loadMedia = (audio, background, extension) => {
+  computer.setTimeMap(mapManager.getSelectedMap().beatMap);
   mapManager
     .generateBlobUrl({
       audio,
@@ -245,6 +252,17 @@ const timeController = () => {
 
   editor.setPreviousTime(currentTime);
   editor.setElapsedTime(previousTime * playRate);
+  // computer
+
+  const check = computer.checkForInput(
+    Number(editor.getElapsedTime().toFixed(1))
+  );
+  if (check) {
+    check.hit = true;
+    feedBackVisualiser.inputFeedback(check);
+    feedBackVisualiser.showIndicator(check);
+    playClick();
+  }
 };
 const AnimatePrompts = () => {
   const elapsedTime = editor.getElapsedTime();
@@ -368,9 +386,9 @@ promptPosition.addEventListener("click", (e) => {
     console.log("cant place that prompt here");
     return;
   }
-  console.log(`${e.target.id}  time: ${editor.getElapsedTime().toFixed(1)}`);
 
   editor.addPrompt(Number(time), e.target.id, mapManager.getSelectedMap());
+  computer.setTimeMap(mapManager.getSelectedMap().beatMap);
 
   updateGraphics();
 });
@@ -407,6 +425,7 @@ progressBar.addEventListener("mousedown", (e) => {
   editor.progressBarTimeUpdate(timePosition);
   updateGraphics();
   updateMediaTime(editor.getElapsedTime());
+  computer.resetMap();
 });
 
 progressBar.addEventListener("mouseup", () => {
@@ -419,6 +438,7 @@ progressBar.addEventListener("mousemove", (e) => {
     editor.progressBarTimeUpdate(timePosition);
     updateGraphics();
     updateMediaTime(editor.getElapsedTime());
+    computer.resetMap();
   }
 });
 
@@ -435,6 +455,9 @@ document.querySelector("body").addEventListener("keydown", (e) => {
   autoThumbMovement(currentAudioTime() / editor.getAudioDuration());
   updateGraphics();
   updateMediaTime(editor.getElapsedTime());
+  if (direction === "backward") {
+    computer.resetMap();
+  }
 });
 document.querySelector("#name-edit-open").addEventListener("click", () => {
   opneNameEditForm(true);
@@ -456,7 +479,6 @@ document.querySelector("#name-edit").addEventListener("submit", (e) => {
   if (formData.get("map-name") === name) return;
   const submitButton = document.querySelector("#name-edit button");
   submitButton.disabled = true;
-  console.log(submitButton);
 
   mapManager
     .saveMapName(formData.get("map-name"))
@@ -574,7 +596,9 @@ document.querySelector("body").addEventListener("keydown", (e) => {
     stopEditor();
   }
 });
-
+document.querySelector("#mute-hit").addEventListener("change", (e) => {
+  muteHitSound(e.target.checked);
+});
 document.querySelector("#login").addEventListener("submit", (e) => {
   e.preventDefault();
   const submitButton = e.submitter;
