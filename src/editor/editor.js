@@ -83,7 +83,20 @@ const setSelectedMap = (beatMap, extension) => {
   editor.setBeatMap(mapManager.getSelectedMap().beatMap);
   loadMedia(beatMap.audio, beatMap.background, extension);
 };
+const updateGraphics = () => {
+  validPrompts(editor.getElapsedTime(), editor.getBeatMap());
+  drawMap(
+    editor.getBeatMap(),
+    editor.getElapsedTime(),
+    editor.getAudioDuration()
+  );
 
+  updateDomTime(editor.getElapsedTime());
+  mapProgressPrompts(
+    editor.getBeatMap(), // replace with beatMap
+    editor.getAudioDuration()
+  );
+};
 const addMapToList = (beatMap) => {
   const mediaExtension = mapManager.getExtension(beatMap.background);
   const mediaSource = beatMap.background;
@@ -99,6 +112,7 @@ const addMapToList = (beatMap) => {
     clearLocal,
     publishMap,
     mapStatus,
+    reset,
   } = listBeatMap(beatMap, mediaExtension, mediaSource);
   listItem.addEventListener("click", () => {
     const selectedMap = mapManager.getSelectedMap();
@@ -183,6 +197,22 @@ const addMapToList = (beatMap) => {
 
     deleteLocalMap(beatMap.id);
     editor.setBeatMap(JSON.parse(beatMap.beatMap));
+    computer.setTimeMap(editor.getBeatMap());
+    updateGraphics();
+  });
+  reset.addEventListener("click", () => {
+    // eslint-disable-next-line no-restricted-globals
+    const acceptDelete = confirm(
+      "all prompts will be deleted (remote data will be reset on save)"
+    );
+    if (!acceptDelete) return;
+
+    deleteLocalMap(beatMap.id);
+    editor.setBeatMap([]);
+    computer.setTimeMap([]);
+    // eslint-disable-next-line no-param-reassign
+    beatMap.beatMap = "[]";
+    updateGraphics();
   });
   publishMap.addEventListener("click", () => {
     if (loadingPublish) return;
@@ -222,20 +252,7 @@ const stopEditor = () => {
   editor.setPlay(false);
   editorPause();
 };
-const updateGraphics = () => {
-  validPrompts(editor.getElapsedTime(), editor.getBeatMap());
-  drawMap(
-    editor.getBeatMap(),
-    editor.getElapsedTime(),
-    editor.getAudioDuration()
-  );
 
-  updateDomTime(editor.getElapsedTime());
-  mapProgressPrompts(
-    editor.getBeatMap(), // replace with beatMap
-    editor.getAudioDuration()
-  );
-};
 const timeController = () => {
   const elapsedTime = editor.getElapsedTime();
 
@@ -388,7 +405,7 @@ promptPosition.addEventListener("click", (e) => {
   }
 
   editor.addPrompt(Number(time), e.target.id, mapManager.getSelectedMap());
-  computer.setTimeMap(mapManager.getSelectedMap().beatMap);
+  computer.setTimeMap(editor.getBeatMap());
 
   updateGraphics();
 });
@@ -656,7 +673,7 @@ userManager
     console.log(e);
     notAuthenticatedView();
   });
-console.log(isMobile());
+
 if (isMobile()) {
   const getPrompts = document.querySelector(".get-prompt");
   getPrompts.style.color = "var(--primary-color)";

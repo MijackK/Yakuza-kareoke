@@ -231,6 +231,9 @@ export function listBeatMap(beatMap, extension, source) {
   const clearLocal = document.createElement("li");
   clearLocal.textContent = " Clear local";
   optionsList.append(clearLocal);
+  const reset = document.createElement("li");
+  reset.textContent = "Reset";
+  optionsList.append(reset);
 
   const backgroundType = extension;
   let mapBackground;
@@ -280,6 +283,7 @@ export function listBeatMap(beatMap, extension, source) {
     clearLocal,
     mapName,
     mapStatus,
+    reset,
   };
 }
 
