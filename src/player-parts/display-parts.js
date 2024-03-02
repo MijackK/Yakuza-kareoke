@@ -31,25 +31,27 @@ export const feedBackVisualiserFactory = () => {
   const inputFeedback = (showInfo) => {
     if (showInfo.Success) {
       clearAnimation([first, second, third, fourth], "button input-visualiser");
-      switch (showInfo.Key) {
-        case "ArrowUp":
-          first.classList.toggle("explode-animation");
+      setTimeout(() => {
+        switch (showInfo.Key) {
+          case "ArrowUp":
+            first.classList.toggle("explode-animation");
 
-          break;
-        case "ArrowRight":
-          second.classList.toggle("explode-animation");
+            break;
+          case "ArrowRight":
+            second.classList.toggle("explode-animation");
 
-          break;
-        case "ArrowLeft":
-          third.classList.toggle("explode-animation");
+            break;
+          case "ArrowLeft":
+            third.classList.toggle("explode-animation");
 
-          break;
-        case "ArrowDown":
-          fourth.classList.toggle("explode-animation");
+            break;
+          case "ArrowDown":
+            fourth.classList.toggle("explode-animation");
 
-          break;
-        default:
-      }
+            break;
+          default:
+        }
+      }, 10);
     }
   };
   const showIndicator = (showInfo) => {
