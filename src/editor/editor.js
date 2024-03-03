@@ -113,6 +113,10 @@ const addMapToList = (beatMap) => {
     publishMap,
     mapStatus,
     reset,
+    confirmDelete,
+    confirmPublish,
+    confirmReset,
+    confirmClearLocal,
   } = listBeatMap(beatMap, mediaExtension, mediaSource);
   listItem.addEventListener("click", () => {
     const selectedMap = mapManager.getSelectedMap();
@@ -161,71 +165,102 @@ const addMapToList = (beatMap) => {
     });
   }
 
+  // delete
   deleteMap.addEventListener("click", () => {
     if (loadingDelete) return;
-    // eslint-disable-next-line no-restricted-globals
-    const acceptDelete = confirm("All map data will be deleted");
-    if (!acceptDelete) return;
-    loadingDelete = true;
-    deleteMap.textContent = "Deleting...";
-    mapManager
-      .deleteBeatMap(beatMap.id)
-      .then((res) => {
-        listItem.remove();
-        if (mapManager.getSelectedMap() === null) {
-          displaySelectedStatus("No map selected");
-        }
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-        deleteMap.textContent = "Error";
-      })
-      .finally(() => {
-        loadingDelete = false;
-        setTimeout(() => {
-          deleteMap.textContent = "delete";
-        }, 1000);
-      });
+    confirmDelete.style.display = "flex";
+    deleteMap.style.display = "none";
   });
+
+  confirmDelete.addEventListener("click", (e) => {
+    if (e.target.className === "yes-confirm") {
+      confirmDelete.style.display = "none";
+      deleteMap.style.display = "list-item";
+      loadingDelete = true;
+      deleteMap.textContent = "Deleting...";
+      mapManager
+        .deleteBeatMap(beatMap.id)
+        .then((res) => {
+          listItem.remove();
+          if (mapManager.getSelectedMap() === null) {
+            displaySelectedStatus("No map selected");
+          }
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+          deleteMap.textContent = "Error";
+        })
+        .finally(() => {
+          loadingDelete = false;
+          setTimeout(() => {
+            deleteMap.textContent = "delete";
+          }, 1000);
+        });
+      return;
+    }
+    if (e.target.className === "no-confirm") {
+      confirmDelete.style.display = "none";
+      deleteMap.style.display = "list-item";
+    }
+  });
+
+  // clear local option
   clearLocal.addEventListener("click", () => {
-    // eslint-disable-next-line no-restricted-globals
-    const acceptDelete = confirm(
-      "Local data will be deleted (will revert to remote data)"
-    );
-    if (!acceptDelete) return;
-
-    deleteLocalMap(beatMap.id);
-    editor.setBeatMap(JSON.parse(beatMap.beatMap));
-    computer.setTimeMap(editor.getBeatMap());
-    updateGraphics();
+    confirmClearLocal.style.display = "flex";
+    clearLocal.style.display = "none";
   });
+  confirmClearLocal.addEventListener("click", (e) => {
+    if (e.target.className === "yes-confirm") {
+      deleteLocalMap(beatMap.id);
+      editor.setBeatMap(JSON.parse(beatMap.beatMap));
+      computer.setTimeMap(editor.getBeatMap());
+      updateGraphics();
+      confirmClearLocal.style.display = "none";
+      clearLocal.style.display = "list-item";
+      return;
+    }
+    if (e.target.className === "no-confirm") {
+      confirmClearLocal.style.display = "none";
+      clearLocal.style.display = "list-item";
+    }
+  });
+
+  // reset
   reset.addEventListener("click", () => {
-    // eslint-disable-next-line no-restricted-globals
-    const acceptDelete = confirm(
-      "all prompts will be deleted (remote data will be reset on save)"
-    );
-    if (!acceptDelete) return;
-
-    deleteLocalMap(beatMap.id);
-    editor.setBeatMap([]);
-    computer.setTimeMap([]);
-    // eslint-disable-next-line no-param-reassign
-    beatMap.beatMap = "[]";
-    updateGraphics();
+    confirmReset.style.display = "flex";
+    reset.style.display = "none";
   });
+
+  confirmReset.addEventListener("click", (e) => {
+    if (e.target.className === "yes-confirm") {
+      deleteLocalMap(beatMap.id);
+      editor.setBeatMap([]);
+      computer.setTimeMap([]);
+      // eslint-disable-next-line no-param-reassign
+      beatMap.beatMap = "[]";
+      updateGraphics();
+      confirmReset.style.display = "none";
+      reset.style.display = "list-item";
+      return;
+    }
+    if (e.target.className === "no-confirm") {
+      confirmReset.style.display = "none";
+      reset.style.display = "list-item";
+    }
+  });
+
+  // publish
   publishMap.addEventListener("click", () => {
     if (loadingPublish) return;
-    const message = {
-      draft:
-        "Map will be put up for review and you wont be able to edit it during this period",
-      pending: "Map will be removed from publish queue",
-      published: "Map will no longer be publicly available",
-    };
+    confirmPublish.style.display = "flex";
+    publishMap.style.display = "none";
+  });
 
-    // eslint-disable-next-line no-restricted-globals
-    const accept = confirm(message[beatMap.status]);
-    if (accept) {
+  confirmPublish.addEventListener("click", (e) => {
+    if (e.target.className === "yes-confirm") {
+      confirmPublish.style.display = "none";
+      publishMap.style.display = "list-item";
       loadingPublish = true;
       publishMap.textContent = "....";
       mapManager
@@ -242,6 +277,11 @@ const addMapToList = (beatMap) => {
             beatMap.status === "draft" ? "" : beatMap.status;
           mapStatus.className = `${beatMap.status}-status`;
         });
+      return;
+    }
+    if (e.target.className === "no-confirm") {
+      confirmPublish.style.display = "none";
+      publishMap.style.display = "list-item";
     }
   });
 };
@@ -371,9 +411,7 @@ document.querySelector("#time_guage").addEventListener("change", (e) => {
 });
 
 document.querySelector("#play").addEventListener("click", () => {
-  console.log(editor.getPlay());
   if (editor.getPlay() === false) {
-    console.log("hi");
     startEditor();
     return;
   }
@@ -533,7 +571,6 @@ document.querySelector("#background-edit").addEventListener("change", (e) => {
     .then(({ reload, extension }) => {
       addErrorMessage("", "editbackground-error");
       if (reload) {
-        console.log("reloading");
         loadMedia(
           mapManager.getSelectedMap().audio,
           mapManager.getSelectedMap().background,

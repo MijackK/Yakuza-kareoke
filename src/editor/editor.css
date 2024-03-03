@@ -398,13 +398,13 @@ a {
   right: 40px;
   margin-top: 20px;
   list-style: none;
+  min-width: 110px;
 }
-.option-list > li:hover {
+.option-list > li:hover,
+a:hover {
   color: var(--highlight);
 }
-.option-list > a:hover {
-  color: var(--highlight);
-}
+
 .published-status {
   color: white;
   border: solid green;
@@ -418,6 +418,25 @@ a {
   margin-left: 5px;
   background-color: rgb(124, 124, 18);
   border-radius: 5px;
+}
+.are-you-sure {
+  display: none;
+  justify-content: space-around;
+}
+.are-you-sure > button {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: none;
+  border-bottom: solid thin;
+  cursor: pointer;
+}
+.yes-confirm:hover,
+button:active {
+  color: green;
+}
+.no-confirm:hover,
+button:active {
+  color: red;
 }
 @media only screen and (max-width: 900px) {
   #menu-body {
@@ -441,6 +460,10 @@ a {
     padding: 0;
     width: 100%;
     margin-bottom: 40px;
+  }
+  .option-list > li,
+  a {
+    margin-bottom: 5px;
   }
 }
 

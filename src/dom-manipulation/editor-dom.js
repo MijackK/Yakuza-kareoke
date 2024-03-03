@@ -194,10 +194,24 @@ export function changeMapName(id, value) {
   const mapName = document.querySelector(`#map-${id} .map-name`);
   mapName.textContent = value;
 }
+export function areYouSure(id) {
+  const listItem = document.createElement("li");
+  listItem.id = id;
+  listItem.classList.add("are-you-sure");
+  const yes = document.createElement("button");
+  yes.classList.add("yes-confirm");
+  yes.textContent = "Yes";
+  listItem.append(yes);
+  const no = document.createElement("button");
+  no.classList.add("no-confirm");
+  no.textContent = "No";
+  listItem.append(no);
+  return listItem;
+}
+
 export function listBeatMap(beatMap, extension, source) {
   const mapList = document.querySelector("#map-list");
   const listItem = document.createElement("li");
-
   listItem.id = `map-${beatMap.id}`;
   listItem.classList.add("beat-map");
   const optionButton = document.createElement("span");
@@ -224,16 +238,26 @@ export function listBeatMap(beatMap, extension, source) {
   const publishMap = document.createElement("li");
   publishMap.textContent = beatMap.status !== "draft" ? "unpublish" : "publish";
   optionsList.append(publishMap);
+  const confirmPublish = areYouSure("confirm-publish");
+  optionsList.append(confirmPublish);
 
   const deleteMap = document.createElement("li");
   deleteMap.textContent = "Delete";
   optionsList.append(deleteMap);
+  const confirmDelete = areYouSure("confirm-delete");
+  optionsList.append(confirmDelete);
+
   const clearLocal = document.createElement("li");
   clearLocal.textContent = " Clear local";
   optionsList.append(clearLocal);
+  const confirmClearLocal = areYouSure("confirm-clear-local");
+  optionsList.append(confirmClearLocal);
+
   const reset = document.createElement("li");
   reset.textContent = "Reset";
   optionsList.append(reset);
+  const confirmReset = areYouSure("confirm-clear-local");
+  optionsList.append(confirmReset);
 
   const backgroundType = extension;
   let mapBackground;
@@ -284,6 +308,10 @@ export function listBeatMap(beatMap, extension, source) {
     mapName,
     mapStatus,
     reset,
+    confirmDelete,
+    confirmPublish,
+    confirmReset,
+    confirmClearLocal,
   };
 }
 
