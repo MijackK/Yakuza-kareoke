@@ -17,7 +17,7 @@ export default function userFactory() {
   const handleLogin = async (authData) => {
     const loginResponse = await login(authData);
     userData = { ...loginResponse, isLogin: true };
-    sessionStorage.setItem("csrfToken", userData.csrfToken);
+    localStorage.setItem("csrfToken", userData.csrfToken);
   };
   const handleRegister = async (data) => {
     const registerResponse = await register(data);
@@ -26,18 +26,18 @@ export default function userFactory() {
   };
   const isLogin = async () => {
     // check session
-    if (!sessionStorage.getItem("csrfToken")) {
+    if (!localStorage.getItem("csrfToken")) {
       return;
     }
 
     const response = await check();
     const responseData = await response.json();
     userData = { ...responseData, isLogin: true };
-    sessionStorage.setItem("csrfToken", userData.csrfToken);
+    localStorage.setItem("csrfToken", userData.csrfToken);
   };
   const handleLogout = async () => {
     const logoutResponse = await logout();
-    sessionStorage.removeItem("csrfToken");
+    localStorage.removeItem("csrfToken");
     return logoutResponse;
   };
   const handlePasswordChange = async (currentPassword, newPassword) => {
