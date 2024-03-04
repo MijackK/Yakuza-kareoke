@@ -2,7 +2,7 @@ import { saveLocalMap } from "../utility.js/storage";
 
 export default function editorFactory() {
   let elapsedTime = 0;
-  let previousTime = 0;
+
   let startTime;
   let Play = false;
   let moveThumb = false;
@@ -25,6 +25,7 @@ export default function editorFactory() {
   };
 
   // getters
+
   const getBeatMap = () => beatMap;
   const getPlayRate = () => playbackRate;
   const getElapsedTime = () => elapsedTime;
@@ -34,7 +35,6 @@ export default function editorFactory() {
   const getPromptType = () => promptType;
   const getMoveThumb = () => moveThumb;
 
-  const getPreviousTime = () => previousTime;
   const getAudioDuration = () => audioDuration;
   const getPlay = () => Play;
 
@@ -48,9 +48,7 @@ export default function editorFactory() {
   const setMoveThump = (value) => {
     moveThumb = value;
   };
-  const setPreviousTime = (value) => {
-    previousTime = value;
-  };
+
   const setAudioDuration = (value) => {
     audioDuration = value;
   };
@@ -60,9 +58,7 @@ export default function editorFactory() {
   const setElapsedTime = (value) => {
     elapsedTime = value;
   };
-  const setStartTime = (value) => {
-    startTime = value;
-  };
+
   const setMoveThumb = (value) => {
     moveThumb = value;
   };
@@ -89,6 +85,9 @@ export default function editorFactory() {
         break;
     }
     return key;
+  };
+  const updateStartTime = () => {
+    startTime = Date.now() - (elapsedTime / playbackRate) * 1000;
   };
 
   const beatMapDownload = (map) => {
@@ -158,35 +157,24 @@ export default function editorFactory() {
     if (Play) {
       return;
     }
-    if (previousTime - 0.1 < 0 && direction === "backward") {
+    if (elapsedTime - 0.1 < 0 && direction === "backward") {
       return;
     }
     const move = direction === "foward" ? 0.1 : -0.1;
-    previousTime = (timePassed + move) / playbackRate;
-    elapsedTime = previousTime * playbackRate;
-  };
-
-  const pickTime = (time) => {
-    previousTime = time / playbackRate;
-    elapsedTime = previousTime * playbackRate;
-
-    return true;
+    elapsedTime = timePassed + move;
   };
 
   const updateSpeed = (speed) => {
     playbackRate = speed;
-    previousTime = elapsedTime / playbackRate;
-    elapsedTime = previousTime * playbackRate;
-    startTime = Date.now() - previousTime * 1000;
+    updateStartTime();
   };
   const progressBarTimeUpdate = (timePosition) => {
     if (timePosition === undefined) {
-      console.log("undefined");
       return;
     }
-    previousTime = (audioDuration * timePosition) / playbackRate;
-    elapsedTime = previousTime * playbackRate;
-    startTime = Date.now() - previousTime * 1000;
+    elapsedTime = audioDuration * timePosition;
+
+    updateStartTime();
   };
 
   return {
@@ -197,7 +185,6 @@ export default function editorFactory() {
     updateSpeed,
     addPrompt,
     removePrompt,
-    pickTime,
     checkOccupation,
     canPlace,
     timeStep,
@@ -209,17 +196,15 @@ export default function editorFactory() {
     beatMapDownload,
     setMoveThump,
     getMoveThumb,
-    getPreviousTime,
-    setPreviousTime,
     getAudioDuration,
     setAudioDuration,
     getPlay,
     setPlay,
     setElapsedTime,
     getPlayBackRate,
-    setStartTime,
     setMoveThumb,
     getDurations,
     setDurations,
+    updateStartTime,
   };
 }

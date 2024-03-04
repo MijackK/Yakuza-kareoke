@@ -69,12 +69,13 @@ const loadMedia = (audio, background, extension) => {
       background,
     })
     .then(() => {
-      showSelectedSong(
+      const audioElement = showSelectedSong(
         mapManager.getSelectedMap(),
         extension,
         mapManager.getAudioUrl(),
         mapManager.getBackgroundUrl()
       );
+
       showEdit(true);
     });
 };
@@ -97,6 +98,88 @@ const updateGraphics = () => {
     editor.getAudioDuration()
   );
 };
+
+const stopEditor = () => {
+  // clearInterval(intervalID);
+  cancelAnimationFrame(animationID);
+  editor.setPlay(false);
+  editorPause();
+};
+
+const timeController = () => {
+  const elapsedTime = editor.getElapsedTime();
+
+  const audioDuration = editor.getAudioDuration();
+
+  const playRate = editor.getPlayRate();
+
+  if (elapsedTime >= audioDuration) {
+    stopEditor();
+    return;
+  }
+
+  const currentTime = Number((Date.now() - editor.getStartTime()) / 1000);
+
+  editor.setElapsedTime(currentTime * playRate);
+
+  // computer
+
+  const check = computer.checkForInput(
+    Number(editor.getElapsedTime().toFixed(1))
+  );
+  if (check) {
+    check.hit = true;
+    feedBackVisualiser.inputFeedback(check);
+    feedBackVisualiser.showIndicator(check);
+    playClick();
+  }
+};
+const AnimatePrompts = () => {
+  const elapsedTime = editor.getElapsedTime();
+
+  const audioDuration = editor.getAudioDuration();
+
+  if (elapsedTime >= audioDuration) {
+    stopEditor();
+    return;
+  }
+  // enable this when computer player is working is working
+  // gamePlayerLogic(elapsedTime);
+  autoThumbMovement(elapsedTime / audioDuration);
+  updateDomTime(elapsedTime);
+  validPrompts(elapsedTime, editor.getBeatMap());
+  drawMap(editor.getBeatMap(), elapsedTime, audioDuration);
+  timeController();
+  animationID = requestAnimationFrame(AnimatePrompts);
+};
+const startEditor = () => {
+  animationID = requestAnimationFrame(AnimatePrompts);
+  editor.updateStartTime();
+  editor.setPlay(true);
+  editorPlay(editor.getElapsedTime());
+};
+const checkSelectedSong = () => {
+  mapManager
+    .checkSelectedSong()
+    .then((isSelected) => {
+      if (isSelected) {
+        const beatMap = mapManager.getSelectedMap();
+        const extension = mapManager.getExtension(beatMap.background);
+        loadMedia(beatMap.audio, beatMap.background, extension);
+        editor.setBeatMap(mapManager.getSelectedMap().beatMap);
+        showEdit(true);
+        return;
+      }
+      displaySelectedStatus("No map selected");
+    })
+    .catch((error) => {
+      console.log(error);
+      displaySelectedStatus("Error while fetching map");
+
+      mapManager.clearSelectedMap();
+    });
+};
+
 const addMapToList = (beatMap) => {
   const mediaExtension = mapManager.getExtension(beatMap.background);
   const mediaSource = beatMap.background;
@@ -285,88 +368,6 @@ const addMapToList = (beatMap) => {
     }
   });
 };
-
-const stopEditor = () => {
-  // clearInterval(intervalID);
-  cancelAnimationFrame(animationID);
-  editor.setPlay(false);
-  editorPause();
-};
-
-const timeController = () => {
-  const elapsedTime = editor.getElapsedTime();
-
-  const audioDuration = editor.getAudioDuration();
-
-  const previousTime = editor.getPreviousTime();
-  const playRate = editor.getPlayRate();
-
-  if (elapsedTime >= audioDuration) {
-    stopEditor();
-    return;
-  }
-  const currentTime = Number((Date.now() - editor.getStartTime()) / 1000);
-
-  editor.setPreviousTime(currentTime);
-  editor.setElapsedTime(previousTime * playRate);
-  // computer
-
-  const check = computer.checkForInput(
-    Number(editor.getElapsedTime().toFixed(1))
-  );
-  if (check) {
-    check.hit = true;
-    feedBackVisualiser.inputFeedback(check);
-    feedBackVisualiser.showIndicator(check);
-    playClick();
-  }
-};
-const AnimatePrompts = () => {
-  const elapsedTime = editor.getElapsedTime();
-
-  const audioDuration = editor.getAudioDuration();
-
-  if (elapsedTime >= audioDuration) {
-    stopEditor();
-    return;
-  }
-  // enable this when computer player is working is working
-  // gamePlayerLogic(elapsedTime);
-  autoThumbMovement(elapsedTime / audioDuration);
-  updateDomTime(elapsedTime);
-  validPrompts(elapsedTime, editor.getBeatMap());
-  drawMap(editor.getBeatMap(), elapsedTime, audioDuration);
-  timeController();
-  animationID = requestAnimationFrame(AnimatePrompts);
-};
-const startEditor = () => {
-  animationID = requestAnimationFrame(AnimatePrompts);
-  editor.setStartTime(Date.now() - editor.getPreviousTime() * 1000);
-  editor.setPlay(true);
-  editorPlay(editor.getElapsedTime());
-};
-const checkSelectedSong = () => {
-  mapManager
-    .checkSelectedSong()
-    .then((isSelected) => {
-      if (isSelected) {
-        const beatMap = mapManager.getSelectedMap();
-        const extension = mapManager.getExtension(beatMap.background);
-        loadMedia(beatMap.audio, beatMap.background, extension);
-        editor.setBeatMap(mapManager.getSelectedMap().beatMap);
-        showEdit(true);
-        return;
-      }
-      displaySelectedStatus("No map selected");
-    })
-    .catch((error) => {
-      console.log(error);
-      displaySelectedStatus("Error while fetching map");
-
-      mapManager.clearSelectedMap();
-    });
-};
-
 // add event listners
 
 document.querySelector("#add").addEventListener("click", (e) => {

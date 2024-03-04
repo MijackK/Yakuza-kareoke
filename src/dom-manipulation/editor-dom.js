@@ -177,6 +177,7 @@ export function showSelectedSong(
     selectImage.style.display = "block";
     backgroundImage.style.display = "block";
   }
+  return Audio;
 }
 
 export function displaySelectedStatus(text) {
