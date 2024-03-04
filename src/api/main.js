@@ -11,7 +11,7 @@ export default async function apiRequest({ url, options, headers = {} }) {
     mode: "cors",
     credentials: "include",
     headers: {
-      CSRF_TOKEN: sessionStorage.getItem("csrfToken"),
+      CSRF_TOKEN: localStorage.getItem("csrfToken"),
       ...headers,
     },
     ...options,
