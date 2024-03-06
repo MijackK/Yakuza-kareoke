@@ -47,6 +47,8 @@ import {
 import beatMapManager from "../managers/map_manager";
 import userFactory from "../managers/user-manager";
 
+const audioContext = new AudioContext();
+let track;
 const editor = editorFactory();
 const mapManager = beatMapManager();
 const userManager = userFactory();
@@ -69,12 +71,14 @@ const loadMedia = (audio, background, extension) => {
       background,
     })
     .then(() => {
-      showSelectedSong(
+      const audioElement = showSelectedSong(
         mapManager.getSelectedMap(),
         extension,
         mapManager.getAudioUrl(),
         mapManager.getBackgroundUrl()
       );
+      track = audioContext.createMediaElementSource(audioElement);
+      track.connect(audioContext.destination);
 
       showEdit(true);
     });
@@ -154,6 +158,9 @@ const AnimatePrompts = () => {
 };
 const startEditor = () => {
   animationID = requestAnimationFrame(AnimatePrompts);
+  if (audioContext.state === "suspended") {
+    audioContext.resume();
+  }
   editor.updateStartTime();
   editor.setPlay(true);
   editorPlay(editor.getElapsedTime());
