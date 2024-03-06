@@ -69,7 +69,7 @@ const loadMedia = (audio, background, extension) => {
       background,
     })
     .then(() => {
-      const audioElement = showSelectedSong(
+      showSelectedSong(
         mapManager.getSelectedMap(),
         extension,
         mapManager.getAudioUrl(),
@@ -211,7 +211,6 @@ const addMapToList = (beatMap) => {
     mapManager.abortSelection();
     setSelectedMap(beatMap, mediaExtension);
     editor.setElapsedTime(0);
-    editor.setPreviousTime(0);
   });
   optionButton.addEventListener("click", (e) => {
     e.stopPropagation();

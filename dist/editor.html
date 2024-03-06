@@ -28,8 +28,9 @@
             </div>
           </div>
         </div>
-        <select id="time_guage" value="1">
-          <option value="1" >Normal (x1)</option>
+        <label for="play-rate">Play rate:</label>
+        <select id="time_guage" value="1" name="play-rate">
+          <option  value="1" >Normal (x1)</option>
           <option value="0.75" >x0.75</option>
           <option value="0.5" >x0.5</option>
           <option value="0.25" >x0.25</option>
@@ -78,7 +79,7 @@
   
   
       <div class="tool-bar">
-        <div id="play">&#9654</div>
+        <div id="play" >&#9654</div>
         <div  id ="click" >
           <img id="click-image" class="active-prompt"  alt="Click"/>
         </div>
@@ -140,7 +141,8 @@
         <Form id="add-map-form" class="general-form">
           <label for="map-name">Map name</label>
           <input type="text" name="map-name" id="map-name" required>
-          <label for="song"> Audio</label>
+          <label for="song"> Audio </label>
+          <em style="font-size: 1rem;">mp3 audio should use "constant bit rate encoding" to prevent audio desynchronization</em>
           <input type="file"id="song-select" name="audio" id="song" accept=".mp3" required>
           <label for="background">Background</label>
           <input type="file" name="background" id="background" accept=".mp4,.jpg,.gif,.webp,.WebM,.ogg" required>
@@ -188,6 +190,7 @@
           </div>
           <span id="editaudio-error" style="color:red;padding:3px;"></span>
           <audio id="map-audio" src="" controls></audio>
+          
           <input type="file" id="audio-edit"  style="display:none" accept=".mp3"/>
         </div>
          </div>

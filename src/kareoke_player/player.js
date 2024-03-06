@@ -113,6 +113,9 @@ const handleKeyDown = (key, inputObject, methodName) => {
     feedBackVisualiser.showIndicator(Info);
     incrementScore(Info);
     Success = Info.Success;
+    if (Info.Success) {
+      playClick();
+    }
   }
   return Success;
 };
@@ -258,7 +261,7 @@ const checkDownInput = (key) => {
       handleKeyDown(key, holdInput, "checkDown");
     }
     rapidInputHandler(key);
-    playClick();
+
     keydown = true;
   }
 };
