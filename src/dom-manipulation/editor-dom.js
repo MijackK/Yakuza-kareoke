@@ -63,6 +63,7 @@ export function updateDomTime(elapsedTime) {
   )} / ${Audio.duration}`;
 
   const Score = document.querySelector("#score");
+
   Score.textContent = `${elapsedTime.toFixed(1)} `;
 }
 
@@ -73,6 +74,7 @@ export function editorPlay(time) {
 
   Audio.currentTime = time;
   backgroundVideo.currentTime = time;
+
   Audio.play();
   backgroundVideo.play();
 
@@ -163,7 +165,8 @@ export function showSelectedSong(
   selectedAudio.src = audioURL;
   const extension = previewExtension;
   // show either video or image based on background extension
-  if (extension === "mp4") {
+
+  if (["mp4", "webm"].includes(extension)) {
     backgroundVideo.src = backgroundURL;
     backgroundVideo.style.display = "block";
 
@@ -260,10 +263,9 @@ export function listBeatMap(beatMap, extension, source) {
   const confirmReset = areYouSure("confirm-clear-local");
   optionsList.append(confirmReset);
 
-  const backgroundType = extension;
   let mapBackground;
 
-  if (backgroundType === "mp4") {
+  if (["mp4", "webm"].includes(extension)) {
     mapBackground = document.createElement("video");
     mapBackground.addEventListener("mouseenter", (e) => {
       e.target.play();
@@ -355,6 +357,9 @@ export function addPromptSrc() {
   click.src = hitSound;
   const isMuted = document.querySelector("#mute-hit").checked;
   click.muted = isMuted;
+  // reset playback speed
+  const rateSelector = document.querySelector("#time_guage");
+  rateSelector.value = 1;
 }
 
 export function addErrorMessage(message, id) {

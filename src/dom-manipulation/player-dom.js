@@ -23,7 +23,7 @@ export function addAudio(songSrc, backgroundSRC, clickSrc, extension) {
   click.src = clickSrc;
   click.volume = settings.hit;
   song.currentTime = 0;
-  if (extension === "mp4") {
+  if (["mp4", "webm"].includes(extension)) {
     backgroundVideo.src = backgroundSRC;
     backgroundVideo.currentTime = 0;
 
