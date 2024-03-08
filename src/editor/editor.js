@@ -122,7 +122,9 @@ const timeController = () => {
     return;
   }
 
-  const currentTime = Number((Date.now() - editor.getStartTime()) / 1000);
+  const currentTime = Number(
+    (performance.now() - editor.getStartTime()) / 1000
+  );
 
   editor.setElapsedTime(currentTime * playRate);
 
@@ -485,8 +487,9 @@ progressBar.addEventListener("mousedown", (e) => {
   editor.setMoveThumb(true);
   const timePosition = moveProgressThumb(e);
   editor.progressBarTimeUpdate(timePosition);
-  updateGraphics();
   updateMediaTime(editor.getElapsedTime());
+  updateGraphics();
+
   computer.resetMap();
 });
 
@@ -498,8 +501,9 @@ progressBar.addEventListener("mousemove", (e) => {
   if (editor.getMoveThumb()) {
     const timePosition = moveProgressThumb(e);
     editor.progressBarTimeUpdate(timePosition);
-    updateGraphics();
     updateMediaTime(editor.getElapsedTime());
+    updateGraphics();
+
     computer.resetMap();
   }
 });
@@ -515,8 +519,9 @@ document.querySelector("body").addEventListener("keydown", (e) => {
   const direction = e.key === "ArrowRight" ? "foward" : "backward";
   editor.timeStep(direction);
   autoThumbMovement(currentAudioTime() / editor.getAudioDuration());
-  updateGraphics();
   updateMediaTime(editor.getElapsedTime());
+  updateGraphics();
+
   if (direction === "backward") {
     computer.resetMap();
   }

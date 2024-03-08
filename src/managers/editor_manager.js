@@ -87,7 +87,7 @@ export default function editorFactory() {
     return key;
   };
   const updateStartTime = () => {
-    startTime = Date.now() - (elapsedTime / playbackRate) * 1000;
+    startTime = performance.now() - (elapsedTime / playbackRate) * 1000;
   };
 
   const beatMapDownload = (map) => {

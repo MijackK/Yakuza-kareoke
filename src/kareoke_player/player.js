@@ -147,7 +147,7 @@ const stopMap = () => {
 
 const timeController = () => {
   if (player.getPlay() === false) return;
-  const timeNow = Number((Date.now() - player.getStartTime()) / 1000);
+  const timeNow = Number((performance.now() - player.getStartTime()) / 1000);
   const elapsedTime =
     player.getTimeElapsed() + (timeNow - player.getPreviousTime());
 

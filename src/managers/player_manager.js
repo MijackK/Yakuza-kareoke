@@ -30,7 +30,7 @@ export default function PlayerManager() {
     play = value;
   };
   const startMap = () => {
-    startTime = Date.now() - timeElapsed * 1000;
+    startTime = performance.now() - timeElapsed * 1000;
     play = true;
   };
 
