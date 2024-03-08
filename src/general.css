@@ -49,6 +49,7 @@ input[type="password"]:focus {
 .general-form input[type="file"] {
   margin-top: 20px;
   margin-bottom: 20px;
+  width: 100%;
 }
 .general-form button {
   border: none;
