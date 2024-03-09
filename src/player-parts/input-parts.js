@@ -39,17 +39,19 @@ export const hold = (inputList) => {
     let Success = false;
     const performance = "bad";
     const Key = inputs[0].key;
+    let correct = false;
     if (validRange) {
       if (key === inputs[0].key) {
         // eslint-disable-next-line no-param-reassign
         clickTime = inputTime;
+        correct = true;
       } else {
         inputs.shift();
         Success = true;
       }
     }
     // eslint-disable-next-line consistent-return
-    return { Success, performance, Key };
+    return { Success, performance, Key, correct };
   };
   const checkUp = (key, releaseTime, inputs) => {
     const difference = Number((releaseTime - clickTime).toFixed(1));
@@ -100,7 +102,9 @@ export const rapid = (inputList) => {
       clicks += 1;
       // eslint-disable-next-line no-param-reassign
       inputs[0].click = clicks;
+      return true;
     }
+    return false;
   };
   const countInputs = (inputs, currentTime) => {
     const totalDuration = inputs[0].time + inputs[0].duration;

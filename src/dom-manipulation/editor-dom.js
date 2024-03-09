@@ -1,7 +1,7 @@
 import rapidText from "../images/rapid.png";
 import holdText from "../images/hold.png";
 import clickText from "../images/click.png";
-import hitSound from "../audio/bass1drum-43078.mp3";
+import hitSound from "../audio/metronome-85688.mp3";
 
 export function showEdit(show) {
   const editBtn = document.querySelector("#exit");
@@ -155,6 +155,7 @@ export function showSelectedSong(
   highLightSelected(beatMap.id);
   // add audio src
   Audio.src = audioURL;
+
   selectVideo.style.display = "none";
   selectImage.style.display = "none";
   backgroundVideo.style.display = "none";
@@ -180,6 +181,9 @@ export function showSelectedSong(
     selectImage.style.display = "block";
     backgroundImage.style.display = "block";
   }
+
+  const rateSelector = document.querySelector("#time_guage");
+  rateSelector.value = 1;
   return Audio;
 }
 

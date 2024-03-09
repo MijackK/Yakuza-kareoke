@@ -71,6 +71,7 @@ const loadMedia = (audio, background, extension) => {
       background,
     })
     .then(() => {
+      editor.updateSpeed(1);
       const audioElement = showSelectedSong(
         mapManager.getSelectedMap(),
         extension,
@@ -592,6 +593,9 @@ document.querySelector("#background-edit").addEventListener("change", (e) => {
     })
     .catch((err) => {
       addErrorMessage(err, "editbackground-error");
+      setTimeout(() => {
+        addErrorMessage("", "editbackground-error");
+      }, 5000);
       console.log(err);
     })
     .finally(() => {
@@ -620,6 +624,9 @@ document.querySelector("#audio-edit").addEventListener("change", (e) => {
     })
     .catch((err) => {
       addErrorMessage(err, "editaudio-error");
+      setTimeout(() => {
+        addErrorMessage("", "editaudio-error");
+      }, 5000);
       console.log(err);
     })
     .finally(() => {

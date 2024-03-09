@@ -1,6 +1,6 @@
 import "./player.css";
 import "../general.css";
-import clickSound from "../audio/bass1drum-43078.mp3";
+import clickSound from "../audio/metronome-85688.mp3";
 import sScore from "../images/s-score.png";
 import aScore from "../images/a-score.png";
 import bScore from "../images/b-score.png";
@@ -113,7 +113,7 @@ const handleKeyDown = (key, inputObject, methodName) => {
     feedBackVisualiser.showIndicator(Info);
     incrementScore(Info);
     Success = Info.Success;
-    if (Info.Success) {
+    if (Info.Success || Info.correct) {
       playClick();
     }
   }
@@ -121,11 +121,14 @@ const handleKeyDown = (key, inputObject, methodName) => {
 };
 const rapidInputHandler = (key) => {
   if (rapidInput.inputList.length !== 0) {
-    rapidInput.checkInput(
+    const correct = rapidInput.checkInput(
       key,
       rapidInput.inputList,
       player.getTimeElapsed().toFixed(1)
     );
+    if (correct) {
+      playClick();
+    }
   }
 };
 
