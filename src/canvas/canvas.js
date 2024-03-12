@@ -5,7 +5,7 @@ import leftImg from "../images/left.png";
 import downImg from "../images/down.png";
 import rightImg from "../images/right.png";
 
-const entryOffset = 3.0; // determines the speed of prompt
+const entryOffset = 3; // determines the speed of prompt
 const widthPerSecond = Number(((1897.5 - 400) / entryOffset).toFixed(3));
 let key;
 

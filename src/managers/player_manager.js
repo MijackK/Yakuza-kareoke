@@ -6,7 +6,7 @@ export default function PlayerManager() {
   console.log(offset);
 
   let timeElapsed = 0 + offset;
-  let previousTime = 0 + offset;
+
   let play = false;
   let startTime;
   let score = 0;
@@ -14,7 +14,7 @@ export default function PlayerManager() {
   // getters
 
   const getTimeElapsed = () => timeElapsed;
-  const getPreviousTime = () => previousTime;
+
   const getPlay = () => play;
   const getStartTime = () => startTime;
   const getScore = () => score;
@@ -23,9 +23,7 @@ export default function PlayerManager() {
   const setTimeElapsed = (value) => {
     timeElapsed = value + offset;
   };
-  const setPreviousTime = (value) => {
-    previousTime = value + offset;
-  };
+
   const setPlay = (value) => {
     play = value;
   };
@@ -36,11 +34,9 @@ export default function PlayerManager() {
 
   return {
     getTimeElapsed,
-    getPreviousTime,
     getPlay,
     getStartTime,
     getScore,
-    setPreviousTime,
     setTimeElapsed,
     setPlay,
     startMap,

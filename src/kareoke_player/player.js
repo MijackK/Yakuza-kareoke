@@ -150,11 +150,11 @@ const stopMap = () => {
 
 const timeController = () => {
   if (player.getPlay() === false) return;
-  const timeNow = Number((performance.now() - player.getStartTime()) / 1000);
-  const elapsedTime =
-    player.getTimeElapsed() + (timeNow - player.getPreviousTime());
+  const currentTime = Number(
+    (performance.now() - player.getStartTime()) / 1000
+  );
 
-  player.setTimeElapsed(elapsedTime);
+  player.setTimeElapsed(currentTime);
 
   if (
     clickInput.inputList.length === 0 &&
@@ -203,7 +203,6 @@ const timeController = () => {
       rapidInput,
       player.getTimeElapsed()
     );
-  player.setPreviousTime(timeNow);
 
   document.querySelector("#time").textContent = player
     .getTimeElapsed()
@@ -240,7 +239,6 @@ const pause = () => {
 };
 const restart = () => {
   player.setTimeElapsed(0);
-  player.setPreviousTime(0);
 
   score = 0;
   combo = 0;
