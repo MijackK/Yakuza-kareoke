@@ -27,11 +27,13 @@ symbols.ArrowDown.src = downImg;
 symbols.ArrowRight.src = rightImg;
 let ctx;
 let myCanvas;
-const textImage = document.createElement("img");
+
 const longPromptText = {
-  rapid: rapidText,
-  hold: holdText,
+  rapid: document.createElement("img"),
+  hold: document.createElement("img"),
 };
+longPromptText.rapid.src = rapidText;
+longPromptText.hold.src = holdText;
 
 export const init = () => {
   myCanvas = document.querySelector(".cplayer");
@@ -78,7 +80,6 @@ const spanwLongPrompts = (
   type,
   symbol
 ) => {
-  textImage.src = longPromptText[type];
   const startArc = 1897.5 - travelTime * widthPerSecond;
   const endArc = startArc + duration * widthPerSecond;
   const textP = startArc + (duration * widthPerSecond) / 2 - 25;
@@ -102,7 +103,7 @@ const spanwLongPrompts = (
     size,
     size
   );
-  ctx.drawImage(textImage, textP, yPosition[symbol] - 22.5, 75, 35);
+  ctx.drawImage(longPromptText[type], textP, yPosition[symbol] - 22.5, 75, 35);
   ctx.drawImage(
     symbols[symbol],
     endArc - 22.5,
