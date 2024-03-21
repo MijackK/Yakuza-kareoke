@@ -9,8 +9,10 @@ export function initialize() {
   // add the  audio elements
   const audioHover = document.createElement("audio");
   audioHover.id = "hover-sound";
+  audioHover.volume = 0.4;
   audioHover.muted = true;
   const audioSelect = document.createElement("audio");
+  audioSelect.volume = 0.4;
   audioSelect.id = "select-sound";
 
   audioSelect.setAttribute(
@@ -22,6 +24,7 @@ export function initialize() {
   audioSelect.src = selectSound;
   const startAudio = document.querySelector("#start-audio");
   startAudio.src = startSound;
+  startAudio.VOLUME = 0.4;
   document.querySelector("body").prepend(audioHover, audioSelect);
 
   // add background image & audio
