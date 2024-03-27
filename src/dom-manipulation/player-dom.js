@@ -122,7 +122,7 @@ export function openFinalScore(score, scoreSummary, highscore, rankInfo) {
   const great = document.querySelector("#great-hits");
   great.innerHTML = `
   <div style="display:flex; align-items:center;" >
-    <img style="width:117px; height:35px"  src=${greatImg} alt="Great" > 
+    <img style="width:117px; "  src=${greatImg} alt="Great" > 
     <span>: ${scoreSummary.great}</span> 
   </div>
   <span>${((scoreSummary.great / total) * 100).toFixed(1) || "0"}%</span>`;
@@ -131,7 +131,7 @@ export function openFinalScore(score, scoreSummary, highscore, rankInfo) {
   good.innerHTML = `
   <div align-items:center>
 
-    <img style="width:117px; height:35px" src=${goodImg} alt="Good" /> 
+    <img style="width:117px; " src=${goodImg} alt="Good" /> 
     <span>: ${scoreSummary.good}</span> 
   </div>
   <span>${((scoreSummary.good / total) * 100).toFixed(1) || "0"}%</span>`;
@@ -140,7 +140,7 @@ export function openFinalScore(score, scoreSummary, highscore, rankInfo) {
   const bad = document.querySelector("#bad-hits");
   bad.innerHTML = `
   <div  style="display:flex;align-items:center" >
-    <img style="width:117px; height:35px"  src=${badImg} alt="Bad" /> 
+    <img style="width:117px; "  src=${badImg} alt="Bad" /> 
     <span>: ${scoreSummary.bad}</span> 
   </div>
   <span>${((scoreSummary.bad / total) * 100).toFixed(1) || "0"}%</span>`;
@@ -148,7 +148,7 @@ export function openFinalScore(score, scoreSummary, highscore, rankInfo) {
   const miss = document.querySelector("#miss-hits");
   miss.innerHTML = `
   <div style="display:flex;align-items:center" >
-    <img style="width:117px; height:35px"  src=${missImg} alt="Miss" /> 
+    <img style="width:117px; "  src=${missImg} alt="Miss" /> 
     <span>: ${scoreSummary.miss}</span> 
   </div>
   <span>${((scoreSummary.miss / total) * 100).toFixed(1) || "0"}%</span>`;
