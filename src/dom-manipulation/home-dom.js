@@ -24,7 +24,7 @@ export function initialize() {
   audioSelect.src = selectSound;
   const startAudio = document.querySelector("#start-audio");
   startAudio.src = startSound;
-  startAudio.VOLUME = 0.4;
+  startAudio.volume = 0.4;
   document.querySelector("body").prepend(audioHover, audioSelect);
 
   // add background image & audio

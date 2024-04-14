@@ -38,6 +38,13 @@ addTouchControls();
 const mapManager = beatMapManager();
 const player = PlayerManager();
 
+const wasd = {
+  w: "ArrowUp",
+  s: "ArrowDown",
+  a: "ArrowLeft",
+  d: "ArrowRight",
+};
+
 // give song an src
 
 // give background an src
@@ -286,11 +293,11 @@ const checkUpInput = (key) => {
 };
 // Eventlistners and logic for getting
 document.querySelector("body").addEventListener("keydown", (e) => {
-  checkDownInput(e.key);
+  checkDownInput(wasd[e.key] || e.key);
 });
 
 document.querySelector("body").addEventListener("keyup", (e) => {
-  checkUpInput(e.key);
+  checkUpInput(wasd[e.key] || e.key);
 });
 
 // touc controls

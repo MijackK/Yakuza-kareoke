@@ -9,6 +9,12 @@ const entryOffset = 3; // determines the speed of prompt
 const widthPerSecond = Number(((1897.5 - 400) / entryOffset).toFixed(3));
 let key;
 
+const wasd = {
+  w: "ArrowUp",
+  s: "ArrowDown",
+  a: "ArrowLeft",
+  d: "ArrowRight",
+};
 const symbols = {
   ArrowUp: document.createElement("img"),
   ArrowLeft: document.createElement("img"),
@@ -145,7 +151,7 @@ window.addEventListener("resize", () => {
 });
 
 window.addEventListener("keydown", (e) => {
-  key = e.key;
+  key = wasd[e.key] || e.key;
 });
 window.addEventListener("keyup", () => {
   key = null;
