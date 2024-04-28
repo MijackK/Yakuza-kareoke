@@ -299,6 +299,7 @@ export function listBeatMap(beatMap, extension, source) {
   nameContainer.append(mapName, mapStatus);
 
   const mapUpdateDate = document.createElement("span");
+  mapUpdateDate.style.marginTop = "10px";
   mapUpdateDate.textContent = `last updated: ${beatMap.dateUpdated}`;
   mapInfo.append(nameContainer, mapUpdateDate);
 
