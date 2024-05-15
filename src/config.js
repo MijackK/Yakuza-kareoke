@@ -7,7 +7,7 @@ const config = {
   startTime: 3,
   apiDomain: {
     development: "http://localhost:5000",
-    production: "https://kareokeapi.onrender.com/",
+    production: "https://api.karaokeweb.org",
   },
   // for fetch requests
 };
