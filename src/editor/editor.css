@@ -84,6 +84,7 @@ h1 {
   flex-direction: column;
   gap: 10px;
   font-style: italic;
+  border-radius: 10px;
 }
 .short-key {
   background-color: #d9d9d9;
