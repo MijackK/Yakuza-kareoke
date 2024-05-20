@@ -216,8 +216,8 @@ export function domSettings(settings) {
   const hit = document.querySelector("#hit-sound");
   const offset = document.querySelector("#time-offset");
   const brightness = document.querySelector("#background-opacity");
-  music.value = settings.music * 10;
-  hit.value = settings.songItem * 10;
+  music.value = settings.music;
+  hit.value = settings.songItem;
   offset.value = settings.offset;
-  brightness.value = settings.opacity * 10;
+  brightness.value = settings.opacity;
 }
