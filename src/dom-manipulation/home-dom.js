@@ -1,7 +1,7 @@
 import diskImage from "../images/disk.png";
 import hoverSound from "../audio/menu-selection-102220.mp3";
 import selectSound from "../audio/click-menu-app-147357.mp3";
-import stray from "../video/Particles-27669.mp4";
+import background from "../images/tatto.webp";
 import startSound from "../audio/interface-124464.mp3";
 import isMobile from "../utility.js/isMobile";
 
@@ -29,21 +29,19 @@ export function initialize() {
 
   // add background image & audio
   const backgroundImage = document.querySelector(".background_image");
-  backgroundImage.src = stray;
+  backgroundImage.src = background;
 
   // add disk image
   const Disk = document.querySelector(".disk");
   Disk.style.backgroundImage = `url(${diskImage})`;
 }
 export function playBackground() {
-  const backgroundImage = document.querySelector(".background_image");
   const audioHover = document.querySelector("#hover-sound");
   const entryScreen = document.querySelector("#entry-screen");
   const startAudio = document.querySelector("#start-audio");
   if (!isMobile()) {
     audioHover.muted = false;
   }
-  backgroundImage.play();
   startAudio.play();
   entryScreen.style.display = "none";
 }
