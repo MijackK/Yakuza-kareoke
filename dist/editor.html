@@ -36,8 +36,16 @@
           <option value="0.25" >x0.25</option>
         </select>
         <span> songTime:<span id="ptime"></span></span>
+       
         <div style="background-color: black; width: fit-content;padding:5px; margin-left:auto">
+          <div style="display: flex; align-items: center;">
+            <label for="mute-hit">Music volume:</label>
+          <input type="range" id="music-volume" name="music-volume" min="0" max="1" step="0.1"/>
+          <label for="hit-volume">Hit volume:</label>
+          <input type="range" id="hit-volume" name="hit-volume" min="0" max="1" step="0.1"/>
+        </div>
           <input type="checkbox" id="mute-hit" name="mute-hit"  />
+
           <label for="mute-hit">Mute hit sound</label>
         </div>
       </div>
@@ -108,8 +116,16 @@
         </div>
         <div id="menu">&#x22EF;</div>
     </div>
+    <div id="shortcuts">
+      <span> Keyboard Shortcuts</span>
+      <span><span class="short-key">Space:</span> Pause/Play</span>
+      <span> <span class="short-key">Right Arrow:</span> Increase time by 0.1 seconds</span>
+      <span><span class="short-key">Left Arrow:</span> Decrease time by 0.1 seconds</span>
+      <span><span class="short-key">Shift + Right Arrow:</span> Increase the time of all prompts by 0.1 seconds</span>
+      <span><span class="short-key">Shift + Left Arrow:</span> Decrease the time of all prompts by 0.1 seconds</span>
+    </div>
  <div id="background-image"class="background"></div>
- <video id="background-video" src="" class="background"></video>
+ <video id="background-video" src="" class="background" muted></video>
  
 <div id="modal">
   <p style="text-align: center; position:fixed;bottom:0;width:100%">
