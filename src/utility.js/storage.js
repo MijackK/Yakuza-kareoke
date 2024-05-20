@@ -40,6 +40,8 @@ export function updateSettings(property, value) {
         hit: 0.5,
         offset: 0,
         opacity: 0.7,
+        editorMusic: 0.5,
+        editorHit: 0.5,
       })
     );
     settings = JSON.parse(localStorage.getItem("settings"));
@@ -54,6 +56,8 @@ export function getSettings() {
     hit: 0.7,
     offset: 0,
     opacity: 1,
+    editorMusic: 0.5,
+    editorHit: 0.5,
   };
 
   const settings = JSON.parse(localStorage.getItem("settings"));

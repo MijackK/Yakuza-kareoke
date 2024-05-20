@@ -4,7 +4,7 @@ import "../general.css";
 // import gamePlayerLogic from "../player-parts/map-visualizer";
 import { validPrompts, init } from "../canvas/canvas";
 import { initMap, drawMap } from "../canvas/time-map";
-import { deleteLocalMap } from "../utility.js/storage";
+import { deleteLocalMap, updateSettings } from "../utility.js/storage";
 import isMobile from "../utility.js/isMobile";
 
 import {
@@ -43,6 +43,8 @@ import {
   handleDurationForm,
   playClick,
   muteHitSound,
+  updateDomAudio,
+  initialize,
 } from "../dom-manipulation/editor-dom";
 import beatMapManager from "../managers/map_manager";
 import userFactory from "../managers/user-manager";
@@ -57,7 +59,9 @@ const feedBackVisualiser = feedBackVisualiserFactory();
 let changingBackground = false;
 let changingAudio = false;
 let changingName = false;
+let shiftPressed = false;
 init();
+initialize();
 initMap("#time-map");
 addPromptSrc();
 
@@ -510,7 +514,7 @@ progressBar.addEventListener("mousemove", (e) => {
 });
 
 document.querySelector("body").addEventListener("keydown", (e) => {
-  if (editor.getPlay()) {
+  if (editor.getPlay() || shiftPressed) {
     return;
   }
   if (["ArrowRight", "ArrowLeft"].includes(e.key) === false) {
@@ -707,9 +711,44 @@ document
   .querySelector("#editor-audio")
   .addEventListener("loadedmetadata", (e) => {
     editor.setAudioDuration(e.target.duration);
-
     updateGraphics();
   });
+document.querySelector("body").addEventListener("keydown", (e) => {
+  if (e.key !== "Shift" || shiftPressed) {
+    return;
+  }
+  shiftPressed = true;
+});
+document.querySelector("body").addEventListener("keyup", (e) => {
+  if (e.key !== "Shift") {
+    return;
+  }
+  shiftPressed = false;
+});
+document.querySelector("body").addEventListener("keydown", (e) => {
+  if (editor.getPlay()) {
+    return;
+  }
+
+  if (["ArrowRight", "ArrowLeft"].includes(e.key) === false) {
+    return;
+  }
+
+  if (shiftPressed) {
+    const move = e.key === "ArrowRight" ? 0.1 : -0.1;
+    editor.moveAll(move, mapManager.getSelectedMap());
+    updateGraphics();
+  }
+});
+document.querySelector("#music-volume").addEventListener("change", (e) => {
+  updateSettings("editorMusic", Number(e.target.value));
+  updateDomAudio("music", Number(e.target.value));
+});
+document.querySelector("#hit-volume").addEventListener("change", (e) => {
+  updateSettings("editorHit", Number(e.target.value));
+  updateDomAudio("hit", Number(e.target.value));
+});
+
 userManager
   .isLogin()
   .then(async () => {

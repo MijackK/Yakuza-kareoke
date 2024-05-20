@@ -2,6 +2,7 @@ import rapidText from "../images/rapid.png";
 import holdText from "../images/hold.png";
 import clickText from "../images/click.png";
 import hitSound from "../audio/metronome-85688.mp3";
+import { getSettings } from "../utility.js/storage";
 
 export function showEdit(show) {
   const editBtn = document.querySelector("#exit");
@@ -399,4 +400,25 @@ export function playClick() {
 export function muteHitSound(mute) {
   const hit = document.querySelector("#hit-audio");
   hit.muted = mute;
+}
+
+export function updateDomAudio(property, value) {
+  const audioNodes = {
+    hit: document.querySelector("#hit-audio"),
+    music: document.querySelector("#editor-audio"),
+  };
+  audioNodes[property].volume = value;
+}
+export function initialize() {
+  const settings = getSettings();
+
+  const hitInput = document.querySelector("#hit-volume");
+  hitInput.value = settings.editorHit;
+  const hitAudio = document.querySelector("#editor-audio");
+  hitAudio.volume = settings.editorHit;
+
+  const musicInput = document.querySelector("#music-volume");
+  musicInput.value = settings.editorMusic;
+  const musicAudio = document.querySelector("#editor-audio");
+  musicAudio.volume = settings.editorMusic;
 }

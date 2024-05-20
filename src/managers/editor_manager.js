@@ -86,6 +86,24 @@ export default function editorFactory() {
     }
     return key;
   };
+
+  const moveAll = (move, map) => {
+    if (
+      Number((beatMap[0].time + move).toFixed(1)) < 0 ||
+      Number((beatMap[beatMap.length - 1].time + move).toFixed(1)) >
+        audioDuration
+    ) {
+      return false;
+    }
+    const newBeatMap = beatMap.map((value) => ({
+      ...value,
+      time: Number((value.time + move).toFixed(1)),
+    }));
+
+    beatMap = newBeatMap;
+    saveLocalMap({ id: map.id, beatMap, name: map.name });
+    return true;
+  };
   const updateStartTime = () => {
     startTime = performance.now() - (elapsedTime / playbackRate) * 1000;
   };
@@ -126,8 +144,6 @@ export default function editorFactory() {
   const removePrompt = (identifier, map) => {
     beatMap = beatMap.filter((prompt) => prompt.time !== identifier);
     saveLocalMap({ id: map.id, beatMap, name: map.name });
-
-    // eslint-disable-next-line no-param-reassign
   };
   const addPrompt = (time, place, map) => {
     // check if prompt is there
@@ -206,5 +222,6 @@ export default function editorFactory() {
     getDurations,
     setDurations,
     updateStartTime,
+    moveAll,
   };
 }
