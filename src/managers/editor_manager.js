@@ -88,13 +88,17 @@ export default function editorFactory() {
   };
 
   const moveAll = (move, map) => {
+    if (Number((beatMap[0].time + move).toFixed(1)) < 0 && move < 0) {
+      return false;
+    }
     if (
-      Number((beatMap[0].time + move).toFixed(1)) < 0 ||
       Number((beatMap[beatMap.length - 1].time + move).toFixed(1)) >
-        audioDuration
+        audioDuration &&
+      move > 0
     ) {
       return false;
     }
+
     const newBeatMap = beatMap.map((value) => ({
       ...value,
       time: Number((value.time + move).toFixed(1)),
