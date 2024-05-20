@@ -714,18 +714,21 @@ document
     updateGraphics();
   });
 document.querySelector("body").addEventListener("keydown", (e) => {
+  e.preventDefault();
   if (e.key !== "Shift" || shiftPressed) {
     return;
   }
   shiftPressed = true;
 });
 document.querySelector("body").addEventListener("keyup", (e) => {
+  e.preventDefault();
   if (e.key !== "Shift") {
     return;
   }
   shiftPressed = false;
 });
 document.querySelector("body").addEventListener("keydown", (e) => {
+  e.preventDefault();
   if (editor.getPlay()) {
     return;
   }
