@@ -344,10 +344,10 @@ Object.keys(optionElements).forEach((option) => {
 });
 
 document.querySelector("#music-volume").addEventListener("change", (e) => {
-  updateSettings("music", Number(e.target.value) / 10);
+  updateSettings("music", Number(e.target.value));
 });
 document.querySelector("#hit-sound").addEventListener("change", (e) => {
-  updateSettings("hit", Number(e.target.value) / 10);
+  updateSettings("hit", Number(e.target.value));
 });
 
 document.querySelector("#time-offset").addEventListener("click", (e) => {
@@ -360,7 +360,7 @@ document.querySelector("#time-offset").addEventListener("keyup", (e) => {
 document
   .querySelector("#background-opacity")
   .addEventListener("change", (e) => {
-    updateSettings("opacity", Number(e.target.value) / 10);
+    updateSettings("opacity", Number(e.target.value));
   });
 
 document.querySelector("#setting-dialog").addEventListener("click", (e) => {
