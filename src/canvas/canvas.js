@@ -90,7 +90,7 @@ const spanwLongPrompts = (
   const endArc = startArc + duration * widthPerSecond;
   const textP = startArc + (duration * widthPerSecond) / 2 - 25;
   let size;
-  const clicked = symbol === key && elapsedTime >= promptTime - 0.2;
+  const clicked = symbol === key && elapsedTime >= promptTime - 0.1;
 
   if (type === "hold") size = clicked ? 50 : 55;
   if (type === "rapid") size = clicked ? 50 : 55;
