@@ -6,6 +6,8 @@ import { validPrompts, init } from "../canvas/canvas";
 import { initMap, drawMap } from "../canvas/time-map";
 import { deleteLocalMap, updateSettings } from "../utility.js/storage";
 import isMobile from "../utility.js/isMobile";
+import compressImage from "../utility.js/compressImage";
+import isImage from "../utility.js/isImage";
 
 import {
   autoThumbMovement,
@@ -191,6 +193,34 @@ const checkSelectedSong = () => {
       displaySelectedStatus("Error while fetching map");
 
       mapManager.clearSelectedMap();
+    });
+};
+const uploadImage = (file) => {
+  changingBackground = true;
+  // check on frontend if changing the size go over the maximum allowed beatMap size
+  showLoading("background-indicator", "block");
+  mapManager
+    .changeMedia("background", file)
+    .then(({ reload, extension }) => {
+      addErrorMessage("", "editbackground-error");
+      if (reload) {
+        loadMedia(
+          mapManager.getSelectedMap().audio,
+          mapManager.getSelectedMap().background,
+          extension
+        );
+      }
+    })
+    .catch((err) => {
+      addErrorMessage(err, "editbackground-error");
+      setTimeout(() => {
+        addErrorMessage("", "editbackground-error");
+      }, 5000);
+      console.log(err);
+    })
+    .finally(() => {
+      showLoading("background-indicator", "none");
+      changingBackground = false;
     });
 };
 
@@ -381,21 +411,7 @@ const addMapToList = (beatMap) => {
     }
   });
 };
-// add event listners
-
-document.querySelector("#add").addEventListener("click", (e) => {
-  viewSwitch(e.target.id);
-});
-document.querySelector("#selected").addEventListener("click", (e) => {
-  viewSwitch(e.target.id);
-});
-const addMapForm = document.querySelector("#add-map-form");
-addMapForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const submitButton = e.submitter;
-  submitButton.disabled = true;
-
-  const mapData = new FormData(addMapForm);
+const addMap = (mapData, addMapForm, submitButton) => {
   mapManager
     .addBeatMap(mapData)
     .then(async (res) => {
@@ -415,8 +431,40 @@ addMapForm.addEventListener("submit", (e) => {
       addErrorMessage(error, "addmap-error");
     })
     .finally(() => {
+      // eslint-disable-next-line no-param-reassign
       submitButton.disabled = false;
     });
+};
+// add event listners
+
+document.querySelector("#add").addEventListener("click", (e) => {
+  viewSwitch(e.target.id);
+});
+document.querySelector("#selected").addEventListener("click", (e) => {
+  viewSwitch(e.target.id);
+});
+const addMapForm = document.querySelector("#add-map-form");
+addMapForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const submitButton = e.submitter;
+  submitButton.disabled = true;
+
+  const mapData = new FormData(addMapForm);
+  if (isImage(mapData.get("background").type)) {
+    const url = URL.createObjectURL(mapData.get("background"));
+    compressImage({ url })
+      .then((info) => {
+        URL.revokeObjectURL(info.url);
+        mapData.set("background", info.file);
+        addMap(mapData, addMapForm, submitButton);
+      })
+      .catch((err) => {
+        console.log("problem comrpressing file");
+        console.log(err);
+      });
+    return;
+  }
+  addMap(mapData, addMapForm, submitButton);
 });
 
 document.querySelector("#time_guage").addEventListener("change", (e) => {
@@ -579,33 +627,23 @@ document.querySelector("#name-edit").addEventListener("submit", (e) => {
 });
 document.querySelector("#background-edit").addEventListener("change", (e) => {
   if (changingBackground) return;
-  const file = e.target.files[0];
-  changingBackground = true;
-  // check on frontend if changing the size go over the maximum allowed beatMap size
-  showLoading("background-indicator", "block");
-  mapManager
-    .changeMedia("background", file)
-    .then(({ reload, extension }) => {
-      addErrorMessage("", "editbackground-error");
-      if (reload) {
-        loadMedia(
-          mapManager.getSelectedMap().audio,
-          mapManager.getSelectedMap().background,
-          extension
-        );
-      }
-    })
-    .catch((err) => {
-      addErrorMessage(err, "editbackground-error");
-      setTimeout(() => {
-        addErrorMessage("", "editbackground-error");
-      }, 5000);
-      console.log(err);
-    })
-    .finally(() => {
-      showLoading("background-indicator", "none");
-      changingBackground = false;
-    });
+  let file = e.target.files[0];
+  // compress file if its an image
+  if (isImage(file.type)) {
+    const url = URL.createObjectURL(file);
+    compressImage({ url })
+      .then((info) => {
+        URL.revokeObjectURL(info.url);
+        file = info.file;
+        uploadImage(file);
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("issue compressing file");
+      });
+    return;
+  }
+  uploadImage(file);
 });
 document.querySelector("#audio-edit").addEventListener("change", (e) => {
   if (changingAudio) return;
