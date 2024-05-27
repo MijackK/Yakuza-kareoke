@@ -167,13 +167,15 @@ export function populateAccountForm(userName, email, verified, used) {
   userNameValue.textContent = userName;
   const emailValue = document.querySelector("#email-value");
   emailValue.textContent = email;
+  const verifyBtn = document.querySelector("#verify-button");
   if (verified === false && used === true) {
-    const verifyBtn = document.querySelector("#verify-button");
     verifyBtn.style.display = "inline-block";
   }
   if (used === false) {
     const pendingMessage = document.querySelector("#pending-verify");
     pendingMessage.style.display = "inline-block";
+    verifyBtn.style.display = "inline-block";
+    verifyBtn.textContent = "Resend verification link";
   }
 }
 
