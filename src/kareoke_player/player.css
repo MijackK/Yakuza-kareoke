@@ -327,6 +327,7 @@ body {
   border: none;
   font-size: 4rem;
   right: 0;
+  z-index: 10;
 }
 .song-name {
   font-size: clamp(2.4rem, 4vw, 3rem);
