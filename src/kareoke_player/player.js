@@ -38,6 +38,7 @@ addTouchControls();
 const mapManager = beatMapManager();
 const player = PlayerManager();
 const songTime = document.querySelector("#song");
+let desynID;
 
 const wasd = {
   w: "ArrowUp",
@@ -147,6 +148,7 @@ const removeGameInputs = (duration, inputObject, elapsedTime) => {
 };
 const stopMap = () => {
   cancelAnimationFrame(animationID);
+  clearInterval(desynID);
   player.setPlay(false);
 
   validPrompts(player.getTimeElapsed(), [
@@ -211,10 +213,6 @@ const timeController = () => {
       rapidInput,
       player.getTimeElapsed()
     );
-
-  document.querySelector("#time").textContent = `Desync:${(
-    player.getTimeElapsed() - songTime.currentTime
-  ).toFixed(3)} `;
 };
 const AnimatePrompts = () => {
   timeController();
@@ -228,8 +226,13 @@ const AnimatePrompts = () => {
 };
 const startMap = () => {
   animationID = requestAnimationFrame(AnimatePrompts);
+  desynID = setInterval(() => {
+    document.querySelector("#time").textContent = `Desync:${(
+      player.getTimeElapsed() - songTime.currentTime
+    ).toFixed(3)} `;
+  }, 100);
   player.startMap();
-  playMap();
+  playMap(player.getTimeElapsed());
   closeMenu();
 };
 const initalizeButtons = () => {

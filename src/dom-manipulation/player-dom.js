@@ -51,9 +51,10 @@ export function pauseMap() {
   song.pause();
   backgroundVideo.pause();
 }
-export function playMap() {
+export function playMap(currentTime) {
   const settings = getSettings();
   const song = document.querySelector("#song");
+  song.currentTime = currentTime;
   song.volume = settings.music;
   const backgroundVideo = document.querySelector("#background-video");
   song.play();
