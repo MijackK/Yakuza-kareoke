@@ -37,6 +37,7 @@ init();
 addTouchControls();
 const mapManager = beatMapManager();
 const player = PlayerManager();
+const songTime = document.querySelector("#song");
 
 const wasd = {
   w: "ArrowUp",
@@ -211,9 +212,9 @@ const timeController = () => {
       player.getTimeElapsed()
     );
 
-  document.querySelector("#time").textContent = `${player
-    .getTimeElapsed()
-    .toFixed(3)}  ${document.querySelector("#song").currentTime}`;
+  document.querySelector("#time").textContent = `Desync:${(
+    player.getTimeElapsed() - songTime.currentTime
+  ).toFixed(3)} `;
 };
 const AnimatePrompts = () => {
   timeController();
