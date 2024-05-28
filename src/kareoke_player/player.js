@@ -211,9 +211,9 @@ const timeController = () => {
       player.getTimeElapsed()
     );
 
-  document.querySelector("#time").textContent = player
+  document.querySelector("#time").textContent = `${player
     .getTimeElapsed()
-    .toFixed(3);
+    .toFixed(3)}  ${document.querySelector("#song").currentTime}`;
 };
 const AnimatePrompts = () => {
   timeController();
