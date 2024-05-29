@@ -79,9 +79,13 @@ export async function getBeatMap(id, signal) {
   return data;
 }
 export async function getMedia(url, signal) {
+  const options = {
+    mode: "no-cors",
+  };
   const response = await fetch(url, {
     method: "get",
     signal,
+    options,
   });
 
   const data = await response.blob();
