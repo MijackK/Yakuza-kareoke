@@ -39,6 +39,8 @@ const mapManager = beatMapManager();
 const player = PlayerManager();
 const time = document.querySelector("#time");
 const audioContext = new AudioContext();
+const song = document.querySelector("#song");
+const desync = document.querySelector("#desync");
 
 const wasd = {
   w: "ArrowUp",
@@ -244,6 +246,9 @@ const pause = () => {
   stopMap();
   pauseMap();
   openMenu();
+  desync.textContent = `desync: ${(
+    player.getTimeElapsed() - song.currentTime
+  ).toFixed(3)}`;
 };
 const restart = () => {
   player.setTimeElapsed(0);
