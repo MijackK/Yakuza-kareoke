@@ -84,7 +84,10 @@ const loadMedia = (audio, background, extension) => {
         mapManager.getAudioUrl(),
         mapManager.getBackgroundUrl()
       );
-      track = audioContext.createMediaElementSource(audioElement);
+      if (track === undefined) {
+        track = audioContext.createMediaElementSource(audioElement);
+      }
+
       track.connect(audioContext.destination);
 
       showEdit(true);
