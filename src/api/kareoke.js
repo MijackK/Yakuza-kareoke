@@ -79,7 +79,7 @@ export async function getBeatMap(id, signal) {
   return data;
 }
 export async function getMedia(url, signal) {
-  const response = await fetch(url, {
+  const response = await fetch(`${url}?dummy`, {
     method: "get",
     signal,
   });

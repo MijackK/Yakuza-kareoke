@@ -88,6 +88,10 @@ const loadMedia = (audio, background, extension) => {
       track.connect(audioContext.destination);
 
       showEdit(true);
+    })
+    .catch((err) => {
+      console.log(err);
+      console.log("couldn't load media into memory");
     });
 };
 const setSelectedMap = (beatMap, extension) => {
