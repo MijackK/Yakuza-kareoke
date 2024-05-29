@@ -26,10 +26,10 @@ export function addAudio(songSrc, backgroundSRC, clickSrc, extension) {
   if (["mp4", "webm"].includes(extension)) {
     backgroundVideo.src = backgroundSRC;
     backgroundVideo.currentTime = 0;
-
-    return;
+  } else {
+    backgroundImage.style.backgroundImage = `url(${backgroundSRC})`;
   }
-  backgroundImage.style.backgroundImage = `url(${backgroundSRC})`;
+  return song;
 }
 export function addSettings() {}
 

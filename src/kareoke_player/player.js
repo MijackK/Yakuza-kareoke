@@ -38,6 +38,7 @@ addTouchControls();
 const mapManager = beatMapManager();
 const player = PlayerManager();
 const time = document.querySelector("#time");
+const audioContext = new AudioContext();
 
 const wasd = {
   w: "ArrowUp",
@@ -223,6 +224,9 @@ const AnimatePrompts = () => {
   animationID = requestAnimationFrame(AnimatePrompts);
 };
 const startMap = () => {
+  if (audioContext.state === "suspended") {
+    audioContext.resume();
+  }
   animationID = requestAnimationFrame(AnimatePrompts);
   player.startMap();
   playMap(player.getTimeElapsed());
@@ -347,7 +351,14 @@ mapManager
     // load them
     initalizeButtons();
     // add media sources
-    addAudio(audioUrl, backgroundUrl, clickSound, extension);
+    const audioElement = addAudio(
+      audioUrl,
+      backgroundUrl,
+      clickSound,
+      extension
+    );
+    const track = audioContext.createMediaElementSource(audioElement);
+    track.connect(audioContext.destination);
     openMenu();
   })
   .catch((err) => {
