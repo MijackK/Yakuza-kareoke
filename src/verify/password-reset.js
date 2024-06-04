@@ -20,9 +20,6 @@ resetForm.addEventListener("submit", (e) => {
   forgotPassword(formData)
     .then((res) => {
       resetForm.innerHTML = `<label> ${res} </label>`;
-      setTimeout(() => {
-        window.location.pathname = "";
-      }, 1000);
     })
     .catch((err) => {
       console.log(err);

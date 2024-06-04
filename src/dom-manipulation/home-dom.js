@@ -162,7 +162,7 @@ export function handleSongModal(open) {
   // eslint-disable-next-line no-script-url
   startSongBtn.parentNode.href = "javascript:void(0)";
 }
-export function populateAccountForm(userName, email, verified, used) {
+export function populateAccountForm(userName, email, verified) {
   const userNameValue = document.querySelector("#username-value");
   userNameValue.textContent = userName;
   const emailValue = document.querySelector("#email-value");
@@ -170,10 +170,6 @@ export function populateAccountForm(userName, email, verified, used) {
   const verifyBtn = document.querySelector("#verify-button");
   if (verified === false) {
     verifyBtn.style.display = "inline-block";
-  }
-  if (used === false) {
-    const pendingMessage = document.querySelector("#pending-verify");
-    pendingMessage.style.display = "inline-block";
   }
 }
 

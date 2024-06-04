@@ -783,6 +783,7 @@ document.querySelector("body").addEventListener("keydown", (e) => {
     const move = e.key === "ArrowRight" ? 0.1 : -0.1;
     editor.moveAll(move, mapManager.getSelectedMap());
     updateGraphics();
+    computer.setTimeMap(editor.getBeatMap());
   }
 });
 document.querySelector("#music-volume").addEventListener("change", (e) => {
