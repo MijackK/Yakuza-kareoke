@@ -329,7 +329,7 @@ document.querySelector("#resume-btn").addEventListener("click", () => {
   startMap();
 });
 document.querySelector("#home-btn").addEventListener("click", () => {
-  window.location.href = "index.html?banner";
+  window.location.href = "/?banner";
   // change this to be dynamic instead of static
 });
 
@@ -341,7 +341,7 @@ document
   .querySelector("#play-again")
   .addEventListener("click", () => restart());
 
-const songID = document.location.search.split("?song=")[1];
+const songID = window.location.pathname.split("/")[2];
 startLoading();
 
 mapManager

@@ -102,7 +102,10 @@ export function selectSong(song, listItem) {
   listItem.classList.toggle("selected");
   animateDisk();
   const startSongBtn = document.querySelector("#start-song");
-  startSongBtn.parentNode.href = `player.html?song=${song.id}`;
+  startSongBtn.parentNode.href = `/player/${song.id}/${song.name.replaceAll(
+    " ",
+    "_"
+  )}`;
 }
 export function authenticatedView() {
   const authBtn = document.querySelector(".auth");
