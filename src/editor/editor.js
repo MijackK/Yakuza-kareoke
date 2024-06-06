@@ -191,6 +191,7 @@ const checkSelectedSong = () => {
         loadMedia(beatMap.audio, beatMap.background, extension);
         editor.setBeatMap(mapManager.getSelectedMap().beatMap);
         showEdit(true);
+        document.title = `Editing - ${beatMap.name}`;
         return;
       }
       displaySelectedStatus("No map selected");
