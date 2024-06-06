@@ -271,33 +271,32 @@ const addMapToList = (beatMap) => {
   optionsList.addEventListener("click", (e) => {
     e.stopPropagation();
   });
-  if (beatMap.status === "draft") {
-    saveMap.addEventListener("click", (e) => {
-      e.stopPropagation();
-      if (loadingSave) return;
-      saveMap.textContent = "Saving...";
-      loadingSave = true;
 
-      const { id } = beatMap;
-      mapManager
-        .saveMapRemote(id)
-        .then((res) => {
-          console.log(res);
-          saveMap.textContent = "Saved";
-        })
-        .catch((err) => {
-          console.log(err);
-          saveMap.textContent = "Error";
-        })
-        .finally(() => {
-          setTimeout(() => {
-            saveMap.textContent = "Save";
-          }, 1000);
+  saveMap.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (loadingSave) return;
+    saveMap.textContent = "Saving...";
+    loadingSave = true;
 
-          loadingSave = false;
-        });
-    });
-  }
+    const { id } = beatMap;
+    mapManager
+      .saveMapRemote(id)
+      .then((res) => {
+        console.log(res);
+        saveMap.textContent = "Saved";
+      })
+      .catch((err) => {
+        console.log(err);
+        saveMap.textContent = "Error";
+      })
+      .finally(() => {
+        setTimeout(() => {
+          saveMap.textContent = "Save";
+        }, 1000);
+
+        loadingSave = false;
+      });
+  });
 
   // delete
   deleteMap.addEventListener("click", () => {
@@ -410,6 +409,8 @@ const addMapToList = (beatMap) => {
           mapStatus.textContent =
             beatMap.status === "draft" ? "" : beatMap.status;
           mapStatus.className = `${beatMap.status}-status`;
+          saveMap.style.display =
+            beatMap.status === "draft" ? "list-item" : "none";
         });
       return;
     }

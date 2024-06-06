@@ -240,8 +240,9 @@ export function listBeatMap(beatMap, extension, source) {
 
   const saveMap = document.createElement("li");
   saveMap.textContent = "Save";
-  if (beatMap.status === "draft") {
-    optionsList.append(saveMap);
+  optionsList.append(saveMap);
+  if (beatMap.status !== "draft") {
+    saveMap.style.display = "none";
   }
 
   const publishMap = document.createElement("li");
