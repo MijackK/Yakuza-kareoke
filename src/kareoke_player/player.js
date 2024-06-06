@@ -350,6 +350,7 @@ mapManager
     buttons = JSON.parse(mapInfo.beatMap);
     highScore = mapInfo.highscore || 0;
     mapID = mapInfo.id;
+    document.title = `Playing - ${mapInfo.name}`;
 
     addMapInfo(mapInfo.name, mapInfo.author);
 
