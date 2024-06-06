@@ -35,14 +35,17 @@ export function initialize() {
   const Disk = document.querySelector(".disk");
   Disk.style.backgroundImage = `url(${diskImage})`;
 }
-export function playBackground() {
+export function playBackground(play = true) {
   const audioHover = document.querySelector("#hover-sound");
   const entryScreen = document.querySelector("#entry-screen");
   const startAudio = document.querySelector("#start-audio");
   if (!isMobile()) {
     audioHover.muted = false;
   }
-  startAudio.play();
+  if (play) {
+    startAudio.play();
+  }
+
   entryScreen.style.display = "none";
 }
 

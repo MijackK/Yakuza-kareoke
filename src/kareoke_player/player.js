@@ -329,7 +329,7 @@ document.querySelector("#resume-btn").addEventListener("click", () => {
   startMap();
 });
 document.querySelector("#home-btn").addEventListener("click", () => {
-  window.location.href = "index.html";
+  window.location.href = "index.html?banner";
   // change this to be dynamic instead of static
 });
 

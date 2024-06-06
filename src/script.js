@@ -377,3 +377,8 @@ document.querySelector(".settings").addEventListener("click", () => {
 document.querySelector("#entry-screen").addEventListener("click", () => {
   playBackground();
 });
+const params = new URLSearchParams(document.location.search);
+const noBanner = params.has("banner");
+if (noBanner) {
+  playBackground(false);
+}
