@@ -234,7 +234,8 @@ export function listBeatMap(beatMap, extension, source) {
   // create the options
   const play = document.createElement("a");
   play.textContent = "Play";
-  play.href = `player.html?song=${beatMap.id}`;
+  play.href = `/player/${beatMap.id}/${beatMap.name.replaceAll(" ", "_")}`;
+
   play.target = "_blank” attribute";
   optionsList.append(play);
 
