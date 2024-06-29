@@ -143,6 +143,7 @@ export function showSelectedSong(
   audioURL,
   backgroundURL
 ) {
+  document.title = `Editing - ${beatMap.name}`;
   const Audio = document.querySelector("#editor-audio");
   const backgroundVideo = document.querySelector("#background-video");
   const backgroundImage = document.querySelector("#background-image");
