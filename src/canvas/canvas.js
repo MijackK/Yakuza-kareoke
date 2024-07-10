@@ -8,29 +8,78 @@ import rightImg from "../images/right.png";
 const entryOffset = 3; // determines the speed of prompt
 const widthPerSecond = Number(((1897.5 - 400) / entryOffset).toFixed(3));
 let key;
+const normal = 55;
+const clicked = 50;
 
+// offscreen canvas for the up prompts
+const upPrompt = new OffscreenCanvas(normal, normal);
+const upClickedPrompt = new OffscreenCanvas(clicked, clicked);
+const upPromptImage = document.createElement("img");
+upPromptImage.src = upImg;
+upPromptImage.onload = () => {
+  upPrompt.getContext("2d").drawImage(upPromptImage, 0, 0, normal, normal);
+  upClickedPrompt
+    .getContext("2d")
+    .drawImage(upPromptImage, 0, 0, clicked, clicked);
+};
+
+// offscreen canvas for left prompt
+const leftPrompt = new OffscreenCanvas(normal, normal);
+const leftClickedPrompt = new OffscreenCanvas(clicked, clicked);
+const leftPromptImage = document.createElement("img");
+leftPromptImage.src = leftImg;
+leftPromptImage.onload = () => {
+  leftPrompt.getContext("2d").drawImage(leftPromptImage, 0, 0, normal, normal);
+  leftClickedPrompt
+    .getContext("2d")
+    .drawImage(leftPromptImage, 0, 0, clicked, clicked);
+};
+
+// offscreen canvas for right prompt
+
+const rightPrompt = new OffscreenCanvas(normal, normal);
+const rightClickedPrompt = new OffscreenCanvas(clicked, clicked);
+const rightPromptImage = document.createElement("img");
+rightPromptImage.src = rightImg;
+rightPromptImage.onload = () => {
+  rightPrompt
+    .getContext("2d")
+    .drawImage(rightPromptImage, 0, 0, normal, normal);
+  rightClickedPrompt
+    .getContext("2d")
+    .drawImage(rightPromptImage, 0, 0, clicked, clicked);
+};
+
+// offscreen canvas for down prompt
+const downPrompt = new OffscreenCanvas(normal, normal);
+const downClickedPrompt = new OffscreenCanvas(clicked, clicked);
+const downPromptImage = document.createElement("img");
+downPromptImage.src = downImg;
+downPromptImage.onload = () => {
+  downPrompt.getContext("2d").drawImage(downPromptImage, 0, 0, normal, normal);
+  downClickedPrompt
+    .getContext("2d")
+    .drawImage(downPromptImage, 0, 0, clicked, clicked);
+};
+const symbols = {
+  ArrowUp: [upPrompt, upClickedPrompt],
+  ArrowDown: [downPrompt, downClickedPrompt],
+  ArrowLeft: [leftPrompt, leftClickedPrompt],
+  ArrowRight: [rightPrompt, rightClickedPrompt],
+};
 const wasd = {
   w: "ArrowUp",
   s: "ArrowDown",
   a: "ArrowLeft",
   d: "ArrowRight",
 };
-const symbols = {
-  ArrowUp: document.createElement("img"),
-  ArrowLeft: document.createElement("img"),
-  ArrowRight: document.createElement("img"),
-  ArrowDown: document.createElement("img"),
-};
+
 const yPosition = {
   ArrowUp: 30,
   ArrowRight: 83,
   ArrowLeft: 130,
   ArrowDown: 185,
 };
-symbols.ArrowUp.src = upImg;
-symbols.ArrowLeft.src = leftImg;
-symbols.ArrowDown.src = downImg;
-symbols.ArrowRight.src = rightImg;
 let ctx;
 let myCanvas;
 
@@ -44,7 +93,7 @@ longPromptText.hold.src = holdText;
 export const init = () => {
   myCanvas = document.querySelector(".cplayer");
   myCanvas.width = myCanvas.scrollWidth;
-  myCanvas.height = 215;
+  myCanvas.height = 220;
 
   if (myCanvas.getContext) {
     ctx = myCanvas.getContext("2d"); // rendering context
@@ -53,7 +102,9 @@ export const init = () => {
 
 const verticleLines = (elapsedTime) => {
   for (let i = 0; i < 3; i += 1) {
-    const xCoords = 633 * (i + 1) - ((widthPerSecond * elapsedTime) % 633);
+    const xCoords = Math.round(
+      633 * (i + 1) - ((widthPerSecond * elapsedTime) % 633)
+    );
 
     ctx.beginPath();
     ctx.strokeStyle = "gray";
@@ -64,17 +115,11 @@ const verticleLines = (elapsedTime) => {
   }
 };
 const spawnPrompts = (time, symbol) => {
-  const xPosition = 1897.5 - time * widthPerSecond;
+  const xPosition = Math.round(1897.5 - time * widthPerSecond);
   ctx.fillStyle = "blue";
   ctx.beginPath();
   // ctx.arc(xPosition, yPosition, 22.5, 0, 2 * Math.PI);
-  ctx.drawImage(
-    symbols[symbol],
-    xPosition - 22.5,
-    yPosition[symbol] - 22.5,
-    55,
-    55
-  );
+  ctx.drawImage(symbols[symbol][0], xPosition - 22, yPosition[symbol] - 22);
   ctx.fill();
   ctx.stroke();
 };
@@ -86,37 +131,22 @@ const spanwLongPrompts = (
   type,
   symbol
 ) => {
-  const startArc = 1897.5 - travelTime * widthPerSecond;
-  const endArc = startArc + duration * widthPerSecond;
-  const textP = startArc + (duration * widthPerSecond) / 2 - 25;
-  let size;
-  const clicked = symbol === key && elapsedTime >= promptTime - 0.1;
+  const startArc = Math.round(1897.5 - travelTime * widthPerSecond);
+  const endArc = Math.round(startArc + duration * widthPerSecond);
+  const textP = Math.round(startArc + (duration * widthPerSecond) / 2 - 25);
 
-  if (type === "hold") size = clicked ? 50 : 55;
-  if (type === "rapid") size = clicked ? 50 : 55;
-  ctx.font = "40px serif";
+  const held = symbol === key && elapsedTime >= promptTime - 0.1 ? 1 : 0;
+
   ctx.strokeStyle = type === "rapid" ? "blue" : "#add8e6";
   ctx.lineWidth = 10;
   ctx.beginPath();
-  ctx.arc(startArc, yPosition[symbol], 15.5, 0, 2 * Math.PI);
-  ctx.arc(endArc, yPosition[symbol], 15.5, 0, 2 * Math.PI);
+  ctx.arc(startArc, yPosition[symbol], 15, 0, 2 * Math.PI);
+  ctx.arc(endArc, yPosition[symbol], 15, 0, 2 * Math.PI);
   ctx.stroke();
   ctx.beginPath();
-  ctx.drawImage(
-    symbols[symbol],
-    startArc - 22.5,
-    yPosition[symbol] - 22.5,
-    size,
-    size
-  );
-  ctx.drawImage(longPromptText[type], textP, yPosition[symbol] - 22.5, 75, 35);
-  ctx.drawImage(
-    symbols[symbol],
-    endArc - 22.5,
-    yPosition[symbol] - 22.5,
-    size,
-    size
-  );
+  ctx.drawImage(symbols[symbol][held], startArc - 22, yPosition[symbol] - 22);
+  ctx.drawImage(longPromptText[type], textP, yPosition[symbol] - 22, 75, 35);
+  ctx.drawImage(symbols[symbol][held], endArc - 22, yPosition[symbol] - 22);
   ctx.stroke();
 };
 export const validPrompts = (time, buttons) => {
