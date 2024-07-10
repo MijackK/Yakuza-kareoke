@@ -9,7 +9,7 @@ const createListItem = (request) => {
   const link = document.createElement("a");
   link.target = "_blank";
   link.textContent = request.name;
-  link.href = `player.html?song=${request.id}`;
+  link.href = `/player/${request.id}/${request.name.replaceAll(" ", "_")}`;
   listItem.append(link);
   const userName = document.createElement("span");
   userName.textContent = ` by ${request.userName}`;
