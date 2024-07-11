@@ -6,7 +6,7 @@ import downImg from "../images/down.png";
 import rightImg from "../images/right.png";
 
 const entryOffset = 3; // determines the speed of prompt
-const widthPerSecond = Number(((1897.5 - 400) / entryOffset).toFixed(3));
+const widthPerSecond = Math.round((1897 - 400) / entryOffset);
 let key;
 const normal = 55;
 const clicked = 50;
@@ -115,10 +115,10 @@ const verticleLines = (elapsedTime) => {
   }
 };
 const spawnPrompts = (time, symbol) => {
-  const xPosition = Math.round(1897.5 - time * widthPerSecond);
+  const xPosition = Math.round(1897 - time * widthPerSecond);
   ctx.fillStyle = "blue";
   ctx.beginPath();
-  // ctx.arc(xPosition, yPosition, 22.5, 0, 2 * Math.PI);
+  // ctx.arc(xPosition, yPosition[symbol], 22.5, 0, 2 * Math.PI);
   ctx.drawImage(symbols[symbol][0], xPosition - 22, yPosition[symbol] - 22);
   ctx.fill();
   ctx.stroke();
