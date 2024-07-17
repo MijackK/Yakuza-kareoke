@@ -102,9 +102,7 @@ export const init = () => {
 
 const verticleLines = (elapsedTime) => {
   for (let i = 0; i < 3; i += 1) {
-    const xCoords = Math.round(
-      633 * (i + 1) - ((widthPerSecond * elapsedTime) % 633)
-    );
+    const xCoords = 633 * (i + 1) - ((widthPerSecond * elapsedTime) % 633);
 
     ctx.beginPath();
     ctx.strokeStyle = "gray";
@@ -115,7 +113,7 @@ const verticleLines = (elapsedTime) => {
   }
 };
 const spawnPrompts = (time, symbol) => {
-  const xPosition = Math.round(1897 - time * widthPerSecond);
+  const xPosition = 1897 - time * widthPerSecond;
   ctx.fillStyle = "blue";
   ctx.beginPath();
   // ctx.arc(xPosition, yPosition[symbol], 22.5, 0, 2 * Math.PI);
@@ -131,9 +129,9 @@ const spanwLongPrompts = (
   type,
   symbol
 ) => {
-  const startArc = Math.round(1897.5 - travelTime * widthPerSecond);
-  const endArc = Math.round(startArc + duration * widthPerSecond);
-  const textP = Math.round(startArc + (duration * widthPerSecond) / 2 - 25);
+  const startArc = 1897 - travelTime * widthPerSecond;
+  const endArc = startArc + duration * widthPerSecond;
+  const textP = startArc + (duration * widthPerSecond) / 2 - 25;
 
   const held = symbol === key && elapsedTime >= promptTime - 0.1 ? 1 : 0;
 
