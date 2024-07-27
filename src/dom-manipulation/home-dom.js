@@ -3,7 +3,7 @@ import hoverSound from "../audio/menu-selection-102220.mp3";
 import selectSound from "../audio/click-menu-app-147357.mp3";
 import background from "../images/tatto.webp";
 import startSound from "../audio/interface-124464.mp3";
-import isMobile from "../utility.js/isMobile";
+import isMobile from "../utility/isMobile";
 
 export function initialize() {
   // add the  audio elements

@@ -1,5 +1,5 @@
 // add data and function having to do with the player here
-import { getSettings } from "../utility.js/storage";
+import { getSettings } from "../utility/storage";
 
 export default function PlayerManager() {
   const offset = getSettings().offset / 1000;

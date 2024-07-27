@@ -4,10 +4,10 @@ import "../general.css";
 // import gamePlayerLogic from "../player-parts/map-visualizer";
 import { validPrompts, init } from "../canvas/canvas";
 import { initMap, drawMap } from "../canvas/time-map";
-import { deleteLocalMap, updateSettings } from "../utility.js/storage";
-import isMobile from "../utility.js/isMobile";
-import compressImage from "../utility.js/compressImage";
-import isImage from "../utility.js/isImage";
+import { deleteLocalMap, updateSettings } from "../utility/storage";
+import isMobile from "../utility/isMobile";
+import compressImage from "../utility/compressImage";
+import isImage from "../utility/isImage";
 
 import {
   autoThumbMovement,

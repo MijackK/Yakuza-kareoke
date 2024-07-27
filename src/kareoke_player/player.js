@@ -12,6 +12,7 @@ import { feedBackVisualiserFactory } from "../player-parts/display-parts";
 import { validPrompts, init } from "../canvas/canvas";
 import beatMapManager from "../managers/map_manager";
 import PlayerManager from "../managers/player_manager";
+import youtube from "../utility/ytplayer";
 
 import {
   addAudio,

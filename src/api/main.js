@@ -1,5 +1,5 @@
 import config from "../config";
-import responseText from "../utility.js/responseText";
+import responseText from "../utility/responseText";
 
 const { apiDomain } = config;
 

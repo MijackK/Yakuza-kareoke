@@ -6,8 +6,8 @@ import upArrow from "../images/up.png";
 import leftArrow from "../images/left.png";
 import downArrow from "../images/down.png";
 import rightArrow from "../images/right.png";
-import { getSettings } from "../utility.js/storage";
-import isMobile from "../utility.js/isMobile";
+import { getSettings } from "../utility/storage";
+import isMobile from "../utility/isMobile";
 
 export function addAudio(songSrc, backgroundSRC, clickSrc, extension) {
   const settings = getSettings();
@@ -27,7 +27,7 @@ export function addAudio(songSrc, backgroundSRC, clickSrc, extension) {
     backgroundVideo.src = backgroundSRC;
     backgroundVideo.currentTime = 0;
   } else {
-    backgroundImage.style.backgroundImage = `url(${backgroundSRC})`;
+    // backgroundImage.style.backgroundImage = `url(${backgroundSRC})`;
   }
   return song;
 }

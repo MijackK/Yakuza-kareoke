@@ -1,4 +1,4 @@
-import { saveLocalMap } from "../utility.js/storage";
+import { saveLocalMap } from "../utility/storage";
 
 export default function editorFactory() {
   let elapsedTime = 0;

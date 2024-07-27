@@ -2,7 +2,7 @@ import rapidText from "../images/rapid.png";
 import holdText from "../images/hold.png";
 import clickText from "../images/click.png";
 import hitSound from "../audio/metronome-85688.mp3";
-import { getSettings } from "../utility.js/storage";
+import { getSettings } from "../utility/storage";
 
 export function showEdit(show) {
   const editBtn = document.querySelector("#exit");

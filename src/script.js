@@ -25,7 +25,7 @@ import {
 } from "./dom-manipulation/home-dom";
 import user from "./managers/user-manager";
 import map from "./managers/map_manager";
-import { updateSettings, getSettings } from "./utility.js/storage";
+import { updateSettings, getSettings } from "./utility/storage";
 
 const userManager = user();
 const mapManager = map();

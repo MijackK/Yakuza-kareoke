@@ -35,7 +35,7 @@ changeForm.addEventListener("submit", (e) => {
   const submitButton = changeForm.querySelector("button");
   const formData = new FormData(changeForm);
   formData.set("token", token);
-  const errorMessage = changeForm.querySelector("p");
+  const errorMessage = changeForm.querySelector("span");
   recoverPassword(formData)
     .then((res) => {
       changeForm.innerHTML = `<label> ${res} </label>`;
@@ -45,9 +45,14 @@ changeForm.addEventListener("submit", (e) => {
     })
     .catch((err) => {
       console.log(err);
-      errorMessage.style.display = "block";
+      errorMessage.textContent = err.message;
     })
     .finally(() => {
       submitButton.disabled = false;
     });
+});
+
+document.querySelector("#show-password").addEventListener("click", (e) => {
+  const password = changeForm.querySelector("input");
+  password.type = e.target.checked ? "text" : "password";
 });

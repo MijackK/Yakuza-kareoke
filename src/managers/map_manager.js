@@ -10,11 +10,7 @@ import {
   publishRequest,
 } from "../api/kareoke";
 
-import {
-  getLocalMap,
-  saveLocalMap,
-  deleteLocalMap,
-} from "../utility.js/storage";
+import { getLocalMap, saveLocalMap, deleteLocalMap } from "../utility/storage";
 
 export default function beatMapManager() {
   let audioUrl;
